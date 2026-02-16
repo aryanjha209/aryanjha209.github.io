@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aryan Kumar - AI & Machine Learning Developer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="ai-loader">
+            <div class="neural-network">
+                <div class="node"></div>
+                <div class="node"></div>
+                <div class="node"></div>
+                <div class="connection"></div>
+                <div class="connection"></div>
+                <div class="connection"></div>
+            </div>
+            <div class="loading-text">Initializing AI System...</div>
+        </div>
+    </div>
+
+    <!-- Background Effects -->
+    <div class="bg-effects">
+        <canvas id="particleCanvas"></canvas>
+        <div class="matrix-bg" id="matrixBg"></div>
+        <div class="neural-bg" id="neuralBg"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="navbar">
+        <div class="nav__container">
+            <div class="nav__brand">
+                <a href="#home">
+                    <span class="brand-icon">AK</span>
+                    <span class="brand-text">Aryan Kumar Jha</span>
+                </a>
+            </div>
+            <ul class="nav__menu" id="nav-menu">
+                <li class="nav__item">
+                    <a href="#about" class="nav__link">
+                        <span class="nav-glow"></span>
+                        About
+                    </a>
+                </li>
+                <li class="nav__item">
+                    <a href="#skills" class="nav__link">
+                        <span class="nav-glow"></span>
+                        Skills
+                    </a>
+                </li>
+                <li class="nav__item">
+                    <a href="#projects" class="nav__link">
+                        <span class="nav-glow"></span>
+                        Projects
+                    </a>
+                </li>
+                <li class="nav__item">
+                    <a href="#resume" class="nav__link">
+                        <span class="nav-glow"></span>
+                        Resume
+                    </a>
+                </li>
+                <li class="nav__item">
+                    <a href="#contact" class="nav__link">
+                        <span class="nav-glow"></span>
+                        Contact
+                    </a>
+                </li>
+            </ul>
+            <div class="nav__toggle" id="nav-toggle">
+                <span class="nav__toggle-line"></span>
+                <span class="nav__toggle-line"></span>
+                <span class="nav__toggle-line"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero__bg-shapes">
+            <div class="floating-shape shape-1"></div>
+            <div class="floating-shape shape-2"></div>
+            <div class="floating-shape shape-3"></div>
+        </div>
+        <div class="hero__container">
+            <div class="hero__content">
+                <div class="hero__avatar">
+                    <div class="avatar">
+                        <span>AK</span>
+                        <div class="avatar-glow"></div>
+                    </div>
+                </div>
+                <h1 class="hero__title">
+                    <span class="title-line">Aryan Kumar</span>
+                </h1>
+                <h2 class="hero__subtitle">
+                    <span class="typewriter" id="typewriter"></span>
+                    <span class="cursor">|</span>
+                </h2>
+                <p class="hero__description">
+                    Detail-oriented developer with expertise in AI/ML, Python programming, and database management. 
+                    Currently pursuing B.Tech in Computer Science with specialization in Artificial Intelligence.
+                </p>
+                <div class="hero__cta">
+                    <a href="#contact" class="btn btn--primary glow-btn">
+                        <span class="btn-text">Contact Me</span>
+                        <div class="btn-glow"></div>
+                    </a>
+                    <a href="#resume" class="btn btn--outline holo-btn">
+                        <span class="btn-text">View Resume</span>
+                        <div class="holo-border"></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <div class="container">
+            <h2 class="section__title">
+                <span class="title-glow">About Me</span>
+            </h2>
+            <div class="about__content">
+                <div class="about__text data-reveal">
+                    <p>
+                        I'm a passionate AI & Machine Learning Developer currently pursuing my B.Tech in Computer Science 
+                        with specialization in Artificial Intelligence at Parul University. With a strong foundation in 
+                        programming and web technologies, I focus on building efficient, user-friendly applications while 
+                        ensuring seamless data management and performance optimization.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="section" id="skills">
+        <div class="container">
+            <h2 class="section__title">
+                <span class="title-glow">Skills & Expertise</span>
+            </h2>
+            <div class="skills__grid">
+                <div class="skill-category" data-category="programming">
+                    <div class="circuit-pattern"></div>
+                    <h3 class="skill-category__title">Programming Languages</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag" data-skill="java">Core Java</span>
+                        <span class="skill-tag" data-skill="python">Python</span>
+                        <span class="skill-tag" data-skill="c">C</span>
+                        <span class="skill-tag" data-skill="sql">SQL</span>
+                        <span class="skill-tag" data-skill="js">JavaScript</span>
+                    </div>
+                    <div class="skill-progress">
+                        <div class="progress-bar" data-progress="85"></div>
+                    </div>
+                </div>
+                <div class="skill-category" data-category="web">
+                    <div class="circuit-pattern"></div>
+                    <h3 class="skill-category__title">Web Technologies</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag" data-skill="html">HTML</span>
+                        <span class="skill-tag" data-skill="css">CSS</span>
+                        <span class="skill-tag" data-skill="js">JavaScript</span>
+                    </div>
+                    <div class="skill-progress">
+                        <div class="progress-bar" data-progress="90"></div>
+                    </div>
+                </div>
+                <div class="skill-category" data-category="tools">
+                    <div class="circuit-pattern"></div>
+                    <h3 class="skill-category__title">Tools & Platforms</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag" data-skill="git">Git</span>
+                        <span class="skill-tag" data-skill="github">GitHub</span>
+                        <span class="skill-tag" data-skill="tableau">Tableau</span>
+                    </div>
+                    <div class="skill-progress">
+                        <div class="progress-bar" data-progress="75"></div>
+                    </div>
+                </div>
+                <div class="skill-category" data-category="ai">
+                    <div class="circuit-pattern"></div>
+                    <h3 class="skill-category__title">Specializations</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag" data-skill="ai">Artificial Intelligence</span>
+                        <span class="skill-tag" data-skill="db">Database Management</span>
+                    </div>
+                    <div class="skill-progress">
+                        <div class="progress-bar" data-progress="80"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="section" id="projects">
+        <div class="container">
+            <h2 class="section__title">
+                <span class="title-glow">Featured Projects</span>
+            </h2>
+            <div class="projects__grid">
+                <div class="project-card" data-project="ar-card">
+                    <div class="project-card__inner">
+                        <div class="project-card__front">
+                            <div class="project-preview">
+                                <div class="preview-glow"></div>
+                                <div class="project-icon">🌐</div>
+                            </div>
+                            <div class="project-card__header">
+                                <h3 class="project-card__title">AR Card System</h3>
+                                <span class="project-card__duration">June 2025</span>
+                            </div>
+                            <p class="project-card__description">
+                                Experience seamless digital identity with an AI-ready, cloud-powered platform...
+                            </p>
+                            <div class="project-card__tech">
+                                <span class="tech-tag">Python</span>
+                                <span class="tech-tag">HTML</span>
+                                <span class="tech-tag">CSS</span>
+                                <span class="tech-tag">JavaScript</span>
+                            </div>
+                        </div>
+                        <div class="project-card__back">
+                            <div class="project-details">
+                                <h4>Full Description</h4>
+                                <p>Experience seamless digital identity with an AI-ready, cloud-powered platform to create, manage, and share smart AR cards. Features include user signup, personalized AR card generation with unique QR codes, and secure authentication.</p>
+                                <div class="project-card__actions">
+                                    <a href="https://arcard-1.onrender.com" target="_blank" class="btn btn--primary btn--sm glow-btn">
+                                        <span class="btn-text">Live Demo</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card" data-project="ai-editor">
+                    <div class="project-card__inner">
+                        <div class="project-card__front">
+                            <div class="project-preview">
+                                <div class="preview-glow"></div>
+                                <div class="project-icon">🎨</div>
+                            </div>
+                            <div class="project-card__header">
+                                <h3 class="project-card__title">Editor Pro - AI Image Editor</h3>
+                                <span class="project-card__duration">September 2023</span>
+                            </div>
+                            <p class="project-card__description">
+                                Next-generation AI-powered image editor with command-based editing capabilities...
+                            </p>
+                            <div class="project-card__tech">
+                                <span class="tech-tag">HTML</span>
+                                <span class="tech-tag">CSS</span>
+                                <span class="tech-tag">JavaScript</span>
+                                <span class="tech-tag">Python</span>
+                            </div>
+                        </div>
+                        <div class="project-card__back">
+                            <div class="project-details">
+                                <h4>Full Description</h4>
+                                <p>Next-generation AI-powered image editor with command-based editing capabilities. Features include cartoon effects, vintage styles, and manual adjustments (brightness, contrast). Implemented user-friendly interface with one-click AI transformations.</p>
+                                <div class="project-card__actions">
+                                    <a href="https://ai-gngh.vercel.app" target="_blank" class="btn btn--primary btn--sm glow-btn">
+                                        <span class="btn-text">Live Demo</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resume Section -->
+    <section class="section" id="resume">
+        <div class="container">
+            <h2 class="section__title">
+                <span class="title-glow">Education & Achievements</span>
+            </h2>
+            <div class="resume__content">
+                <div class="education__section">
+                    <h3 class="resume__subtitle">Education</h3>
+                    <div class="timeline">
+                        <div class="timeline-line"></div>
+                        <div class="timeline-item" data-aos="fade-right">
+                            <div class="timeline-marker">
+                                <div class="marker-glow"></div>
+                            </div>
+                            <div class="timeline-content">
+                                <h4 class="timeline-title">B.Tech. - CSE - Artificial Intelligence</h4>
+                                <p class="timeline-subtitle">Parul University • 2022 – 2026</p>
+                                <p class="timeline-description">CGPA: 7.81/10 • Specialization in AI & ML</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item" data-aos="fade-right" data-aos-delay="200">
+                            <div class="timeline-marker">
+                                <div class="marker-glow"></div>
+                            </div>
+                            <div class="timeline-content">
+                                <h4 class="timeline-title">Higher Secondary (12th)</h4>
+                                <p class="timeline-subtitle">ARYA COLLEGE, Vaishali • 2022</p>
+                                <p class="timeline-description">BSEB • 60.60%</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item" data-aos="fade-right" data-aos-delay="400">
+                            <div class="timeline-marker">
+                                <div class="marker-glow"></div>
+                            </div>
+                            <div class="timeline-content">
+                                <h4 class="timeline-title">Secondary (10th)</h4>
+                                <p class="timeline-subtitle">ARYA COLLEGE, Vaishali • 2020</p>
+                                <p class="timeline-description">BSEB • 63%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="certifications__section">
+                    <h3 class="resume__subtitle">Certifications</h3>
+                    <div class="cert-grid">
+                        <div class="cert-item floating-card">
+                            <div class="cert-badge">
+                                <div class="badge-glow"></div>
+                                🤖
+                            </div>
+                            <h4 class="cert-title">Introduction to Modern AI</h4>
+                            <p class="cert-date">Jan 10, 2025</p>
+                        </div>
+                        <div class="cert-item floating-card">
+                            <div class="cert-badge">
+                                <div class="badge-glow"></div>
+                                🔒
+                            </div>
+                            <h4 class="cert-title">Introduction to Cybersecurity</h4>
+                            <p class="cert-date">Feb 14, 2024</p>
+                        </div>
+                        <div class="cert-item floating-card">
+                            <div class="cert-badge">
+                                <div class="badge-glow"></div>
+                                🏆
+                            </div>
+                            <h4 class="cert-title">PU CODE HACKATHON 2.0</h4>
+                            <p class="cert-date">Jan 02, 2025</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="workshops__section">
+                    <h3 class="resume__subtitle">Workshops</h3>
+                    <div class="workshop-item floating-card">
+                        <div class="workshop-icon">📊</div>
+                        <h4 class="workshop-title">Gujarat Tableau User Group</h4>
+                        <p class="workshop-subtitle">Parul Institute of Technology, Vadodara</p>
+                        <p class="workshop-duration">Dec 21 – Dec 28, 2024</p>
+                        <p class="workshop-description">
+                            Attended comprehensive data visualization workshop. Gained hands-on experience 
+                            with Tableau for business intelligence.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section" id="contact">
+        <div class="container">
+            <h2 class="section__title">
+                <span class="title-glow">Get In Touch</span>
+            </h2>
+            <div class="contact__content">
+                <div class="contact__info">
+                    <h3 class="contact__subtitle">Contact Information</h3>
+                    <div class="contact-details">
+                        <div class="contact-item pulse-card">
+                            <span class="contact-icon">📧</span>
+                            <div>
+                                <p class="contact-label">Email</p>
+                                <p class="contact-value">aryankjhaa@gmail.com</p>
+                            </div>
+                            <div class="contact-glow"></div>
+                        </div>
+                        <div class="contact-item pulse-card">
+                            <span class="contact-icon">📞</span>
+                            <div>
+                                <p class="contact-label">Phone</p>
+                                <p class="contact-value">+91-9835089300</p>
+                            </div>
+                            <div class="contact-glow"></div>
+                        </div>
+                        <div class="contact-item pulse-card">
+                            <span class="contact-icon">📍</span>
+                            <div>
+                                <p class="contact-label">Location</p>
+                                <p class="contact-value">Vadodara, Gujarat, India</p>
+                            </div>
+                            <div class="contact-glow"></div>
+                        </div>
+                        <div class="contact-item pulse-card">
+                            <span class="contact-icon">💻</span>
+                            <div>
+                                <p class="contact-label">GitHub</p>
+                                <p class="contact-value">
+                                    <a href="https://github.com/aryanjha205" target="_blank">aryanjha205</a>
+                                </p>
+                            </div>
+                            <div class="contact-glow"></div>
+                        </div>
+                        <div class="contact-item pulse-card">
+                            <span class="contact-icon">🔗</span>
+                            <div>
+                                <p class="contact-label">LinkedIn</p>
+                                <p class="contact-value">
+                                    <a href="https://www.linkedin.com/in/jhaaryaan" target="_blank">jhaaryaan</a>
+                                </p>
+                            </div>
+                            <div class="contact-glow"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact__form">
+                    <h3 class="contact__subtitle">Send Message</h3>
+                    <form class="form ai-form" id="contact-form">
+                        <div class="form-group">
+                            <label class="form-label" for="name">Name</label>
+                            <div class="input-wrapper">
+                                <input type="text" class="form-control neon-input" id="name" name="name" required>
+                                <div class="input-border"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="email">Email</label>
+                            <div class="input-wrapper">
+                                <input type="email" class="form-control neon-input" id="email" name="email" required>
+                                <div class="input-border"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="message">Message</label>
+                            <div class="input-wrapper">
+                                <textarea class="form-control neon-input" id="message" name="message" rows="5" required></textarea>
+                                <div class="input-border"></div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn--primary btn--full-width glow-btn">
+                            <span class="btn-text">Send Message</span>
+                            <div class="btn-glow"></div>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer__text">
+                © 2025 Aryan Kumar
+            </p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
