@@ -31,8 +31,15 @@ transporter.verify((error, success) => {
 });
 
 // Contact Route
-app.post('/api/contact', (value, res) => {
-    const { name, email, subject, message } = value.body;
+app.post('/api/contact', (req, res) => {
+    console.log('Received contact form request:', req.body);
+    const { name, email, subject, message } = req.body;
+
+    // Basic validation
+    if (!name || !email || !subject || !message) {
+        console.log('Missing form fields');
+        return res.status(400).json({ success: false, message: 'All fields are required.' });
+    }
 
     const mailOptions = {
         from: `"${name}" <${email}>`,
@@ -51,12 +58,13 @@ app.post('/api/contact', (value, res) => {
         `
     };
 
+    console.log('Attempting to send mail...');
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            console.log(error);
-            return res.status(500).json({ success: false, message: 'Failed to send message.' });
+            console.error('Nodemailer Error:', error);
+            return res.status(500).json({ success: false, message: 'Internal Server Error. ' + error.message });
         }
-        console.log('Email sent: ' + info.response);
+        console.log('Email sent successfully:', info.response);
         res.status(200).json({ success: true, message: 'Message sent successfully!' });
     });
 });

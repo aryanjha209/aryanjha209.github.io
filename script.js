@@ -379,13 +379,23 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
 
             try {
-                const response = await fetch('http://localhost:5000/api/contact', {
+                // Try localhost first, then fall back to relative path if hosted
+                const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                    ? 'http://localhost:5000/api/contact'
+                    : '/api/contact';
+
+                const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(formData)
                 });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Server responded with ${response.status}: ${errorText}`);
+                }
 
                 const result = await response.json();
 
@@ -396,14 +406,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     formMsg.style.color = '#10b981';
                     contactForm.reset();
                 } else {
-                    throw new Error(result.message);
+                    throw new Error(result.message || 'Failed to send');
                 }
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Contact Form Error:', error);
                 submitBtn.innerHTML = '<i class="fas fa-times"></i> Error';
                 submitBtn.style.background = '#ef4444';
-                formMsg.textContent = 'Something went wrong. Please try again.';
+                formMsg.textContent = 'Connection error. Make sure server.js is running!';
                 formMsg.style.color = '#ef4444';
+                alert('Could not connect to the mail server. Please ensure node server.js is running on your PC.');
             } finally {
                 setTimeout(() => {
                     submitBtn.disabled = false;
