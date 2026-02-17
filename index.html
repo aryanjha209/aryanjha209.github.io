@@ -1,474 +1,665 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aryan Kumar - AI & Machine Learning Developer</title>
+    <meta name="description"
+        content="Aryan Kumar - AI/ML Engineer and Web Developer Portfolio. Explore my projects in AI, Machine Learning, and Web Development.">
+    <meta name="keywords"
+        content="Aryan Kumar, Portfolio, AI Engineer, ML Developer, Web Developer, Parul University, AI/ML Intern">
+    <meta name="author" content="Aryan Kumar">
+    <title>Aryan Kumar | AI/ML Engineer & Web Developer</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💻</text></svg>">
 </head>
-<body>
-    <!-- Loading Screen -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="ai-loader">
-            <div class="neural-network">
-                <div class="node"></div>
-                <div class="node"></div>
-                <div class="node"></div>
-                <div class="connection"></div>
-                <div class="connection"></div>
-                <div class="connection"></div>
-            </div>
-            <div class="loading-text">Initializing AI System...</div>
-        </div>
+
+<body class="dark-theme">
+    <!-- Loader -->
+    <div id="loader" class="loader-container">
+        <div class="loader"></div>
     </div>
 
-    <!-- Background Effects -->
-    <div class="bg-effects">
-        <canvas id="particleCanvas"></canvas>
-        <div class="matrix-bg" id="matrixBg"></div>
-        <div class="neural-bg" id="neuralBg"></div>
+    <!-- Animated Background -->
+    <div class="background-animation">
+        <canvas id="particle-canvas"></canvas>
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
     </div>
 
-    <!-- Navigation -->
-    <nav class="nav" id="navbar">
-        <div class="nav__container">
-            <div class="nav__brand">
-                <a href="#home">
-                    <span class="brand-icon">AK</span>
-                    <span class="brand-text">Aryan Kumar Jha</span>
-                </a>
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress"></div>
+
+    <!-- Navbar -->
+    <header class="navbar-container">
+        <nav class="navbar">
+            <div class="logo">
+                <a href="#home">AK<span>.</span></a>
             </div>
-            <ul class="nav__menu" id="nav-menu">
-                <li class="nav__item">
-                    <a href="#about" class="nav__link">
-                        <span class="nav-glow"></span>
-                        About
-                    </a>
-                </li>
-                <li class="nav__item">
-                    <a href="#skills" class="nav__link">
-                        <span class="nav-glow"></span>
-                        Skills
-                    </a>
-                </li>
-                <li class="nav__item">
-                    <a href="#projects" class="nav__link">
-                        <span class="nav-glow"></span>
-                        Projects
-                    </a>
-                </li>
-                <li class="nav__item">
-                    <a href="#resume" class="nav__link">
-                        <span class="nav-glow"></span>
-                        Resume
-                    </a>
-                </li>
-                <li class="nav__item">
-                    <a href="#contact" class="nav__link">
-                        <span class="nav-glow"></span>
-                        Contact
-                    </a>
-                </li>
+            <ul class="nav-links">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
-            <div class="nav__toggle" id="nav-toggle">
-                <span class="nav__toggle-line"></span>
-                <span class="nav__toggle-line"></span>
-                <span class="nav__toggle-line"></span>
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </header>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero__bg-shapes">
-            <div class="floating-shape shape-1"></div>
-            <div class="floating-shape shape-2"></div>
-            <div class="floating-shape shape-3"></div>
-        </div>
-        <div class="hero__container">
-            <div class="hero__content">
-                <div class="hero__avatar">
-                    <div class="avatar">
-                        <span>AK</span>
-                        <div class="avatar-glow"></div>
-                    </div>
-                </div>
-                <h1 class="hero__title">
-                    <span class="title-line">Aryan Kumar</span>
-                </h1>
-                <h2 class="hero__subtitle">
-                    <span class="typewriter" id="typewriter"></span>
-                    <span class="cursor">|</span>
-                </h2>
-                <p class="hero__description">
-                    Detail-oriented developer with expertise in AI/ML, Python programming, and database management. 
-                    Currently pursuing B.Tech in Computer Science with specialization in Artificial Intelligence.
-                </p>
-                <div class="hero__cta">
-                    <a href="#contact" class="btn btn--primary glow-btn">
-                        <span class="btn-text">Contact Me</span>
-                        <div class="btn-glow"></div>
-                    </a>
-                    <a href="#resume" class="btn btn--outline holo-btn">
-                        <span class="btn-text">View Resume</span>
-                        <div class="holo-border"></div>
-                    </a>
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero section">
+            <div class="hero-content">
+                <h2 class="reveal">Hello, I'm</h2>
+                <h1 class="reveal">Aryan Kumar</h1>
+                <h3 class="typing-text-container reveal">
+                    I am a <span class="typing-text"></span>
+                </h3>
+                <p class="reveal">Passionate AI/ML Engineer and Web Developer focused on building intelligent solutions
+                    and high-performance applications.</p>
+                <div class="hero-btns reveal">
+                    <a href="#projects" class="btn btn-primary">View Projects</a>
+                    <a href="aryan.pdf" download class="btn btn-secondary">Download CV <i
+                            class="fas fa-download"></i></a>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section class="section" id="about">
-        <div class="container">
-            <h2 class="section__title">
-                <span class="title-glow">About Me</span>
-            </h2>
-            <div class="about__content">
-                <div class="about__text data-reveal">
-                    <p>
-                        I'm a passionate AI & Machine Learning Developer currently pursuing my B.Tech in Computer Science 
-                        with specialization in Artificial Intelligence at Parul University. With a strong foundation in 
-                        programming and web technologies, I focus on building efficient, user-friendly applications while 
-                        ensuring seamless data management and performance optimization.
-                    </p>
+            <div class="hero-image reveal">
+                <div class="img-box">
+                    <div class="img-outline"></div>
+                    <img src="https://ui-avatars.com/api/?name=Aryan+Kumar&background=6366f1&color=fff&size=512"
+                        alt="Aryan Kumar">
                 </div>
             </div>
-        </div>
-    </section>
+            <a href="#about" class="scroll-down">
+                <div class="mouse"></div>
+                <span>Scroll Down</span>
+            </a>
+        </section>
 
-    <!-- Skills Section -->
-    <section class="section" id="skills">
-        <div class="container">
-            <h2 class="section__title">
-                <span class="title-glow">Skills & Expertise</span>
-            </h2>
-            <div class="skills__grid">
-                <div class="skill-category" data-category="programming">
-                    <div class="circuit-pattern"></div>
-                    <h3 class="skill-category__title">Programming Languages</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag" data-skill="java">Core Java</span>
-                        <span class="skill-tag" data-skill="python">Python</span>
-                        <span class="skill-tag" data-skill="c">C</span>
-                        <span class="skill-tag" data-skill="sql">SQL</span>
-                        <span class="skill-tag" data-skill="js">JavaScript</span>
-                    </div>
-                    <div class="skill-progress">
-                        <div class="progress-bar" data-progress="85"></div>
-                    </div>
+        <!-- About Section -->
+        <section id="about" class="about section">
+            <div class="section-header reveal">
+                <h2>About Me</h2>
+                <div class="underline"></div>
+            </div>
+            <div class="about-container">
+                <div class="about-img reveal">
+                    <img src="aryan jha.png" alt="Aryan Kumar Professional">
                 </div>
-                <div class="skill-category" data-category="web">
-                    <div class="circuit-pattern"></div>
-                    <h3 class="skill-category__title">Web Technologies</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag" data-skill="html">HTML</span>
-                        <span class="skill-tag" data-skill="css">CSS</span>
-                        <span class="skill-tag" data-skill="js">JavaScript</span>
-                    </div>
-                    <div class="skill-progress">
-                        <div class="progress-bar" data-progress="90"></div>
-                    </div>
-                </div>
-                <div class="skill-category" data-category="tools">
-                    <div class="circuit-pattern"></div>
-                    <h3 class="skill-category__title">Tools & Platforms</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag" data-skill="git">Git</span>
-                        <span class="skill-tag" data-skill="github">GitHub</span>
-                        <span class="skill-tag" data-skill="tableau">Tableau</span>
-                    </div>
-                    <div class="skill-progress">
-                        <div class="progress-bar" data-progress="75"></div>
-                    </div>
-                </div>
-                <div class="skill-category" data-category="ai">
-                    <div class="circuit-pattern"></div>
-                    <h3 class="skill-category__title">Specializations</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag" data-skill="ai">Artificial Intelligence</span>
-                        <span class="skill-tag" data-skill="db">Database Management</span>
-                    </div>
-                    <div class="skill-progress">
-                        <div class="progress-bar" data-progress="80"></div>
-                    </div>
+                <div class="about-text">
+                    <h3 class="reveal">I turn ideas into real working projects</h3>
+                    <p class="reveal">I’m a passionate and detail-focused developer pursuing my B.Tech in Computer
+                        Science with a focus on Artificial Intelligence at Parul University. I have hands-on experience
+                        in front-end development, Python programming, and managing databases.</p>
+                    <p class="reveal">I enjoy creating smart, user-friendly applications that work fast and look good.
+                        I'm always eager to learn new technologies and improve my skills to deliver state-of-the-art
+                        AI-driven solutions.</p>
+
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Projects Section -->
-    <section class="section" id="projects">
-        <div class="container">
-            <h2 class="section__title">
-                <span class="title-glow">Featured Projects</span>
-            </h2>
-            <div class="projects__grid">
-                <div class="project-card" data-project="ar-card">
-                    <div class="project-card__inner">
-                        <div class="project-card__front">
-                            <div class="project-preview">
-                                <div class="preview-glow"></div>
-                                <div class="project-icon">🌐</div>
-                            </div>
-                            <div class="project-card__header">
-                                <h3 class="project-card__title">AR Card System</h3>
-                                <span class="project-card__duration">June 2025</span>
-                            </div>
-                            <p class="project-card__description">
-                                Experience seamless digital identity with an AI-ready, cloud-powered platform...
-                            </p>
-                            <div class="project-card__tech">
-                                <span class="tech-tag">Python</span>
-                                <span class="tech-tag">HTML</span>
-                                <span class="tech-tag">CSS</span>
-                                <span class="tech-tag">JavaScript</span>
-                            </div>
-                        </div>
-                        <div class="project-card__back">
-                            <div class="project-details">
-                                <h4>Full Description</h4>
-                                <p>Experience seamless digital identity with an AI-ready, cloud-powered platform to create, manage, and share smart AR cards. Features include user signup, personalized AR card generation with unique QR codes, and secure authentication.</p>
-                                <div class="project-card__actions">
-                                    <a href="https://arcard-1.onrender.com" target="_blank" class="btn btn--primary btn--sm glow-btn">
-                                        <span class="btn-text">Live Demo</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Stats -->
+            <div class="stats-container reveal">
+                <div class="stat-card">
+                    <h3 class="counter" data-target="54">0</h3>
+                    <p>Projects Completed</p>
                 </div>
-
-                <div class="project-card" data-project="ai-editor">
-                    <div class="project-card__inner">
-                        <div class="project-card__front">
-                            <div class="project-preview">
-                                <div class="preview-glow"></div>
-                                <div class="project-icon">🎨</div>
-                            </div>
-                            <div class="project-card__header">
-                                <h3 class="project-card__title">Editor Pro - AI Image Editor</h3>
-                                <span class="project-card__duration">September 2023</span>
-                            </div>
-                            <p class="project-card__description">
-                                Next-generation AI-powered image editor with command-based editing capabilities...
-                            </p>
-                            <div class="project-card__tech">
-                                <span class="tech-tag">HTML</span>
-                                <span class="tech-tag">CSS</span>
-                                <span class="tech-tag">JavaScript</span>
-                                <span class="tech-tag">Python</span>
-                            </div>
-                        </div>
-                        <div class="project-card__back">
-                            <div class="project-details">
-                                <h4>Full Description</h4>
-                                <p>Next-generation AI-powered image editor with command-based editing capabilities. Features include cartoon effects, vintage styles, and manual adjustments (brightness, contrast). Implemented user-friendly interface with one-click AI transformations.</p>
-                                <div class="project-card__actions">
-                                    <a href="https://ai-gngh.vercel.app" target="_blank" class="btn btn--primary btn--sm glow-btn">
-                                        <span class="btn-text">Live Demo</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="stat-card">
+                    <h3 class="counter" data-target="8">0</h3>
+                    <p>Certifications</p>
+                </div>
+                <div class="stat-card">
+                    <h3 class="counter" data-target="2">0</h3>
+                    <p>Core Languages</p>
+                </div>
+                <div class="stat-card">
+                    <h3 class="counter" data-target="1">0</h3>
+                    <p>Year Experience</p>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Resume Section -->
-    <section class="section" id="resume">
-        <div class="container">
-            <h2 class="section__title">
-                <span class="title-glow">Education & Achievements</span>
-            </h2>
-            <div class="resume__content">
-                <div class="education__section">
-                    <h3 class="resume__subtitle">Education</h3>
-                    <div class="timeline">
-                        <div class="timeline-line"></div>
-                        <div class="timeline-item" data-aos="fade-right">
-                            <div class="timeline-marker">
-                                <div class="marker-glow"></div>
+        <!-- Skills Section -->
+        <section id="skills" class="skills section">
+            <div class="section-header reveal">
+                <h2>Skills & Expertise</h2>
+                <div class="underline"></div>
+            </div>
+            <div class="skills-grid">
+                <div class="skill-category reveal">
+                    <h3><i class="fas fa-code"></i> Programming</h3>
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>Python</span>
+                                <span>90%</span>
                             </div>
-                            <div class="timeline-content">
-                                <h4 class="timeline-title">B.Tech. - CSE - Artificial Intelligence</h4>
-                                <p class="timeline-subtitle">Parul University • 2022 – 2026</p>
-                                <p class="timeline-description">CGPA: 7.81/10 • Specialization in AI & ML</p>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 0%" data-width="90%"></div>
                             </div>
                         </div>
-                        <div class="timeline-item" data-aos="fade-right" data-aos-delay="200">
-                            <div class="timeline-marker">
-                                <div class="marker-glow"></div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>Java</span>
+                                <span>75%</span>
                             </div>
-                            <div class="timeline-content">
-                                <h4 class="timeline-title">Higher Secondary (12th)</h4>
-                                <p class="timeline-subtitle">ARYA COLLEGE, Vaishali • 2022</p>
-                                <p class="timeline-description">BSEB • 60.60%</p>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 0%" data-width="75%"></div>
                             </div>
                         </div>
-                        <div class="timeline-item" data-aos="fade-right" data-aos-delay="400">
-                            <div class="timeline-marker">
-                                <div class="marker-glow"></div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>JavaScript</span>
+                                <span>80%</span>
                             </div>
-                            <div class="timeline-content">
-                                <h4 class="timeline-title">Secondary (10th)</h4>
-                                <p class="timeline-subtitle">ARYA COLLEGE, Vaishali • 2020</p>
-                                <p class="timeline-description">BSEB • 63%</p>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 0%" data-width="80%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>SQL</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 0%" data-width="85%"></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="certifications__section">
-                    <h3 class="resume__subtitle">Certifications</h3>
-                    <div class="cert-grid">
-                        <div class="cert-item floating-card">
-                            <div class="cert-badge">
-                                <div class="badge-glow"></div>
-                                🤖
+                <div class="skill-category reveal">
+                    <h3><i class="fas fa-brain"></i> AI & Machine Learning</h3>
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>Machine Learning</span>
+                                <span>85%</span>
                             </div>
-                            <h4 class="cert-title">Introduction to Modern AI</h4>
-                            <p class="cert-date">Jan 10, 2025</p>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 0%" data-width="85%"></div>
+                            </div>
                         </div>
-                        <div class="cert-item floating-card">
-                            <div class="cert-badge">
-                                <div class="badge-glow"></div>
-                                🔒
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>Deep Learning</span>
+                                <span>70%</span>
                             </div>
-                            <h4 class="cert-title">Introduction to Cybersecurity</h4>
-                            <p class="cert-date">Feb 14, 2024</p>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 0%" data-width="70%"></div>
+                            </div>
                         </div>
-                        <div class="cert-item floating-card">
-                            <div class="cert-badge">
-                                <div class="badge-glow"></div>
-                                🏆
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>Data Science (Tableau)</span>
+                                <span>80%</span>
                             </div>
-                            <h4 class="cert-title">PU CODE HACKATHON 2.0</h4>
-                            <p class="cert-date">Jan 02, 2025</p>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 0%" data-width="80%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>Computer Vision</span>
+                                <span>65%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 0%" data-width="65%"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="workshops__section">
-                    <h3 class="resume__subtitle">Workshops</h3>
-                    <div class="workshop-item floating-card">
-                        <div class="workshop-icon">📊</div>
-                        <h4 class="workshop-title">Gujarat Tableau User Group</h4>
-                        <p class="workshop-subtitle">Parul Institute of Technology, Vadodara</p>
-                        <p class="workshop-duration">Dec 21 – Dec 28, 2024</p>
-                        <p class="workshop-description">
-                            Attended comprehensive data visualization workshop. Gained hands-on experience 
-                            with Tableau for business intelligence.
-                        </p>
+                <div class="skill-category reveal">
+                    <h3><i class="fas fa-laptop-code"></i> Web & Tools</h3>
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>HTML5 / CSS3</span>
+                                <span>95%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 0%" data-width="95%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>Git / GitHub</span>
+                                <span>90%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 0%" data-width="90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>React (Basics)</span>
+                                <span>60%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 0%" data-width="60%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>Database Mgmt</span>
+                                <span>80%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 0%" data-width="80%"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Contact Section -->
-    <section class="section" id="contact">
-        <div class="container">
-            <h2 class="section__title">
-                <span class="title-glow">Get In Touch</span>
-            </h2>
-            <div class="contact__content">
-                <div class="contact__info">
-                    <h3 class="contact__subtitle">Contact Information</h3>
-                    <div class="contact-details">
-                        <div class="contact-item pulse-card">
-                            <span class="contact-icon">📧</span>
+        <!-- Projects Section -->
+        <section id="projects" class="projects section">
+            <div class="section-header reveal">
+                <h2>Featured Projects</h2>
+                <div class="underline"></div>
+            </div>
+            <div class="projects-grid">
+                <!-- Project 1 -->
+                <div class="project-card reveal">
+                    <div class="project-img">
+                        <img src="https://images.unsplash.com/photo-1592478411213-6153e4ebc07d?auto=format&fit=crop&q=80&w=800"
+                            alt="AR Card System">
+                        <div class="project-overlay">
+                            <a href="https://arcard-1.onrender.com" target="_blank" class="btn btn-small">Live Demo</a>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>AR Card System</h3>
+                        <p>An AI-ready platform to create, manage, and share smart AR cards with unique QR codes and
+                            secure authentication.</p>
+                        <div class="tech-tags">
+                            <span>Python</span>
+                            <span>HTML/CSS</span>
+                            <span>JS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card reveal">
+                    <div class="project-img">
+                        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800"
+                            alt="Editor Pro - AI Image Editor">
+                        <div class="project-overlay">
+                            <a href="https://ai-gngh.vercel.app" target="_blank" class="btn btn-small">Live Demo</a>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>Editor Pro - AI Image Editor</h3>
+                        <p>Command-based image editor with cartoon effects, vintage styles, and one-click AI
+                            transformations.</p>
+                        <div class="tech-tags">
+                            <span>Python</span>
+                            <span>JS</span>
+                            <span>CSS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3: BharatStore -->
+                <div class="project-card reveal">
+                    <div class="project-img">
+                        <img src="https://bharat-store-cyan.vercel.app/static/BharatStore.png"
+                            alt="BharatStore - App Marketplace" style="object-fit: fill;">
+                        <div class="project-overlay">
+                            <a href="https://bharat-store-cyan.vercel.app/" target="_blank" class="btn btn-small">Live
+                                Demo</a>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>BharatStore 🇮🇳</h3>
+                        <p>A full-stack app marketplace for India with role-based access, admin moderation, and
+                            localized aesthetics.</p>
+                        <div class="tech-tags">
+                            <span>Flask</span>
+                            <span>MongoDB</span>
+                            <span>Python</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4: SplitEase -->
+                <div class="project-card reveal">
+                    <div class="project-img">
+                        <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80&w=800"
+                            alt="SplitEase - Group Expense Manager">
+                        <div class="project-overlay">
+                            <a href="https://split-ease-lime.vercel.app/" target="_blank" class="btn btn-small">Live
+                                Demo</a>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>SplitEase </h3>
+                        <p>PWA-powered group expense manager with real-time sync, PDF reports, and security features
+                            like App Lock.</p>
+                        <div class="tech-tags">
+                            <span>Flask</span>
+                            <span>PWA</span>
+                            <span>JS</span>
+                            <span>MongoDB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 5: Crop Disease Prediction -->
+                <div class="project-card reveal">
+                    <div class="project-img">
+                        <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&q=80&w=800"
+                            alt="Crop Disease Prediction System">
+                        <div class="project-overlay">
+                            <a href="#" class="btn btn-small">View Details</a>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>Crop Disease Prediction</h3>
+                        <p>ML/DL system predicting crop diseases with Streamlit UI & FastAPI. Supports .pkl, .h5, and
+                            .keras models.</p>
+                        <div class="tech-tags">
+                            <span>TensorFlow</span>
+                            <span>FastAPI</span>
+                            <span>Streamlit</span>
+                            <span>Python</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 6 -->
+                <div class="project-card reveal">
+                    <div class="project-img">
+                        <img src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&q=80&w=800"
+                            alt="ML Forecast">
+                        <div class="project-overlay">
+                            <a href="#" class="btn btn-small">View Details</a>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>Geospatial ML Pipeline</h3>
+                        <p>End-to-end ML pipeline for large-scale geospatial and remote sensing datasets using Python
+                            and deep learning.</p>
+                        <div class="tech-tags">
+                            <span>Python</span>
+                            <span>DL</span>
+                            <span>GIS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="experience section">
+            <div class="section-header reveal">
+                <h2>Professional Experience</h2>
+                <div class="underline"></div>
+            </div>
+            <div class="experience-container">
+                <div class="exp-card reveal">
+                    <div class="exp-header">
+                        <div class="exp-comp">
+                            <img src="https://media.licdn.com/dms/image/v2/C560BAQFmFmvzRkvrJQ/company-logo_200_200/company-logo_200_200/0/1630642709333/bhaskaracharya_institute_for_space_applications_and_geo_informatics_logo?e=2147483647&v=beta&t=Hhm1d2HcTdcjMgCgyhn5ZL9GQKku_zJdAScDTdDpyH8"
+                                alt="BISAG Logo" class="comp-logo">
                             <div>
-                                <p class="contact-label">Email</p>
-                                <p class="contact-value">aryankjhaa@gmail.com</p>
+                                <h3>AI/ML Intern</h3>
+                                <h4>BISAG, Gandhinagar</h4>
                             </div>
-                            <div class="contact-glow"></div>
                         </div>
-                        <div class="contact-item pulse-card">
-                            <span class="contact-icon">📞</span>
-                            <div>
-                                <p class="contact-label">Phone</p>
-                                <p class="contact-value">+91-9835089300</p>
-                            </div>
-                            <div class="contact-glow"></div>
-                        </div>
-                        <div class="contact-item pulse-card">
-                            <span class="contact-icon">📍</span>
-                            <div>
-                                <p class="contact-label">Location</p>
-                                <p class="contact-value">Vadodara, Gujarat, India</p>
-                            </div>
-                            <div class="contact-glow"></div>
-                        </div>
-                        <div class="contact-item pulse-card">
-                            <span class="contact-icon">💻</span>
-                            <div>
-                                <p class="contact-label">GitHub</p>
-                                <p class="contact-value">
-                                    <a href="https://github.com/aryanjha205" target="_blank">aryanjha205</a>
-                                </p>
-                            </div>
-                            <div class="contact-glow"></div>
-                        </div>
-                        <div class="contact-item pulse-card">
-                            <span class="contact-icon">🔗</span>
-                            <div>
-                                <p class="contact-label">LinkedIn</p>
-                                <p class="contact-value">
-                                    <a href="https://www.linkedin.com/in/jhaaryaan" target="_blank">jhaaryaan</a>
-                                </p>
-                            </div>
-                            <div class="contact-glow"></div>
+                        <span class="exp-date">Jan 2026 - Present</span>
+                    </div>
+                    <div class="exp-body">
+                        <ul>
+                            <li>Designed and optimized ML/DL models on large-scale geospatial and remote sensing
+                                datasets using Python.</li>
+                            <li>Built robust end-to-end ML pipelines including preprocessing, feature engineering, and
+                                hyperparameter optimization.</li>
+                            <li>Applied supervised and unsupervised learning for spatial/temporal data analysis.</li>
+                            <li>Evaluated model performance using Accuracy, Precision, Recall, F1-score, and Confusion
+                                Matrix.</li>
+                            <li>Collaborated with multidisciplinary research teams for real-world government and space
+                                applications.</li>
+                        </ul>
+                        <div class="tech-tags">
+                            <span>Python</span>
+                            <span>Deep Learning</span>
+                            <span>Geospatial AI</span>
+                            <span>TensorFlow</span>
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <div class="contact__form">
-                    <h3 class="contact__subtitle">Send Message</h3>
-                    <form class="form ai-form" id="contact-form">
+        <!-- Education Section -->
+        <section id="education" class="education section">
+            <div class="reveal">
+                <div class="section-header">
+                    <h2>My Education</h2>
+                    <div class="underline"></div>
+                </div>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"><i class="fas fa-university"></i></div>
+                    <div class="timeline-content">
+                        <span class="date-tag">2022 – 2026</span>
+                        <h3>B.Tech. - CSE - AI</h3>
+                        <h4 class="edu-subtitle">Parul University, Vadodara</h4>
+                        <ul class="edu-details">
+                            <li><strong>Specialization:</strong> Artificial Intelligence & Machine Learning</li>
+                            <li><strong>Current CGPA:</strong> 7.81/10</li>
+                            <li><strong>Core Coursework:</strong> Deep Learning, Neural Networks, Natural Language
+                                Processing, Data Structures & Algorithms, Cloud Computing.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"><i class="fas fa-school"></i></div>
+                    <div class="timeline-content">
+                        <span class="date-tag">2020 – 2022</span>
+                        <h3>Higher Secondary (12th)</h3>
+                        <h4 class="edu-subtitle">ARYA COLLEGE, Vaishali</h4>
+                        <ul class="edu-details">
+                            <li><strong>Stream:</strong> Science (PCM)</li>
+                            <li><strong>Board:</strong> Bihar School Examination Board (BSEB)</li>
+                            <li><strong>Score:</strong> 60.60%</li>
+                            <li>Focused on Physics, Chemistry, and Mathematics as core subjects.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"><i class="fas fa-graduation-cap"></i></div>
+                    <div class="timeline-content">
+                        <span class="date-tag">2018 – 2020</span>
+                        <h3>Secondary (10th)</h3>
+                        <h4 class="edu-subtitle">ARYA COLLEGE, Vaishali</h4>
+                        <ul class="edu-details">
+                            <li><strong>Board:</strong> Bihar School Examination Board (BSEB)</li>
+                            <li><strong>Score:</strong> 63%</li>
+                            <li>Built a strong foundation in Mathematics, Science, and English.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Certifications Section -->
+        <section id="certifications" class="certifications section">
+            <div class="section-header reveal">
+                <h2>Certifications</h2>
+                <div class="underline"></div>
+            </div>
+            <div class="certs-grid">
+                <div class="cert-card reveal">
+                    <div class="cert-icon"><i class="fas fa-brain"></i></div>
+                    <div class="cert-info">
+                        <h3>Introduction to Modern AI</h3>
+                        <p>Jan 2025</p>
+                    </div>
+                </div>
+                <div class="cert-card reveal">
+                    <div class="cert-icon"><i class="fas fa-network-wired"></i></div>
+                    <div class="cert-info">
+                        <h3>Introduction to IoT</h3>
+                        <p>NPTEL • Jul 2025</p>
+                    </div>
+                </div>
+                <div class="cert-card reveal">
+                    <div class="cert-icon"><i class="fas fa-robot"></i></div>
+                    <div class="cert-info">
+                        <h3>AI Fundamentals</h3>
+                        <p>IBM & Cisco • Jul 2025</p>
+                    </div>
+                </div>
+                <div class="cert-card reveal">
+                    <div class="cert-icon"><i class="fas fa-lightbulb"></i></div>
+                    <div class="cert-info">
+                        <h3>Intro to AI</h3>
+                        <p>Infosys Springboard • Jan 2025</p>
+                    </div>
+                </div>
+                <div class="cert-card reveal">
+                    <div class="cert-icon"><i class="fas fa-server"></i></div>
+                    <div class="cert-info">
+                        <h3>Computer Networks & IP</h3>
+                        <p>NPTEL • May 2024</p>
+                    </div>
+                </div>
+                <div class="cert-card reveal">
+                    <div class="cert-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="cert-info">
+                        <h3>Cybersecurity Intro</h3>
+                        <p>Feb 2024</p>
+                    </div>
+                </div>
+                <div class="cert-card reveal">
+                    <div class="cert-icon"><i class="fas fa-trophy"></i></div>
+                    <div class="cert-info">
+                        <h3>PU CODE HACKATHON 2.0</h3>
+                        <p>Jan 2025</p>
+                    </div>
+                </div>
+                <div class="cert-card reveal">
+                    <div class="cert-icon"><i class="fas fa-chart-bar"></i></div>
+                    <div class="cert-info">
+                        <h3>Tableau Data Visualization</h3>
+                        <p>Dec 2024</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact section">
+            <div class="section-header reveal">
+                <h2>Get In Touch</h2>
+                <div class="underline"></div>
+            </div>
+            <div class="contact-container">
+                <div class="contact-info reveal">
+                    <h3>Contact Information</h3>
+
+                    <div class="contact-methods">
+                        <div class="method-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <span>Email</span>
+                                <p>aryankjhaa@gmail.com</p>
+                            </div>
+                        </div>
+                        <div class="method-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <span>Phone</span>
+                                <p>+91-9835089300</p>
+                            </div>
+                        </div>
+                        <div class="method-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <span>Location</span>
+                                <p>Vadodara, Gujarat, India</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="https://linkedin.com/in/jhaaryaan" target="_blank" title="LinkedIn"><i
+                                class="fab fa-linkedin"></i></a>
+                        <a href="https://github.com/aryanjha205" target="_blank" title="GitHub"><i
+                                class="fab fa-github"></i></a>
+                        <a href="https://twitter.com/jhaaryaan" target="_blank" title="Twitter"><i
+                                class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com/jhaaryaan" target="_blank" title="Instagram"><i
+                                class="fab fa-instagram"></i></a>
+                        <a href="https://snapchat.com/add/jhaaryaan" target="_blank" title="Snapchat"><i
+                                class="fab fa-snapchat"></i></a>
+                    </div>
+                </div>
+                <div class="contact-form-container reveal">
+                    <form id="contact-form" class="contact-form">
                         <div class="form-group">
-                            <label class="form-label" for="name">Name</label>
-                            <div class="input-wrapper">
-                                <input type="text" class="form-control neon-input" id="name" name="name" required>
-                                <div class="input-border"></div>
-                            </div>
+                            <input type="text" id="name" name="name" placeholder="Your Name" required>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="email">Email</label>
-                            <div class="input-wrapper">
-                                <input type="email" class="form-control neon-input" id="email" name="email" required>
-                                <div class="input-border"></div>
-                            </div>
+                            <input type="email" id="email" name="email" placeholder="Your Email" required>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="message">Message</label>
-                            <div class="input-wrapper">
-                                <textarea class="form-control neon-input" id="message" name="message" rows="5" required></textarea>
-                                <div class="input-border"></div>
-                            </div>
+                            <input type="text" id="subject" name="subject" placeholder="Subject" required>
                         </div>
-                        <button type="submit" class="btn btn--primary btn--full-width glow-btn">
-                            <span class="btn-text">Send Message</span>
-                            <div class="btn-glow"></div>
-                        </button>
+                        <div class="form-group">
+                            <textarea id="message" name="message" placeholder="Your Message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary submit-btn">Send Message <i
+                                class="fas fa-paper-plane"></i></button>
                     </form>
+                    <div id="form-msg"></div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container">
-            <p class="footer__text">
-                © 2025 Aryan Kumar
-            </p>
-        </div>
+        <p>&copy; 2026 Aryan Kumar. All Rights Reserved.</p>
     </footer>
 
-    <script src="app.js"></script>
+    <!-- Scroll to Top Button -->
+    <button id="scroll-top" class="btn-scroll-top"><i class="fas fa-chevron-up"></i></button>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
 </body>
+
 </html>
