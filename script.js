@@ -1,5 +1,33 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Loader Logic
+    // 1. Theme Toggle Logic
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    const icon = themeToggle.querySelector('i');
+
+    // Check for saved theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        body.classList.add('light-theme');
+        icon.classList.replace('fa-moon', 'fa-sun');
+    }
+
+    themeToggle.addEventListener('click', () => {
+        body.classList.toggle('light-theme');
+        const isLight = body.classList.contains('light-theme');
+        
+        if (isLight) {
+            icon.classList.replace('fa-moon', 'fa-sun');
+            localStorage.setItem('theme', 'light');
+        } else {
+            icon.classList.replace('fa-sun', 'fa-moon');
+            localStorage.setItem('theme', 'dark');
+        }
+
+        // GSAP transition for theme change
+        gsap.fromTo('body', { opacity: 0.8 }, { opacity: 1, duration: 0.5 });
+    });
+
+    // 2. Loader Logic
     const loader = document.getElementById('loader');
     window.addEventListener('load', () => {
         setTimeout(() => {
@@ -75,66 +103,127 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 4. Scroll Reveal Logic
-    const reveals = document.querySelectorAll('.reveal, .project-card, .skill-category, .stat-card, .exp-card');
-    const revealOptions = {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px"
-    };
+    // 4. GSAP Animations & ScrollTrigger
+    gsap.registerPlugin(ScrollTrigger);
 
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('active');
-            }
+    // Initial Hero Animation
+    const tl = gsap.timeline();
+    tl.from('.navbar-container', { y: -100, opacity: 0, duration: 1, ease: 'power4.out' })
+      .from('.hero-content h2', { y: 30, opacity: 0, duration: 0.8, ease: 'power3.out' }, '-=0.5')
+      .from('.hero-content h1', { y: 30, opacity: 0, duration: 0.8, ease: 'power3.out' }, '-=0.6')
+      .from('.typing-text-container', { y: 30, opacity: 0, duration: 0.8, ease: 'power3.out' }, '-=0.6')
+      .from('.hero-content p', { y: 30, opacity: 0, duration: 0.8, ease: 'power3.out' }, '-=0.6')
+      .from('.hero-btns', { y: 30, opacity: 0, duration: 0.8, ease: 'power3.out' }, '-=0.6')
+      .from('.hero-image', { scale: 0.8, opacity: 0, duration: 1.2, ease: 'elastic.out(1, 0.5)' }, '-=1');
+
+    // Floating Hero Image
+    gsap.to('.img-box', {
+        y: 20,
+        duration: 2,
+        repeat: -1,
+        yoyo: true,
+        ease: 'power1.inOut'
+    });
+
+    // Section Reveals
+    const sections = document.querySelectorAll('section');
+    sections.forEach(section => {
+        const q = gsap.utils.selector(section);
+        
+        // Staggered reveal for cards and items
+        gsap.from(q('.project-card, .skill-category, .stat-card, .exp-card, .timeline-item, .cert-card'), {
+            scrollTrigger: {
+                trigger: section,
+                start: 'top 80%',
+                toggleActions: 'play none none none'
+            },
+            y: 50,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: 'power3.out'
         });
-    }, revealOptions);
 
-    reveals.forEach(reveal => revealObserver.observe(reveal));
+        // Heading reveal
+        gsap.from(q('.section-header'), {
+            scrollTrigger: {
+                trigger: section,
+                start: 'top 85%',
+            },
+            y: 30,
+            opacity: 0,
+            duration: 1,
+            ease: 'power3.out'
+        });
+    });
 
-    // 5. Progress Bar Animation
+    // Parallax Blobs
+    gsap.to('.blob-1', {
+        scrollTrigger: {
+            trigger: 'body',
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 2
+        },
+        y: 300,
+        x: 100,
+        scale: 1.2
+    });
+
+    gsap.to('.blob-2', {
+        scrollTrigger: {
+            trigger: 'body',
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 3
+        },
+        y: -400,
+        x: -200,
+        scale: 0.8
+    });
+
+    gsap.to('.blob-3', {
+        scrollTrigger: {
+            trigger: 'body',
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 1.5
+        },
+        y: 200,
+        x: -150,
+        rotation: 180
+    });
+
+    // 5. Progress Bar Animation with GSAP
     const skillsSection = document.getElementById('skills');
-    const progressObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const progressBars = document.querySelectorAll('.progress');
-                progressBars.forEach(bar => {
-                    const width = bar.getAttribute('data-width');
-                    bar.style.width = width;
-                });
-            }
+    if (skillsSection) {
+        gsap.from('.progress', {
+            scrollTrigger: {
+                trigger: '#skills',
+                start: 'top 70%',
+            },
+            width: 0,
+            duration: 1.5,
+            stagger: 0.1,
+            ease: 'power4.out'
         });
-    }, { threshold: 0.2 });
+    }
 
-    if (skillsSection) progressObserver.observe(skillsSection);
-
-    // 6. Counter Animation
+    // 6. Counter Animation with GSAP
     const counters = document.querySelectorAll('.counter');
-    const counterObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const counter = entry.target;
-                const target = +counter.getAttribute('data-target');
-                const duration = 2000;
-                const increment = target / (duration / 16);
-
-                let count = 0;
-                const updateCount = () => {
-                    if (count < target) {
-                        count += increment;
-                        counter.innerText = Math.ceil(count);
-                        setTimeout(updateCount, 16);
-                    } else {
-                        counter.innerText = target;
-                    }
-                };
-                updateCount();
-                counterObserver.unobserve(counter);
-            }
+    counters.forEach(counter => {
+        const target = +counter.getAttribute('data-target');
+        gsap.to(counter, {
+            scrollTrigger: {
+                trigger: counter,
+                start: 'top 90%',
+            },
+            innerText: target,
+            duration: 2,
+            snap: { innerText: 1 },
+            ease: 'power1.inOut'
         });
-    }, { threshold: 1 });
-
-    counters.forEach(counter => counterObserver.observe(counter));
+    });
 
     // 7. Scroll Progress & Sticky Navbar Logic
     const scrollProgress = document.getElementById('scroll-progress');
@@ -158,9 +247,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Hide/Show Navbar on Scroll
         if (window.scrollY > 100) {
             if (window.scrollY > lastScrollY) {
-                navbar.style.transform = 'translateY(-100%)';
+                gsap.to(navbar, { y: -100, duration: 0.4, ease: 'power2.in' });
             } else {
-                navbar.style.transform = 'translateY(0)';
+                gsap.to(navbar, { y: 0, duration: 0.4, ease: 'power2.out' });
                 navbar.style.background = 'rgba(15, 23, 42, 0.9)';
             }
         } else {
@@ -169,7 +258,6 @@ document.addEventListener('DOMContentLoaded', () => {
         lastScrollY = window.scrollY;
 
         // Active Link Highlight
-        const sections = document.querySelectorAll('section');
         let current = "";
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
@@ -191,33 +279,30 @@ document.addEventListener('DOMContentLoaded', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // 8. Custom Cursor Logic
+    // 8. Custom Cursor Logic (Smoother GSAP version)
     const cursor = document.querySelector('.cursor');
     const follower = document.querySelector('.cursor-follower');
 
-    document.addEventListener('mousemove', (e) => {
-        cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+    gsap.set('.cursor', { xPercent: -50, yPercent: -50 });
+    gsap.set('.cursor-follower', { xPercent: -50, yPercent: -50 });
 
-        setTimeout(() => {
-            follower.style.transform = `translate3d(${e.clientX - 20}px, ${e.clientY - 20}px, 0)`;
-        }, 50);
+    window.addEventListener('mousemove', e => {
+        gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1 });
+        gsap.to(follower, { x: e.clientX, y: e.clientY, duration: 0.3 });
     });
 
     document.querySelectorAll('a, button, .menu-toggle, .project-card, .skill-category, .stat-card').forEach(element => {
         element.addEventListener('mouseenter', () => {
-            cursor.style.transform += ' scale(2.5)';
-            follower.style.transform += ' scale(1.5)';
-            follower.style.background = 'rgba(99, 102, 241, 0.1)';
-            follower.style.borderColor = 'transparent';
+            gsap.to(cursor, { scale: 3, duration: 0.3 });
+            gsap.to(follower, { scale: 2, backgroundColor: 'rgba(99, 102, 241, 0.1)', borderColor: 'transparent', duration: 0.3 });
         });
         element.addEventListener('mouseleave', () => {
-            // Transform resets in the mousemove listener
-            follower.style.background = 'transparent';
-            follower.style.borderColor = 'var(--primary-color)';
+            gsap.to(cursor, { scale: 1, duration: 0.3 });
+            gsap.to(follower, { scale: 1, backgroundColor: 'transparent', borderColor: 'var(--primary-color)', duration: 0.3 });
         });
     });
 
-    // 9. Particle Background Logic (Advanced)
+    // 9. Particle Background Logic (Kept as is, but could be integrated with GSAP)
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -317,7 +402,7 @@ document.addEventListener('DOMContentLoaded', () => {
     animateParticles();
     window.addEventListener('resize', initParticles);
 
-    // 10. 3D Tilt Effect
+    // 10. 3D Tilt Effect (Kept manual for performance/direct control)
     const tiltElements = document.querySelectorAll('.project-card, .stat-card, .skill-category, .img-box, .exp-card');
 
     tiltElements.forEach(el => {
@@ -329,18 +414,31 @@ document.addEventListener('DOMContentLoaded', () => {
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
 
-            const rotateX = (y - centerY) / 10;
-            const rotateY = (centerX - x) / 10;
+            const rotateX = (y - centerY) / 15;
+            const rotateY = (centerX - x) / 15;
 
-            el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+            gsap.to(el, {
+                rotateX: rotateX,
+                rotateY: rotateY,
+                scale: 1.05,
+                duration: 0.5,
+                ease: 'power2.out',
+                perspective: 1000
+            });
         });
 
         el.addEventListener('mouseleave', () => {
-            el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+            gsap.to(el, {
+                rotateX: 0,
+                rotateY: 0,
+                scale: 1,
+                duration: 0.5,
+                ease: 'power2.out'
+            });
         });
     });
 
-    // 11. Magnetic Button Effect
+    // 11. Magnetic Button Effect (Refined GSAP version)
     const magneticBtns = document.querySelectorAll('.btn, .social-hero a, .logo a');
 
     magneticBtns.forEach(btn => {
@@ -349,11 +447,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const x = e.clientX - rect.left - rect.width / 2;
             const y = e.clientY - rect.top - rect.height / 2;
 
-            btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+            gsap.to(btn, {
+                x: x * 0.4,
+                y: y * 0.4,
+                duration: 0.3,
+                ease: 'power2.out'
+            });
         });
 
         btn.addEventListener('mouseleave', () => {
-            btn.style.transform = `translate(0px, 0px)`;
+            gsap.to(btn, {
+                x: 0,
+                y: 0,
+                duration: 0.5,
+                ease: 'elastic.out(1, 0.3)'
+            });
         });
     });
 
@@ -380,7 +488,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 // Try localhost first, then fall back to relative path if hosted
-                const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                const isLocal = window.location.hostname === 'localhost' || 
+                              window.location.hostname === '127.0.0.1' || 
+                              window.location.hostname === '';
+                
+                const apiUrl = isLocal 
                     ? 'http://localhost:5000/api/contact'
                     : '/api/contact';
 
