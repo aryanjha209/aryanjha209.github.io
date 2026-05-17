@@ -613,6 +613,149 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    
+    // 5. AI Chat Assistant
+    const aiChatBtn = document.getElementById('ai-chat-btn');
+    const aiChatWindow = document.getElementById('ai-chat-window');
+    const aiChatClose = document.getElementById('ai-chat-close');
+    const aiChatInput = document.getElementById('ai-chat-input');
+    const aiChatSubmit = document.getElementById('ai-chat-submit');
+    const aiChatBody = document.getElementById('ai-chat-body');
+
+    if (aiChatBtn && aiChatWindow) {
+        aiChatBtn.addEventListener('click', () => {
+            aiChatWindow.classList.toggle('active');
+            if (aiChatWindow.classList.contains('active')) {
+                setTimeout(() => aiChatInput.focus(), 300);
+            }
+        });
+
+        aiChatClose.addEventListener('click', () => {
+            aiChatWindow.classList.remove('active');
+        });
+
+        const getAIResponse = (message) => {
+            message = message.toLowerCase();
+            if (message.includes('skill') || message.includes('tech')) {
+                return "Aryan specializes in Python, JavaScript, React, Node.js, and Machine Learning (TensorFlow/FastAPI). He is great at both front-end and back-end!";
+            } else if (message.includes('project')) {
+                return "Aryan has built over 54 projects! Some favorites include the AR Card System, BharatStore PWA, and a Crop Disease Prediction System.";
+            } else if (message.includes('contact') || message.includes('email') || message.includes('hire')) {
+                return "You can reach Aryan at aryankjhaa@gmail.com or call him at +91-9835089300. You can also use the contact form at the bottom of the page!";
+            } else if (message.includes('education') || message.includes('study')) {
+                return "He is currently pursuing his B.Tech in CSE with a specialization in AI at Parul University (2022-2026).";
+            } else if (message.includes('experience') || message.includes('work')) {
+                return "Aryan is currently working as an AI/ML Intern at BISAG in Gandhinagar, working on real-world geospatial and remote sensing ML pipelines.";
+            } else if (message.includes('hello') || message.includes('hi ') || message === 'hi') {
+                return "Hello there! How can I help you learn more about Aryan today?";
+            } else if (message.includes('who are you')) {
+                return "I'm Aryan's custom AI Assistant, built directly into his portfolio to answer your questions!";
+            } else {
+                return "That's an interesting question! I am still learning, but you can always reach out to Aryan directly via the contact form for a detailed chat.";
+            }
+        };
+
+        const handleChatSubmit = () => {
+            const text = aiChatInput.value.trim();
+            if (!text) return;
+            
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'user-msg';
+            userMsg.textContent = text;
+            aiChatBody.appendChild(userMsg);
+            
+            aiChatInput.value = '';
+            aiChatBody.scrollTop = aiChatBody.scrollHeight;
+
+            // Show typing indicator
+            const typingMsg = document.createElement('div');
+            typingMsg.className = 'ai-msg';
+            typingMsg.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
+            aiChatBody.appendChild(typingMsg);
+            aiChatBody.scrollTop = aiChatBody.scrollHeight;
+
+            // AI Response after delay
+            setTimeout(() => {
+                typingMsg.remove();
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'ai-msg';
+                aiMsg.textContent = getAIResponse(text);
+                aiChatBody.appendChild(aiMsg);
+                aiChatBody.scrollTop = aiChatBody.scrollHeight;
+            }, 1000);
+        };
+
+        aiChatSubmit.addEventListener('click', handleChatSubmit);
+        aiChatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleChatSubmit();
+        });
+    }
+
+    // 6. Voice Navigation (Web Speech API)
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.lang = 'en-US';
+        
+        // Add a mic button to the navbar
+        const navLinksList = document.querySelector('.nav-links');
+        if (navLinksList && !document.getElementById('voice-btn')) {
+            const micLi = document.createElement('li');
+            micLi.innerHTML = '<a href="javascript:void(0)" id="voice-btn" title="Voice Commands (Try \'Go to projects\')"><i class="fas fa-microphone"></i></a>';
+            navLinksList.appendChild(micLi);
+
+            const voiceBtn = document.getElementById('voice-btn');
+            let isListening = false;
+
+            voiceBtn.addEventListener('click', () => {
+                if (isListening) {
+                    recognition.stop();
+                } else {
+                    recognition.start();
+                    voiceBtn.querySelector('i').classList.remove('fa-microphone');
+                    voiceBtn.querySelector('i').classList.add('fa-microphone-slash', 'fa-beat');
+                    voiceBtn.querySelector('i').style.color = '#ef4444';
+                }
+            });
+
+            recognition.onresult = (event) => {
+                const command = event.results[0][0].transcript.toLowerCase();
+                console.log('Voice Command:', command);
+                
+                if (command.includes('home')) document.querySelector('a[href="#home"]').click();
+                else if (command.includes('about')) document.querySelector('a[href="#about"]').click();
+                else if (command.includes('skills')) document.querySelector('a[href="#skills"]').click();
+                else if (command.includes('project')) document.querySelector('a[href="#projects"]').click();
+                else if (command.includes('experience')) document.querySelector('a[href="#experience"]').click();
+                else if (command.includes('education')) document.querySelector('a[href="#education"]').click();
+                else if (command.includes('contact')) document.querySelector('a[href="#contact"]').click();
+                else if (command.includes('dark')) {
+                    if (!document.body.classList.contains('dark-mode')) document.getElementById('theme-toggle').click();
+                }
+                else if (command.includes('light')) {
+                    if (document.body.classList.contains('dark-mode')) document.getElementById('theme-toggle').click();
+                }
+                else if (command.includes('terminal')) document.getElementById('terminal-btn').click();
+                
+                // Alert isn't great, better to show a small toast or just let it happen naturally
+                // alert(`Voice Command Recognized: "${command}"`);
+            };
+
+            recognition.onend = () => {
+                isListening = false;
+                voiceBtn.querySelector('i').classList.add('fa-microphone');
+                voiceBtn.querySelector('i').classList.remove('fa-microphone-slash', 'fa-beat');
+                voiceBtn.querySelector('i').style.color = '';
+            };
+
+            recognition.onstart = () => {
+                isListening = true;
+            };
+        }
+    }
+
     // --- END SURPRISE FEATURES ---
 
 });
