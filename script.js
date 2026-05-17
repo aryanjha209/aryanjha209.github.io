@@ -379,10 +379,8 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
 
             try {
-                // Try localhost first, then fall back to the Vercel deployed backend URL
-                const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-                    ? 'http://localhost:5000/api/contact'
-                    : 'https://aryan-backend-tan.vercel.app/api/contact';
+                // Always use the deployed Vercel backend to prevent local connection errors
+                const apiUrl = 'https://aryan-backend-tan.vercel.app/api/contact';
 
                 const response = await fetch(apiUrl, {
                     method: 'POST',
@@ -412,9 +410,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Contact Form Error:', error);
                 submitBtn.innerHTML = '<i class="fas fa-times"></i> Error';
                 submitBtn.style.background = '#ef4444';
-                formMsg.textContent = 'Connection error. Make sure server.js is running!';
+                
+                // Show the actual error message from the server if available
+                let errorMessage = 'Connection error. Please try again later.';
+                if (error.message.includes('Server responded with 500')) {
+                    errorMessage = 'Server configuration error (Email credentials missing).';
+                }
+                
+                formMsg.textContent = errorMessage;
                 formMsg.style.color = '#ef4444';
-                alert('Could not connect to the mail server. Please ensure node server.js is running on your PC.');
+                alert('Message Failed: ' + error.message);
             } finally {
                 setTimeout(() => {
                     submitBtn.disabled = false;
