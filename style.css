@@ -1,20 +1,20 @@
 /* Base Styles & Variables */
 :root {
-    --primary-color: #6366f1;
-    --secondary-color: #a855f7;
-    --accent-color: #22d3ee;
-    --bg-dark: #0f172a;
-    --bg-darker: #020617;
-    --text-light: #f8fafc;
-    --text-dim: #94a3b8;
-    --card-bg: rgba(30, 41, 59, 0.4);
-    --glass-border: rgba(255, 255, 255, 0.08);
+    --primary-color: #39FF14;
+    --secondary-color: #00CC33;
+    --accent-color: #FFFFFF;
+    --bg-dark: #0a0a0a;
+    --bg-darker: #000000;
+    --text-light: #F8FAFC;
+    --text-dim: #94A3B8;
+    --card-bg: rgba(10, 10, 10, 0.45);
+    --glass-border: rgba(255, 255, 255, 0.05);
     --nav-height: 80px;
     --transition-slow: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     --transition-medium: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-fast: 0.3s ease;
-    --shadow-premium: 0 20px 50px rgba(0, 0, 0, 0.5);
-    --neon-glow: 0 0 20px rgba(99, 102, 241, 0.3);
+    --shadow-premium: 0 20px 40px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    --neon-glow: 0 0 25px rgba(57, 255, 20, 0.3);
 }
 
 /* Custom Scrollbar */
@@ -45,6 +45,11 @@
 body {
     font-family: 'Inter', 'Poppins', sans-serif;
     background-color: var(--bg-darker);
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: center center;
     color: var(--text-light);
     line-height: 1.6;
     overflow-x: hidden;
@@ -253,7 +258,7 @@ section {
     left: 0;
     width: 100%;
     height: var(--nav-height);
-    background: rgba(15, 23, 42, 0.1);
+    background: rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--glass-border);
@@ -346,8 +351,9 @@ section {
 
 .btn-primary {
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: white;
-    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
+    color: #000000;
+    font-weight: 700;
+    box-shadow: 0 10px 30px rgba(57, 255, 20, 0.2);
     position: relative;
     overflow: hidden;
 }
@@ -407,7 +413,7 @@ section {
     font-weight: 800;
     line-height: 1;
     margin-bottom: 20px;
-    background: linear-gradient(to bottom, #fff, #94a3b8);
+    background: linear-gradient(to bottom, #ffffff, #a1a1aa);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -422,7 +428,7 @@ section {
 
 .typing-text {
     color: var(--accent-color);
-    text-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
 }
 
 .hero-content p {
@@ -455,7 +461,7 @@ section {
 .social-hero a:hover {
     color: var(--primary-color);
     transform: translateY(-5px);
-    text-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+    text-shadow: 0 0 15px rgba(57, 255, 20, 0.5);
 }
 
 .hero-image {
@@ -712,7 +718,7 @@ section {
 .skill-category h3 i {
     color: var(--primary-color);
     font-size: 2rem;
-    background: rgba(99, 102, 241, 0.1);
+    background: rgba(57, 255, 20, 0.1);
     padding: 15px;
     border-radius: 12px;
 }
@@ -789,7 +795,7 @@ section {
 .project-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(15, 23, 42, 0.7);
+    background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(8px);
     display: flex;
     justify-content: center;
@@ -828,7 +834,7 @@ section {
 
 .tech-tags span {
     padding: 6px 15px;
-    background: rgba(99, 102, 241, 0.1);
+    background: rgba(57, 255, 20, 0.1);
     color: var(--primary-color);
     font-size: 0.85rem;
     font-weight: 700;
@@ -888,7 +894,7 @@ section {
 .exp-comp i {
     font-size: 2.5rem;
     color: var(--primary-color);
-    background: rgba(99, 102, 241, 0.1);
+    background: rgba(57, 255, 20, 0.1);
     padding: 20px;
     border-radius: 20px;
     box-shadow: var(--neon-glow);
@@ -991,7 +997,7 @@ section {
     align-items: center;
     justify-content: center;
     transition: var(--transition-medium);
-    box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+    box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
 }
 
 .timeline-dot i {
@@ -1025,7 +1031,7 @@ section {
 .timeline-content:hover {
     border-color: var(--primary-color);
     transform: translateX(15px);
-    background: rgba(99, 102, 241, 0.08);
+    background: rgba(57, 255, 20, 0.08);
     box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.3);
 }
 
@@ -1092,7 +1098,7 @@ section {
     font-size: 0.85rem;
     font-weight: 800;
     color: white;
-    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+    box-shadow: 0 8px 20px rgba(57, 255, 20, 0.4);
 }
 
 .date {
@@ -1133,7 +1139,7 @@ section {
     font-size: 3rem;
     color: var(--accent-color);
     margin-bottom: 25px;
-    filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.3));
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
 }
 
 /* Contact Section */
@@ -1168,7 +1174,7 @@ section {
 .method-item i {
     width: 65px;
     height: 65px;
-    background: rgba(99, 102, 241, 0.1);
+    background: rgba(57, 255, 20, 0.1);
     color: var(--primary-color);
     display: flex;
     align-items: center;
@@ -1247,7 +1253,7 @@ section {
 .form-group textarea:focus {
     border-color: var(--primary-color);
     background: rgba(255, 255, 255, 0.06);
-    box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+    box-shadow: 0 0 20px rgba(57, 255, 20, 0.15);
     outline: none;
 }
 
@@ -1406,7 +1412,7 @@ section {
         right: -100%;
         width: 100%;
         height: calc(100vh - var(--nav-height));
-        background: rgba(15, 23, 42, 0.98);
+        background: rgba(0, 0, 0, 0.98);
         backdrop-filter: blur(20px);
         flex-direction: column;
         gap: 30px;

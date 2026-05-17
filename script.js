@@ -379,10 +379,10 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
 
             try {
-                // Try localhost first, then fall back to relative path if hosted
+                // Try localhost first, then fall back to the Vercel deployed backend URL
                 const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
                     ? 'http://localhost:5000/api/contact'
-                    : '/api/contact';
+                    : 'https://aryan-backend-tan.vercel.app/api/contact';
 
                 const response = await fetch(apiUrl, {
                     method: 'POST',
