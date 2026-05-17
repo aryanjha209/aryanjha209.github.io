@@ -1,0 +1,21 @@
+{
+  "name": "Aryan Kumar Portfolio",
+  "short_name": "Aryan",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#10B981",
+  "description": "Aryan Kumar - AI/ML Engineer & Web Developer Portfolio",
+  "icons": [
+    {
+      "src": "https://ui-avatars.com/api/?name=Aryan+Kumar&background=10B981&color=fff&size=192",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://ui-avatars.com/api/?name=Aryan+Kumar&background=10B981&color=fff&size=512",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

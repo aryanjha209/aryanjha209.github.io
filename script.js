@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 800);
     });
 
-    // 2. Typing Animation
+        // 2. Typing Animation
     const typingText = document.querySelector('.typing-text');
     const roles = ['AI/ML Engineer', 'Web Developer', 'Python Enthusiast', 'Cloud Architect', 'Generative AI Developer'];
     let roleIndex = 0;
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    navItems.forEach(item => {
+        navItems.forEach(item => {
         item.addEventListener('click', () => {
             navLinks.classList.remove('active');
             mobileMenu.classList.remove('is-active');
@@ -73,9 +73,10 @@ document.addEventListener('DOMContentLoaded', () => {
             bars[1].style.opacity = '1';
             bars[2].style.transform = 'none';
         });
-    });
 
-    // 4. Scroll Reveal Logic
+        });
+
+        // 4. Scroll Reveal Logic
     const reveals = document.querySelectorAll('.reveal, .project-card, .skill-category, .stat-card, .exp-card');
     const revealOptions = {
         threshold: 0.1,
@@ -88,7 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 entry.target.classList.add('active');
             }
         });
-    }, revealOptions);
+
+        }, revealOptions);
 
     reveals.forEach(reveal => revealObserver.observe(reveal));
 
@@ -102,11 +104,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     const width = bar.getAttribute('data-width');
                     bar.style.width = width;
                 });
-            }
-        });
-    }, { threshold: 0.2 });
 
-    if (skillsSection) progressObserver.observe(skillsSection);
+                }
+        });
+
+        }, { threshold: 0.2 });
+
+        if (skillsSection) progressObserver.observe(skillsSection);
 
     // 6. Counter Animation
     const counters = document.querySelectorAll('.counter');
@@ -132,9 +136,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 counterObserver.unobserve(counter);
             }
         });
-    }, { threshold: 1 });
 
-    counters.forEach(counter => counterObserver.observe(counter));
+        }, { threshold: 1 });
+
+        counters.forEach(counter => counterObserver.observe(counter));
 
     // 7. Scroll Progress & Sticky Navbar Logic
     const scrollProgress = document.getElementById('scroll-progress');
@@ -179,19 +184,21 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        navItems.forEach(item => {
+            navItems.forEach(item => {
             item.classList.remove('active');
             if (item.getAttribute('href') === `#${current}`) {
                 item.classList.add('active');
             }
         });
-    });
 
-    scrollTopBtn.addEventListener('click', () => {
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
 
-    // 8. Custom Cursor Logic
+        });
+
+        // 8. Custom Cursor Logic
     const cursor = document.querySelector('.cursor');
     const follower = document.querySelector('.cursor-follower');
 
@@ -203,21 +210,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 50);
     });
 
-    document.querySelectorAll('a, button, .menu-toggle, .project-card, .skill-category, .stat-card').forEach(element => {
+        document.querySelectorAll('a, button, .menu-toggle, .project-card, .skill-category, .stat-card').forEach(element => {
         element.addEventListener('mouseenter', () => {
             cursor.style.transform += ' scale(2.5)';
             follower.style.transform += ' scale(1.5)';
             follower.style.background = 'rgba(99, 102, 241, 0.1)';
             follower.style.borderColor = 'transparent';
         });
-        element.addEventListener('mouseleave', () => {
+
+            element.addEventListener('mouseleave', () => {
             // Transform resets in the mousemove listener
             follower.style.background = 'transparent';
             follower.style.borderColor = 'var(--primary-color)';
         });
-    });
 
-    // 9. Particle Background Logic (Advanced)
+        });
+
+        // 9. Particle Background Logic (Advanced)
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -228,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mouse.y = e.y;
     });
 
-    class Particle {
+        class Particle {
         constructor() {
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height;
@@ -309,7 +318,8 @@ document.addEventListener('DOMContentLoaded', () => {
             p.update();
             p.draw();
         });
-        connectParticles();
+
+            connectParticles();
         requestAnimationFrame(animateParticles);
     }
 
@@ -335,12 +345,13 @@ document.addEventListener('DOMContentLoaded', () => {
             el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
         });
 
-        el.addEventListener('mouseleave', () => {
+            el.addEventListener('mouseleave', () => {
             el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
         });
-    });
 
-    // 11. Magnetic Button Effect
+        });
+
+        // 11. Magnetic Button Effect
     const magneticBtns = document.querySelectorAll('.btn, .social-hero a, .logo a');
 
     magneticBtns.forEach(btn => {
@@ -352,12 +363,13 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
         });
 
-        btn.addEventListener('mouseleave', () => {
+            btn.addEventListener('mouseleave', () => {
             btn.style.transform = `translate(0px, 0px)`;
         });
-    });
 
-    // 12. Contact Form Logic (Integrated with Backend)
+        });
+
+        // 12. Contact Form Logic (Integrated with Backend)
     const contactForm = document.getElementById('contact-form');
     const formMsg = document.getElementById('form-msg');
 
@@ -390,7 +402,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify(formData)
                 });
 
-                if (!response.ok) {
+                    if (!response.ok) {
                     const errorText = await response.text();
                     throw new Error(`Server responded with ${response.status}: ${errorText}`);
                 }
@@ -431,5 +443,178 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 3000);
             }
         });
+
+        }
+
+    // --- NEW SURPRISE FEATURES ---
+    
+    // 1. Dark/Light Mode Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    const icon = themeToggle ? themeToggle.querySelector('i') : null;
+    
+    // Check saved theme
+    const savedTheme = localStorage.getItem('portfolioTheme');
+    if (savedTheme === 'dark') {
+        body.classList.add('dark-mode');
+        if (icon) icon.classList.replace('fa-moon', 'fa-sun');
     }
+    
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                if (icon) icon.classList.replace('fa-moon', 'fa-sun');
+                localStorage.setItem('portfolioTheme', 'dark');
+                // Show a quick notification
+                if (window.confetti) confetti({ particleCount: 40, spread: 60, origin: { y: 0.9 }, colors: ['#10b981'] });
+            } else {
+                if (icon) icon.classList.replace('fa-sun', 'fa-moon');
+                localStorage.setItem('portfolioTheme', 'light');
+            }
+        });
+    }
+
+    // 2. Easter Egg (Konami Code / Type 'aryan')
+    let pressed = [];
+    const secretCode = 'aryan'; // Type a r y a n on keyboard
+    window.addEventListener('keyup', (e) => {
+        pressed.push(e.key.toLowerCase());
+        pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length);
+        if (pressed.join('').includes(secretCode)) {
+            console.log('DING DING! Easter Egg Found!');
+            if (window.confetti) {
+                var duration = 3000;
+                var end = Date.now() + duration;
+                (function frame() {
+                    confetti({
+                        particleCount: 5,
+                        angle: 60,
+                        spread: 55,
+                        origin: { x: 0 },
+                        colors: ['#10b981', '#34D399', '#ffffff']
+                    });
+                    confetti({
+                        particleCount: 5,
+                        angle: 120,
+                        spread: 55,
+                        origin: { x: 1 },
+                        colors: ['#10b981', '#34D399', '#ffffff']
+                    });
+                    if (Date.now() < end) requestAnimationFrame(frame);
+                }());
+            }
+        }
+    });
+    
+    // 3. Custom Context Menu (Right Click)
+    const contextMenu = document.getElementById('context-menu');
+    
+    if (contextMenu) {
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            
+            let x = e.clientX;
+            let y = e.clientY;
+            
+            const menuWidth = contextMenu.offsetWidth;
+            const menuHeight = contextMenu.offsetHeight;
+            
+            if (x + menuWidth > window.innerWidth) x = window.innerWidth - menuWidth;
+            if (y + menuHeight > window.innerHeight) y = window.innerHeight - menuHeight;
+            
+            contextMenu.style.left = `${x}px`;
+            contextMenu.style.top = `${y}px`;
+            contextMenu.classList.add('active');
+        });
+
+        document.addEventListener('click', () => {
+            contextMenu.classList.remove('active');
+        });
+
+        const ctxTheme = document.getElementById('ctx-theme');
+        const ctxCv = document.getElementById('ctx-cv');
+        const ctxCopy = document.getElementById('ctx-copy');
+        const ctxTerm = document.getElementById('ctx-term');
+        
+        if (ctxTheme && themeToggle) ctxTheme.addEventListener('click', () => themeToggle.click());
+        if (ctxCv) ctxCv.addEventListener('click', () => window.open('aryan.pdf', '_blank'));
+        if (ctxCopy) ctxCopy.addEventListener('click', () => {
+            navigator.clipboard.writeText('aryankjhaa@gmail.com');
+            alert('Email copied to clipboard!');
+        });
+        if (ctxTerm) ctxTerm.addEventListener('click', () => openTerminal());
+    }
+
+    // 4. Interactive Terminal
+    const termBtn = document.getElementById('terminal-btn');
+    const termOverlay = document.getElementById('terminal-overlay');
+    const termClose = document.getElementById('term-close');
+    const termInput = document.getElementById('terminal-input');
+    const termBody = document.getElementById('terminal-body');
+
+    function openTerminal() {
+        if (!termOverlay || !termInput) return;
+        termOverlay.classList.add('active');
+        setTimeout(() => termInput.focus(), 100);
+    }
+    
+    if (termBtn) termBtn.addEventListener('click', openTerminal);
+    if (termClose && termOverlay) termClose.addEventListener('click', () => termOverlay.classList.remove('active'));
+    
+    // Close on click outside
+    if (termOverlay) {
+        termOverlay.addEventListener('click', (e) => {
+            if(e.target === termOverlay) termOverlay.classList.remove('active');
+        });
+    }
+
+    const commands = {
+        'help': 'Available commands: <br> - <span class="term-highlight">whoami</span>: Displays info about me<br> - <span class="term-highlight">skills</span>: Lists my technical skills<br> - <span class="term-highlight">contact</span>: Shows how to reach me<br> - <span class="term-highlight">clear</span>: Clears terminal',
+        'whoami': 'Aryan Kumar. AI/ML Engineer & Web Developer. I build intelligent solutions.',
+        'skills': 'Python, JavaScript, React, Node.js, Next.js, Flask, FastAPI, Machine Learning.',
+        'contact': 'Email: aryankjhaa@gmail.com | LinkedIn: /in/jhaaryaan',
+        'sudo': 'Nice try. This incident will be reported. 🚨',
+    };
+
+    if (termInput && termBody) {
+        termInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const val = termInput.value.trim().toLowerCase();
+                if (val === 'clear') {
+                    const outputs = termBody.querySelectorAll('p');
+                    outputs.forEach(p => p.remove());
+                    termInput.value = '';
+                    return;
+                }
+                
+                const newOutput = document.createElement('p');
+                newOutput.className = 'term-output';
+                newOutput.innerHTML = `<span class="term-prompt">aryan@portfolio:~$</span> ${val}`;
+                
+                const response = document.createElement('p');
+                response.className = 'term-output';
+                response.style.marginBottom = '10px';
+                
+                if (val === '') {
+                    response.innerHTML = '';
+                } else if (commands[val]) {
+                    response.innerHTML = commands[val];
+                } else {
+                    response.innerHTML = `bash: ${val}: command not found. Type 'help'.`;
+                }
+
+                termInput.parentNode.before(newOutput);
+                if(response.innerHTML) termInput.parentNode.before(response);
+                
+                termInput.value = '';
+                termBody.scrollTop = termBody.scrollHeight;
+            }
+        });
+    }
+
+    // --- END SURPRISE FEATURES ---
+
 });
+
+    

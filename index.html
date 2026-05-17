@@ -2,6 +2,10 @@
 <html lang="en">
 
 <head>
+    <meta name="theme-color" content="#10B981">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
@@ -61,7 +65,12 @@
                 <li><a href="#education">Education</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
+            
+            <div class="theme-toggle" id="theme-toggle" title="Toggle Dark/Light Mode">
+                <i class="fas fa-moon"></i>
+            </div>
             <div class="menu-toggle" id="mobile-menu">
+
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -654,12 +663,64 @@
     <!-- Scroll to Top Button -->
     <button id="scroll-top" class="btn-scroll-top"><i class="fas fa-chevron-up"></i></button>
 
+    
+    <!-- Floating Terminal Button -->
+    <div class="terminal-btn" id="terminal-btn" title="Open Developer Terminal">
+        <i class="fas fa-terminal"></i>
+    </div>
+
+    <!-- Terminal Modal -->
+    <div class="terminal-overlay" id="terminal-overlay">
+        <div class="terminal-window">
+            <div class="terminal-header">
+                <div class="terminal-buttons">
+                    <span class="close-btn" id="term-close"></span>
+                    <span class="min-btn"></span>
+                    <span class="max-btn"></span>
+                </div>
+                <div class="terminal-title">aryan@portfolio:~</div>
+            </div>
+            <div class="terminal-body" id="terminal-body">
+                <p class="term-output">Welcome to Aryan's interactive terminal.</p>
+                <p class="term-output">Type <span class="term-highlight">help</span> to see available commands.</p>
+                <div class="term-input-line">
+                    <span class="term-prompt">aryan@portfolio:~$</span>
+                    <input type="text" id="terminal-input" autocomplete="off" spellcheck="false" autofocus>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Context Menu -->
+    <div class="custom-context-menu" id="context-menu">
+        <div class="context-item" id="ctx-theme"><i class="fas fa-moon"></i> Toggle Theme</div>
+        <div class="context-item" id="ctx-cv"><i class="fas fa-download"></i> Download CV</div>
+        <div class="context-item" id="ctx-copy"><i class="fas fa-envelope"></i> Copy Email</div>
+        <div class="context-separator"></div>
+        <div class="context-item" id="ctx-term"><i class="fas fa-terminal"></i> Open Terminal</div>
+    </div>
+
     <!-- Custom Cursor -->
     <div class="cursor"></div>
     <div class="cursor-follower"></div>
 
+    
+    <!-- Confetti Script for Easter Egg -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <!-- Scripts -->
     <script src="script.js"></script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    console.log('SW registered:', reg);
+                }).catch(err => console.log('SW registration failed:', err));
+            });
+        }
+    </script>
 </body>
+
 
 </html>
