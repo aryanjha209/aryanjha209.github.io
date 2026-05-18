@@ -634,28 +634,7 @@ document.addEventListener('DOMContentLoaded', () => {
             aiChatWindow.classList.remove('active');
         });
 
-        const getAIResponse = (message) => {
-            message = message.toLowerCase();
-            if (message.includes('skill') || message.includes('tech')) {
-                return "Aryan specializes in Python, JavaScript, React, Node.js, and Machine Learning (TensorFlow/FastAPI). He is great at both front-end and back-end!";
-            } else if (message.includes('project')) {
-                return "Aryan has built over 54 projects! Some favorites include the AR Card System, BharatStore PWA, and a Crop Disease Prediction System.";
-            } else if (message.includes('contact') || message.includes('email') || message.includes('hire')) {
-                return "You can reach Aryan at aryankjhaa@gmail.com or call him at +91-9835089300. You can also use the contact form at the bottom of the page!";
-            } else if (message.includes('education') || message.includes('study')) {
-                return "He is currently pursuing his B.Tech in CSE with a specialization in AI at Parul University (2022-2026).";
-            } else if (message.includes('experience') || message.includes('work')) {
-                return "Aryan is currently working as an AI/ML Intern at BISAG in Gandhinagar, working on real-world geospatial and remote sensing ML pipelines.";
-            } else if (message.includes('hello') || message.includes('hi ') || message === 'hi') {
-                return "Hello there! How can I help you learn more about Aryan today?";
-            } else if (message.includes('who are you')) {
-                return "I'm Aryan's custom AI Assistant, built directly into his portfolio to answer your questions!";
-            } else {
-                return "That's an interesting question! I am still learning, but you can always reach out to Aryan directly via the contact form for a detailed chat.";
-            }
-        };
-
-        const handleChatSubmit = () => {
+        const handleChatSubmit = async () => {
             const text = aiChatInput.value.trim();
             if (!text) return;
             
@@ -675,15 +654,62 @@ document.addEventListener('DOMContentLoaded', () => {
             aiChatBody.appendChild(typingMsg);
             aiChatBody.scrollTop = aiChatBody.scrollHeight;
 
-            // AI Response after delay
-            setTimeout(() => {
+            try {
+                let aiResponseText = "";
+                
+                // First try to hit the backend
+                try {
+                    const apiUrl = 'https://aryan-backend-tan.vercel.app/api/chat';
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: text })
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.success) {
+                            aiResponseText = data.reply;
+                        }
+                    }
+                } catch (backendError) {
+                    console.warn("Backend chat failed, falling back to direct Pollinations API", backendError);
+                }
+                
+                // Fallback to direct Pollinations AI if backend failed or returned no text
+                if (!aiResponseText) {
+                    const prompt = `You are an AI assistant for Aryan Kumar's portfolio website. Answer the user's question concisely. User says: ${text}`;
+                    const url = `https://text.pollinations.ai/prompt/${encodeURIComponent(prompt)}`;
+                    const response = await fetch(url);
+                    
+                    if (!response.ok) {
+                        throw new Error(`Pollinations API Error: ${response.status}`);
+                    }
+                    
+                    aiResponseText = await response.text();
+                    
+                    // If the response is somehow JSON with an error message
+                    if (aiResponseText.trim().startsWith('{') && aiResponseText.includes('"error"')) {
+                        throw new Error('Pollinations API returned a JSON error object');
+                    }
+                }
+
                 typingMsg.remove();
                 const aiMsg = document.createElement('div');
                 aiMsg.className = 'ai-msg';
-                aiMsg.textContent = getAIResponse(text);
+                aiMsg.textContent = aiResponseText;
                 aiChatBody.appendChild(aiMsg);
                 aiChatBody.scrollTop = aiChatBody.scrollHeight;
-            }, 1000);
+            } catch (error) {
+                console.error("AI Error:", error);
+                typingMsg.remove();
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'ai-msg';
+                errorMsg.style.color = '#ef4444';
+                errorMsg.textContent = "My servers are currently resting 💤. Please use the contact form to reach out to Aryan!";
+                aiChatBody.appendChild(errorMsg);
+                aiChatBody.scrollTop = aiChatBody.scrollHeight;
+            }
         };
 
         aiChatSubmit.addEventListener('click', handleChatSubmit);

@@ -69,6 +69,33 @@ app.post('/api/contact', (req, res) => {
     });
 });
 
+// AI Chat Route using Pollinations AI
+app.post('/api/chat', async (req, res) => {
+    const { message } = req.body;
+    
+    if (!message) {
+        return res.status(400).json({ success: false, message: 'Message is required' });
+    }
+
+    try {
+        // We prompt the AI to act as Aryan's assistant
+        const prompt = `You are an AI assistant for Aryan Kumar's portfolio website. Answer the user's question concisely. User says: ${message}`;
+        const url = `https://text.pollinations.ai/prompt/${encodeURIComponent(prompt)}`;
+        
+        // Use native fetch (available in Node 18+)
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error('Failed to fetch from Pollinations API');
+        }
+        
+        const reply = await response.text();
+        res.status(200).json({ success: true, reply });
+    } catch (error) {
+        console.error('AI Chat Error:', error);
+        res.status(500).json({ success: false, message: 'Error communicating with AI service.' });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

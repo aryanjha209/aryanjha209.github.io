@@ -65,15 +65,16 @@
                 <li><a href="#education">Education</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
-            
-            <div class="theme-toggle" id="theme-toggle" title="Toggle Dark/Light Mode">
-                <i class="fas fa-moon"></i>
-            </div>
-            <div class="menu-toggle" id="mobile-menu">
 
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
+            <div class="nav-actions" style="display: flex; align-items: center; gap: 15px;">
+                <div class="menu-toggle" id="mobile-menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+                <div class="theme-toggle" id="theme-toggle" title="Toggle Dark/Light Mode">
+                    <i class="fas fa-moon"></i>
+                </div>
             </div>
         </nav>
     </header>
@@ -98,8 +99,7 @@
             <div class="hero-image reveal">
                 <div class="img-box">
                     <div class="img-outline"></div>
-                    <img src="https://ui-avatars.com/api/?name=Aryan+Kumar&background=10B981&color=fff&size=512"
-                        alt="Aryan Kumar">
+                    <img src="aryan jha.png" alt="Aryan Kumar">
                 </div>
             </div>
             <a href="#about" class="scroll-down">
@@ -484,7 +484,7 @@
                         <h4 class="edu-subtitle">Parul University, Vadodara</h4>
                         <ul class="edu-details">
                             <li><strong>Specialization:</strong> Artificial Intelligence & Machine Learning</li>
-                            <li><strong>Current CGPA:</strong> 7.81/10</li>
+                            <li><strong>Current CGPA:</strong> 8.0/10</li>
                             <li><strong>Core Coursework:</strong> Deep Learning, Neural Networks, Natural Language
                                 Processing, Data Structures & Algorithms, Cloud Computing.</li>
                         </ul>
@@ -663,21 +663,29 @@
     <!-- Scroll to Top Button -->
     <button id="scroll-top" class="btn-scroll-top"><i class="fas fa-chevron-up"></i></button>
 
-    
-    
+
+
     <!-- Floating AI Chatbot Button -->
     <div class="ai-chat-btn" id="ai-chat-btn" title="Chat with Aryan-AI">
-        <i class="fas fa-robot"></i>
+        <img src="aryan jha.png" alt="AI"
+            style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid white;">
     </div>
 
     <!-- AI Chatbot Window -->
     <div class="ai-chat-window" id="ai-chat-window">
         <div class="ai-chat-header">
-            <div><i class="fas fa-robot"></i> Aryan-AI Assistant</div>
-            <span class="ai-chat-close" id="ai-chat-close"><i class="fas fa-times"></i></span>
+            <div><img src="aryan jha.png" alt="AI"
+                    style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; margin-right: 8px; vertical-align: middle; border: 1px solid white;">
+                Aryan-AI Assistant</div>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <span id="terminal-btn" class="ai-chat-header-btn" title="Open Terminal"><i
+                        class="fas fa-terminal"></i></span>
+                <span id="ai-chat-close" class="ai-chat-header-btn" title="Close"><i class="fas fa-times"></i></span>
+            </div>
         </div>
         <div class="ai-chat-body" id="ai-chat-body">
-            <div class="ai-msg">Hello! I am Aryan's virtual AI assistant. You can ask me about his skills, projects, or experience!</div>
+            <div class="ai-msg">Hello! I am Aryan's virtual AI assistant. You can ask me about his skills, projects, or
+                experience!</div>
         </div>
         <div class="ai-chat-input-area">
             <input type="text" id="ai-chat-input" placeholder="Type a message..." autocomplete="off">
@@ -685,10 +693,7 @@
         </div>
     </div>
 
-    <!-- Floating Terminal Button -->
-    <div class="terminal-btn" id="terminal-btn" title="Open Developer Terminal">
-        <i class="fas fa-terminal"></i>
-    </div>
+
 
     <!-- Terminal Modal -->
     <div class="terminal-overlay" id="terminal-overlay">
@@ -725,7 +730,7 @@
     <div class="cursor"></div>
     <div class="cursor-follower"></div>
 
-    
+
     <!-- Confetti Script for Easter Egg -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
