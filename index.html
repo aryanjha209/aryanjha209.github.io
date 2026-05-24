@@ -2,270 +2,337 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Aryan Kumar - Personal workspace coming soon.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="description" content="A minimalist, high-fidelity PWA developer workspace and utility dashboard.">
     <meta name="theme-color" content="#ffffff">
-    <title>Coming Soon</title>
+    <title>Workspace</title>
 
-    <!-- PWA iOS Standalone Support -->
+    <!-- PWA Standard Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Coming Soon">
+    <meta name="apple-mobile-web-app-title" content="Workspace">
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=Coming+Soon&background=4EBF15&color=fff&size=192&bold=true">
+    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=Workspace&background=4EBF15&color=fff&size=192&bold=true">
 
-    <!-- Google Fonts -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Font Awesome -->
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Custom CSS -->
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="style.css">
 
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
 </head>
 <body>
-    <div class="ambient-background"></div>
+    <!-- App Container -->
+    <div class="app-container">
+        <!-- Ambient decorative background (clean off-white) -->
+        <div class="ambient-background"></div>
 
-    <!-- Main Container -->
-    <main class="viewport">
-        <!-- 3D Card Wrapper -->
-        <div class="perspective-container">
-            <!-- Inner Flipper Container -->
-            <div class="card-flipper" id="3d-card-wrapper">
-                
-                <!-- ================= FRONT: COMING SOON CARD ================= -->
-                <div class="coming-soon-card front-card" id="front-card">
-                    <!-- Branding Header -->
-                    <div class="brand">
-                        <span class="brand-logo">⚡</span>
-                        <h1>Coming Soon<span>.</span></h1>
+        <!-- Global Toast Alert Box -->
+        <div id="toast" class="toast-notification">Copied to clipboard! ⚡</div>
+
+        <!-- Main Workspace Contents -->
+        <main class="app-main">
+            
+            <!-- ============================================== -->
+            <!-- TAB 1: HOME COMMAND CENTER -->
+            <!-- ============================================== -->
+            <section id="tab-home" class="app-tab active">
+                <header class="tab-header">
+                    <div class="header-branding">
+                        <span class="logo-lightning">⚡</span>
+                        <h1>Workspace<span>.</span></h1>
+                    </div>
+                    <div class="status-indicator">
+                        <span class="led"></span> ONLINE
+                    </div>
+                </header>
+
+                <div class="grid-layout">
+                    <!-- Performance Metrics Widget -->
+                    <div class="widget-card double-width">
+                        <h3><i class="fas fa-chart-line header-icon"></i> System Metrics</h3>
+                        <div class="metrics-grid">
+                            <div class="metric-dial">
+                                <svg viewBox="0 0 36 36" class="circular-chart green">
+                                    <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path id="cpu-chart" class="circle" stroke-dasharray="24, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                </svg>
+                                <div class="dial-info">
+                                    <span id="cpu-value" class="dial-number">24%</span>
+                                    <span class="dial-label">CPU LOAD</span>
+                                </div>
+                            </div>
+                            <div class="metric-dial">
+                                <svg viewBox="0 0 36 36" class="circular-chart green">
+                                    <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path id="ram-chart" class="circle" stroke-dasharray="48, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                </svg>
+                                <div class="dial-info">
+                                    <span id="ram-value" class="dial-number">4.8GB</span>
+                                    <span class="dial-label">MEM LOAD</span>
+                                </div>
+                            </div>
+                            <div class="metric-dial">
+                                <svg viewBox="0 0 36 36" class="circular-chart green">
+                                    <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path id="cache-chart" class="circle" stroke-dasharray="98, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                </svg>
+                                <div class="dial-info">
+                                    <span class="dial-number">98%</span>
+                                    <span class="dial-label">CACHE OK</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Circular 3D Floating Avatar -->
-                    <div class="avatar-container">
-                        <img src="aryan jha.png" alt="Aryan Kumar" class="profile-avatar">
-                    </div>
-
-                    <!-- Launch Banner -->
-                    <div class="launch-badge">WORKSPACE v2.0</div>
-
-                    <h2>COMING SOON</h2>
-                    <p class="tagline">A minimalist developer environment and utility suite built for the next generation of creators.</p>
-
-                    <!-- 3D Countdown Grid -->
-                    <div class="countdown-grid" id="countdown">
-                        <div class="countdown-box">
-                            <span id="days" class="number">00</span>
-                            <span class="label">DAYS</span>
-                        </div>
-                        <div class="countdown-box">
-                            <span id="hours" class="number">00</span>
-                            <span class="label">HOURS</span>
-                        </div>
-                        <div class="countdown-box">
-                            <span id="minutes" class="number">00</span>
-                            <span class="label">MINS</span>
-                        </div>
-                        <div class="countdown-box">
-                            <span id="seconds" class="number">00</span>
-                            <span class="label">SECS</span>
+                    <!-- Time & Clock Widget -->
+                    <div class="widget-card">
+                        <h3><i class="far fa-clock header-icon"></i> Local Clock</h3>
+                        <div class="clock-display">
+                            <span id="live-time" class="time-text">00:00:00</span>
+                            <span id="live-date" class="date-text">JANUARY 1, 2026</span>
                         </div>
                     </div>
 
-                    <!-- Subscription Form -->
-                    <form id="subscribe-form" class="subscribe-form">
-                        <div class="input-group">
-                            <i class="far fa-envelope mail-icon"></i>
-                            <input type="email" id="subscriber-email" placeholder="Enter your email address" required autocomplete="off">
-                            <button type="submit" class="submit-btn">
-                                <span class="btn-text">Notify Me</span>
-                                <span class="btn-icon"><i class="fas fa-paper-plane"></i></span>
-                            </button>
+                    <!-- PWA Native Installer -->
+                    <div class="widget-card double-width installer-widget" id="install-card">
+                        <div class="installer-icon">📱</div>
+                        <div class="installer-info">
+                            <h3>Install Workspace App</h3>
+                            <p>Add this utility suite directly to your home screen. Experience high-performance offline tools, faster compilation, and fullscreen standalone viewports.</p>
+                            <button id="pwa-install-btn" class="install-btn"><i class="fas fa-download"></i> Install Standalone</button>
+                            <div id="ios-guide" class="ios-guide-text">
+                                <i class="fas fa-info-circle"></i> On iOS: Tap <span class="share-icon-mimic"><i class="fas fa-share-square"></i> Share</span> in Safari, then select <span class="add-icon-mimic">Add to Home Screen</span>.
+                            </div>
                         </div>
-                    </form>
-
-                    <!-- Feedback Message -->
-                    <div id="form-msg" class="form-msg"></div>
-
-                    <!-- Lens Showcase Call-to-action -->
-                    <div class="showcase-cta-wrapper">
-                        <button id="view-lenses-btn" class="cta-outline-btn">
-                            <i class="fab fa-snapchat"></i> Try Snapchat Lenses
-                        </button>
                     </div>
-
-                    <!-- Social Icons Row -->
-                    <div class="social-links">
-                        <a href="https://linkedin.com/in/jhaaryaan" target="_blank" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="https://github.com/aryanjha205" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
-                        <a href="https://twitter.com/jhaaryaan" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="https://instagram.com/jhaaryaan" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="https://www.snapchat.com/@jhaaryaan" target="_blank" title="Snapchat"><i class="fab fa-snapchat"></i></a>
-                    </div>
-
-                    <!-- Minimal Info Footer -->
-                    <footer>
-                        <p>&copy; 2026. All rights reserved.</p>
-                    </footer>
                 </div>
+            </section>
 
-                <!-- ================= BACK: SNAPCHAT LENS CARD ================= -->
-                <div class="coming-soon-card back-card" id="back-card">
-                    <!-- Branding Header -->
-                    <div class="brand">
-                        <span class="brand-logo"><i class="fab fa-snapchat"></i></span>
-                        <h1>Snapchat Lenses<span>.</span></h1>
-                    </div>
+            <!-- ============================================== -->
+            <!-- TAB 2: DEV UTILITIES SUITE -->
+            <!-- ============================================== -->
+            <section id="tab-tools" class="app-tab">
+                <header class="tab-header">
+                    <h2><i class="fas fa-tools tab-title-icon"></i> Developer Utilities</h2>
+                </header>
 
-                    <div class="launch-badge">AR CREATOR</div>
-
-                    <h2>AR PORTAL</h2>
-                    <p class="tagline">Explore my custom, high-fidelity Snapchat Augmented Reality (AR) filters. Tap to unlock in Snapchat!</p>
-
-                    <!-- Lenses Grid List (Scrollable) -->
-                    <div class="lenses-wrapper">
-                        <div class="lenses-grid">
-                            
-                            <!-- Lens 1 -->
-                            <div class="lens-item">
-                                <div class="lens-icon-box"><i class="fas fa-magic"></i></div>
-                                <div class="lens-info">
-                                    <h3>Cyber-Green HUD</h3>
-                                    <p>Futuristic tech overlay</p>
-                                </div>
-                                <a href="https://www.snapchat.com/unlock/?type=SNAPCODE&uuid=f9781d45bd71424eb06cc72ccf3b25f2&metadata=01" target="_blank" class="lens-try-btn">Try <i class="fas fa-chevron-right"></i></a>
+                <div class="tools-container">
+                    <!-- Tool A: JSON Prettifier -->
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <h3><i class="fas fa-brackets-curly"></i> JSON Prettifier & Validator</h3>
+                        </div>
+                        <div class="tool-body">
+                            <textarea id="json-input" placeholder="Paste raw JSON string here..." autocomplete="off" spellcheck="false"></textarea>
+                            <div class="action-row">
+                                <button id="btn-json-prettify" class="btn btn-primary"><i class="fas fa-magic"></i> Format JSON</button>
+                                <button id="btn-json-clear" class="btn btn-secondary">Clear</button>
                             </div>
-
-                            <!-- Lens 2 -->
-                            <div class="lens-item">
-                                <div class="lens-icon-box"><i class="fas fa-cube"></i></div>
-                                <div class="lens-info">
-                                    <h3>Neon Glassmorphism</h3>
-                                    <p>3D Floating glass rings</p>
-                                </div>
-                                <a href="https://www.snapchat.com/unlock/?type=SNAPCODE&uuid=3b318d18408f42fa88cecf8f972b2512&metadata=01" target="_blank" class="lens-try-btn">Try <i class="fas fa-chevron-right"></i></a>
-                            </div>
-
-                            <!-- Lens 3 -->
-                            <div class="lens-item">
-                                <div class="lens-icon-box"><i class="fas fa-feather"></i></div>
-                                <div class="lens-info">
-                                    <h3>Parrot Aura</h3>
-                                    <p>Green particle storm</p>
-                                </div>
-                                <a href="https://www.snapchat.com/unlock/?type=SNAPCODE&uuid=2b988f56ef454cfa88cfdf8f97cf2512&metadata=01" target="_blank" class="lens-try-btn">Try <i class="fas fa-chevron-right"></i></a>
-                            </div>
-
-                            <!-- Lens 4 -->
-                            <div class="lens-item">
-                                <div class="lens-icon-box"><i class="fas fa-code"></i></div>
-                                <div class="lens-info">
-                                    <h3>Matrix Rain Code</h3>
-                                    <p>Falling green code</p>
-                                </div>
-                                <a href="https://www.snapchat.com/unlock/?type=SNAPCODE&uuid=a53bc7cd87ba447bb411fa7ac3cc2b6f&metadata=01" target="_blank" class="lens-try-btn">Try <i class="fas fa-chevron-right"></i></a>
-                            </div>
-
-                            <!-- Lens 5 -->
-                            <div class="lens-item">
-                                <div class="lens-icon-box"><i class="fas fa-brain"></i></div>
-                                <div class="lens-info">
-                                    <h3>AI Face Mesh</h3>
-                                    <p>Deep learning grid</p>
-                                </div>
-                                <a href="https://www.snapchat.com/unlock/?type=SNAPCODE&uuid=c3488f56ef454cfa88cfdf8f97cf2512&metadata=01" target="_blank" class="lens-try-btn">Try <i class="fas fa-chevron-right"></i></a>
-                            </div>
-
-                            <!-- Lens 6 -->
-                            <div class="lens-item">
-                                <div class="lens-icon-box"><i class="fas fa-gamepad"></i></div>
-                                <div class="lens-info">
-                                    <h3>Retro Pixel Spects</h3>
-                                    <p>8-bit glowing glasses</p>
-                                </div>
-                                <a href="https://www.snapchat.com/unlock/?type=SNAPCODE&uuid=e73bc7cd87ba447bb411fa7ac3cc2b6f&metadata=01" target="_blank" class="lens-try-btn">Try <i class="fas fa-chevron-right"></i></a>
-                            </div>
-
-                            <!-- Lens 7 -->
-                            <div class="lens-item">
-                                <div class="lens-icon-box"><i class="fas fa-infinity"></i></div>
-                                <div class="lens-info">
-                                    <h3>Torus Crown</h3>
-                                    <p>Minimalist geometric crown</p>
-                                </div>
-                                <a href="https://www.snapchat.com/unlock/?type=SNAPCODE&uuid=d83bc7cd87ba447bb411fa7ac3cc2b6f&metadata=01" target="_blank" class="lens-try-btn">Try <i class="fas fa-chevron-right"></i></a>
-                            </div>
-
-                            <!-- Lens 8 -->
-                            <div class="lens-item">
-                                <div class="lens-icon-box"><i class="fas fa-ghost"></i></div>
-                                <div class="lens-info">
-                                    <h3>Synthwave Glitch</h3>
-                                    <p>Retro purple & green filters</p>
-                                </div>
-                                <a href="https://www.snapchat.com/unlock/?type=SNAPCODE&uuid=f13bc7cd87ba447bb411fa7ac3cc2b6f&metadata=01" target="_blank" class="lens-try-btn">Try <i class="fas fa-chevron-right"></i></a>
-                            </div>
-
-                            <!-- Lens 9 -->
-                            <div class="lens-item">
-                                <div class="lens-icon-box"><i class="fas fa-laptop-code"></i></div>
-                                <div class="lens-info">
-                                    <h3>Cyber Deck Hologram</h3>
-                                    <p>Interactive AR workspace</p>
-                                </div>
-                                <a href="https://www.snapchat.com/unlock/?type=SNAPCODE&uuid=9a3bc7cd87ba447bb411fa7ac3cc2b6f&metadata=01" target="_blank" class="lens-try-btn">Try <i class="fas fa-chevron-right"></i></a>
-                            </div>
-
-                            <!-- Lens 10 -->
-                            <div class="lens-item">
-                                <div class="lens-icon-box"><i class="fas fa-sparkles"></i></div>
-                                <div class="lens-info">
-                                    <h3>Parrot Crown Glow</h3>
-                                    <p>Fairy dust trails</p>
-                                </div>
-                                <a href="https://www.snapchat.com/unlock/?type=SNAPCODE&uuid=8a3bc7cd87ba447bb411fa7ac3cc2b6f&metadata=01" target="_blank" class="lens-try-btn">Try <i class="fas fa-chevron-right"></i></a>
-                            </div>
-
+                            <div id="json-error" class="error-msg-box"></div>
+                            <textarea id="json-output" class="output-textarea" placeholder="Formatted output will appear here..." readonly autocomplete="off" spellcheck="false"></textarea>
+                            <button id="btn-json-copy" class="btn btn-secondary copy-btn"><i class="fas fa-copy"></i> Copy Output</button>
                         </div>
                     </div>
 
-                    <!-- Connect Action Docks -->
-                    <div class="connect-row">
-                        <a href="https://www.snapchat.com/@jhaaryaan" target="_blank" class="connect-snap-btn">
-                            <i class="fab fa-snapchat"></i> Connect on Snapchat
-                        </a>
-                        <button id="back-to-launch-btn" class="back-link-btn">
-                            <i class="fas fa-arrow-left"></i> Back to Launch
-                        </button>
+                    <!-- Tool B: Base64 Text Converter -->
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <h3><i class="fas fa-barcode"></i> Base64 Text Tool</h3>
+                        </div>
+                        <div class="tool-body">
+                            <textarea id="base64-input" placeholder="Enter plain text or Base64 code here..." autocomplete="off" spellcheck="false"></textarea>
+                            <div class="action-row">
+                                <button id="btn-base64-encode" class="btn btn-primary">Encode Text</button>
+                                <button id="btn-base64-decode" class="btn btn-primary btn-secondary-green">Decode Base64</button>
+                                <button id="btn-base64-clear" class="btn btn-secondary">Clear</button>
+                            </div>
+                            <textarea id="base64-output" class="output-textarea" placeholder="Conversion output will appear here..." readonly autocomplete="off" spellcheck="false"></textarea>
+                            <button id="btn-base64-copy" class="btn btn-secondary copy-btn"><i class="fas fa-copy"></i> Copy Output</button>
+                        </div>
                     </div>
 
-                    <!-- Minimal Info Footer -->
-                    <footer>
-                        <p>&copy; 2026. All rights reserved.</p>
-                    </footer>
+                    <!-- Tool C: Parrot Green Color Swatch -->
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <h3><i class="fas fa-palette"></i> Parrot Green Design Board</h3>
+                        </div>
+                        <div class="tool-body">
+                            <p class="tool-desc">Click any clean developer swatch below to instantly copy its color code.</p>
+                            <div class="swatches-grid">
+                                <div class="swatch-item" data-color="#39FF14">
+                                    <div class="swatch-preview" style="background-color: #39FF14; box-shadow: 0 4px 15px rgba(57,255,20,0.3);"></div>
+                                    <div class="swatch-details">
+                                        <span class="swatch-name">Neon Green</span>
+                                        <code class="swatch-hex">#39FF14</code>
+                                    </div>
+                                </div>
+                                <div class="swatch-item" data-color="#4EBF15">
+                                    <div class="swatch-preview" style="background-color: #4EBF15; box-shadow: 0 4px 15px rgba(78,191,21,0.3);"></div>
+                                    <div class="swatch-details">
+                                        <span class="swatch-name">Parrot Green</span>
+                                        <code class="swatch-hex">#4EBF15</code>
+                                    </div>
+                                </div>
+                                <div class="swatch-item" data-color="#38a60e">
+                                    <div class="swatch-preview" style="background-color: #38a60e; box-shadow: 0 4px 15px rgba(56,166,14,0.3);"></div>
+                                    <div class="swatch-details">
+                                        <span class="swatch-name">Forest Green</span>
+                                        <code class="swatch-hex">#38A60E</code>
+                                    </div>
+                                </div>
+                                <div class="swatch-item" data-color="#8CE85A">
+                                    <div class="swatch-preview" style="background-color: #8CE85A; box-shadow: 0 4px 15px rgba(140,232,90,0.3);"></div>
+                                    <div class="swatch-details">
+                                        <span class="swatch-name">Mint Pastel</span>
+                                        <code class="swatch-hex">#8CE85A</code>
+                                    </div>
+                                </div>
+                                <div class="swatch-item" data-color="#F2FDF0">
+                                    <div class="swatch-preview" style="background-color: #F2FDF0; border: 1px solid rgba(0,0,0,0.05);"></div>
+                                    <div class="swatch-details">
+                                        <span class="swatch-name">Soft Cream</span>
+                                        <code class="swatch-hex">#F2FDF0</code>
+                                    </div>
+                                </div>
+                                <div class="swatch-item" data-color="#0f172a">
+                                    <div class="swatch-preview" style="background-color: #0f172a; box-shadow: 0 4px 15px rgba(15,23,42,0.3);"></div>
+                                    <div class="swatch-details">
+                                        <span class="swatch-name">Deep Slate</span>
+                                        <code class="swatch-hex">#0F172A</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </section>
 
-            </div>
-        </div>
-    </main>
+            <!-- ============================================== -->
+            <!-- TAB 3: NOTES & PERSISTED CHECKLISTS -->
+            <!-- ============================================== -->
+            <section id="tab-notes" class="app-tab">
+                <header class="tab-header">
+                    <h2><i class="fas fa-tasks tab-title-icon"></i> Tasks & Workspace Notes</h2>
+                </header>
 
-    <!-- Custom Scripts -->
-    <script src="script.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').then(reg => {
-                    console.log('Service Worker registered successfully:', reg);
-                }).catch(err => {
-                    console.warn('Service Worker registration failed:', err);
-                });
-            });
-        }
-    </script>
+                <div class="notes-container">
+                    <!-- Task Input Area -->
+                    <div class="widget-card no-margin">
+                        <h3>Create a New Note / Task</h3>
+                        <form id="todo-form" class="todo-form">
+                            <input type="text" id="todo-input" placeholder="Type notes or task details..." required autocomplete="off">
+                            <select id="todo-priority" class="priority-select">
+                                <option value="low">Low Priority</option>
+                                <option value="medium" selected>Medium Priority</option>
+                                <option value="high">High Priority</option>
+                            </select>
+                            <button type="submit" class="todo-add-btn"><i class="fas fa-plus"></i></button>
+                        </form>
+                    </div>
+
+                    <!-- Checklist Cards Holder -->
+                    <div class="todo-list-section">
+                        <div class="todo-list-header">
+                            <h3>Active List</h3>
+                            <button id="btn-clear-completed" class="btn btn-secondary btn-small">Clear Completed</button>
+                        </div>
+                        <div id="todo-items-holder" class="todo-items-holder">
+                            <!-- Items generated dynamically by script.js -->
+                            <div class="empty-todo">
+                                <i class="fas fa-clipboard-check"></i>
+                                <p>Everything is completed! Add new tasks above.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================== -->
+            <!-- TAB 4: 3D PRISM GEOMETRY SANDBOX -->
+            <!-- ============================================== -->
+            <section id="tab-sandbox" class="app-tab">
+                <header class="tab-header">
+                    <h2><i class="fas fa-cube tab-title-icon"></i> 3D Prism Geometry Playground</h2>
+                </header>
+
+                <div class="sandbox-container">
+                    <!-- 3D Interactive Centerpiece -->
+                    <div class="sandbox-render-area">
+                        <div class="perspective-stage">
+                            <!-- 3D Draggable Box -->
+                            <div class="prism-3d" id="sandbox-prism">
+                                <div class="prism-face front">COMING</div>
+                                <div class="prism-face back">SOON</div>
+                                <div class="prism-face right">⚡</div>
+                                <div class="prism-face left">v2.0</div>
+                                <div class="prism-face top">CREATORS</div>
+                                <div class="prism-face bottom">WORKSPACE</div>
+                            </div>
+                        </div>
+                        <p class="drag-hint"><i class="fas fa-hand-pointer"></i> Drag or swipe directly on the 3D prism to spin it!</p>
+                    </div>
+
+                    <!-- Control Settings Panel -->
+                    <div class="widget-card">
+                        <h3>Playground Physics Controls</h3>
+                        <div class="controls-grid">
+                            <div class="control-slider-group">
+                                <div class="slider-label-row">
+                                    <span>Auto-Spin Speed</span>
+                                    <span id="val-speed">1x</span>
+                                </div>
+                                <input type="range" id="slider-speed" min="0" max="4" step="0.25" value="1">
+                            </div>
+                            <div class="control-slider-group">
+                                <div class="slider-label-row">
+                                    <span>Prism Dimension Scale</span>
+                                    <span id="val-scale">1.0x</span>
+                                </div>
+                                <input type="range" id="slider-scale" min="0.5" max="1.5" step="0.05" value="1">
+                            </div>
+                            <div class="control-slider-group">
+                                <div class="slider-label-row">
+                                    <span>Parrot Glow Intensity</span>
+                                    <span id="val-glow">50%</span>
+                                </div>
+                                <input type="range" id="slider-glow" min="10" max="100" step="5" value="50">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- ============================================== -->
+        <!-- PERSISTENT MOBILE-STYLE BOTTOM DOCK -->
+        <!-- ============================================== -->
+        <nav class="app-dock" id="app-dock">
+            <button class="dock-item active" data-tab="tab-home">
+                <i class="fas fa-home"></i>
+                <span class="dock-label">Home</span>
+            </button>
+            <button class="dock-item" data-tab="tab-tools">
+                <i class="fas fa-laptop-code"></i>
+                <span class="dock-label">Tools</span>
+            </button>
+            <button class="dock-item" data-tab="tab-notes">
+                <i class="fas fa-tasks"></i>
+                <span class="dock-label">Tasks</span>
+            </button>
+            <button class="dock-item" data-tab="tab-sandbox">
+                <i class="fas fa-cube"></i>
+                <span class="dock-label">3D Play</span>
+            </button>
+        </nav>
+    </div>
 </body>
 </html>
