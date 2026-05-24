@@ -1,20 +1,20 @@
 {
-  "name": "Coming Soon",
-  "short_name": "Coming Soon",
+  "name": "Aryan Jha - AI & AR Developer Portfolio",
+  "short_name": "Aryan Jha",
   "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
-  "description": "Coming Soon Portal",
+  "background_color": "#020215",
+  "theme_color": "#020215",
+  "description": "Aryan Jha - Building AI Solutions, Web Experiences & AR Magic.",
   "icons": [
     {
-      "src": "https://ui-avatars.com/api/?name=Coming+Soon&background=4EBF15&color=fff&size=192&bold=true",
+      "src": "https://ui-avatars.com/api/?name=Aryan+Jha&background=6b21a8&color=fff&size=192&bold=true",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "https://ui-avatars.com/api/?name=Coming+Soon&background=4EBF15&color=fff&size=512&bold=true",
+      "src": "https://ui-avatars.com/api/?name=Aryan+Jha&background=6b21a8&color=fff&size=512&bold=true",
       "sizes": "512x512",
       "type": "image/png"
     }

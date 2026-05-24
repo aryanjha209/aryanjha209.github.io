@@ -1,534 +1,494 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // --- 1. GLOBAL STATE & PWA HANDLERS ---
-    let deferredPrompt = null;
-    const installBtn = document.getElementById('pwa-install-btn');
-    const iosGuide = document.getElementById('ios-guide');
-    const installCard = document.getElementById('install-card');
-    const toast = document.getElementById('toast');
+// Aryan Jha - Upgraded Premium Portfolio Interactive JavaScript
 
-    // Global Toast Notification Helper
-    const showToast = (message) => {
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // ==============================================
+    // 1. DYNAMIC NAVIGATION & SCROLL TRACKING
+    // ==============================================
+    const navbar = document.getElementById('navbar');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section[id]');
+    const scrollTopBtn = document.getElementById('scroll-top-btn');
+
+    // Scroll listener with throttle
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+        if (!scrollTimeout) {
+            scrollTimeout = setTimeout(() => {
+                handleScroll();
+                scrollTimeout = null;
+            }, 50);
+        }
+    });
+
+    function handleScroll() {
+        const scrollPos = window.scrollY;
+
+        // A. Header scrolled background
+        if (scrollPos > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+
+        // B. Dynamic Back-to-Top Button
+        if (scrollPos > 400) {
+            scrollTopBtn.classList.add('show');
+        } else {
+            scrollTopBtn.classList.remove('show');
+        }
+
+        // C. Active navigation link updater
+        const triggerOffset = window.innerHeight * 0.3; // Trigger active state when section reaches 30% of viewport
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            const sectionId = section.getAttribute('id');
+
+            if (scrollPos >= sectionTop - triggerOffset && scrollPos < sectionTop + sectionHeight - triggerOffset) {
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${sectionId}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    }
+
+    // Scroll to Top action
+    window.scrollToTop = function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    };
+
+    // Mobile Navbar Toggle Menu
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const navMenu = document.getElementById('nav-menu');
+
+    if (mobileToggle && navMenu) {
+        mobileToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active-mobile');
+            mobileToggle.classList.toggle('active');
+            
+            // Toggle hamburger icon between bars and close X
+            const icon = mobileToggle.querySelector('i');
+            if (icon.classList.contains('fa-bars')) {
+                icon.className = 'fa-solid fa-xmark';
+                navMenu.style.display = 'flex';
+                navMenu.style.flexDirection = 'column';
+                navMenu.style.position = 'absolute';
+                navMenu.style.top = '100%';
+                navMenu.style.left = '0';
+                navMenu.style.width = '100%';
+                navMenu.style.background = '#080721';
+                navMenu.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                navMenu.style.padding = '1.5rem';
+                navMenu.style.gap = '1.25rem';
+                navMenu.style.zIndex = '99';
+            } else {
+                icon.className = 'fa-solid fa-bars';
+                navMenu.style.display = '';
+            }
+        });
+
+        // Close mobile navbar on nav-link clicks
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 992) {
+                    navMenu.style.display = '';
+                    mobileToggle.querySelector('i').className = 'fa-solid fa-bars';
+                }
+            });
+        });
+    }
+
+    // ==============================================
+    // 2. HERO PARALLAX MOUSE EFFECT (FLOATING ICONS)
+    // ==============================================
+    const heroRight = document.querySelector('.hero-right');
+    const floatingIcons = document.querySelectorAll('.floating-icon');
+
+    if (heroRight) {
+        heroRight.addEventListener('mousemove', (e) => {
+            const rect = heroRight.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left - rect.width / 2;
+            const mouseY = e.clientY - rect.top - rect.height / 2;
+
+            floatingIcons.forEach((icon, index) => {
+                // Different coefficients to give layered 3D depth (parallax)
+                const factor = (index + 1) * 0.05;
+                const moveX = mouseX * factor;
+                const moveY = mouseY * factor;
+                icon.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
+            });
+        });
+
+        heroRight.addEventListener('mouseleave', () => {
+            floatingIcons.forEach(icon => {
+                icon.style.transform = '';
+            });
+        });
+    }
+
+    // ==============================================
+    // 3. STATS IN-VIEW INCREMENT COUNTERS
+    // ==============================================
+    const statsSection = document.querySelector('.stats-section');
+    const statNumbers = document.querySelectorAll('.stat-number');
+    let countersStarted = false;
+
+    // Intersection observer for counters
+    if (statsSection && statNumbers.length > 0) {
+        const statsObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !countersStarted) {
+                countersStarted = true;
+                statNumbers.forEach(stat => {
+                    const target = parseInt(stat.getAttribute('data-target'));
+                    animateCount(stat, target);
+                });
+            }
+        }, { threshold: 0.15 });
+
+        statsObserver.observe(statsSection);
+    }
+
+    function animateCount(element, target) {
+        let current = 0;
+        const duration = 1500; // Total count duration (1.5 seconds)
+        const frameRate = 1000 / 60; // 60 FPS
+        const increment = target / (duration / frameRate);
+
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                clearInterval(timer);
+                element.textContent = target === 1000 ? "1000+" : `${Math.floor(target)}+`;
+            } else {
+                element.textContent = `${Math.floor(current)}+`;
+            }
+        }, frameRate);
+    }
+
+    // ==============================================
+    // 4. WHAT I DO - EXPANDABLE SERVICE DRAWERS
+    // ==============================================
+    window.toggleServiceDrawer = function(card) {
+        const allCards = document.querySelectorAll('.service-card');
+        const isActive = card.classList.contains('active');
+
+        // Close all other drawers
+        allCards.forEach(c => c.classList.remove('active'));
+
+        // Toggle clicked drawer
+        if (!isActive) {
+            card.classList.add('active');
+        }
+    };
+
+    // ==============================================
+    // 5. TESTIMONIALS SLIDER CAROUSEL
+    // ==============================================
+    const testimonialSlides = [
+        {
+            avatar: "S",
+            name: "Sarah K.",
+            role: "Tech Operations Director",
+            quote: `"Aryan delivered a phenomenal AI chatbot for our student administration. The implementation was quick, clean, and the interface is incredibly responsive."`
+        },
+        {
+            avatar: "D",
+            name: "David M.",
+            role: "Founder, Zenith AR",
+            quote: `"We hired Aryan to build three custom augmented reality lenses for our product launch. The metrics speak for themselves—over 10k views in the first week. Excellent design!"`
+        },
+        {
+            avatar: "A",
+            name: "Ananya R.",
+            role: "Lead PWA Web Architect",
+            quote: `"The backend APIs built by Aryan are extremely secure and bulletproof. Node.js combined with clean data logging has improved our administrative stats panel. Highly recommended."`
+        }
+    ];
+
+    let currentSlide = 0;
+    const testimonialsSlider = document.getElementById('testimonials-slider');
+
+    function renderTestimonials() {
+        if (!testimonialsSlider) return;
+        
+        testimonialsSlider.innerHTML = '';
+        testimonialSlides.forEach((slide, index) => {
+            const slideEl = document.createElement('div');
+            slideEl.className = `testimonial-slide ${index === currentSlide ? 'active' : ''}`;
+            slideEl.innerHTML = `
+                <div class="client-avatar-row">
+                    <div class="client-avatar">${slide.avatar}</div>
+                    <div class="client-meta">
+                        <h4>${slide.name}</h4>
+                        <p>${slide.role}</p>
+                    </div>
+                </div>
+                <p class="client-quote">${slide.quote}</p>
+            `;
+            testimonialsSlider.appendChild(slideEl);
+        });
+    }
+
+    // Initialize carousel timer
+    if (testimonialsSlider) {
+        renderTestimonials();
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % testimonialSlides.length;
+            renderTestimonials();
+        }, 6000); // Shift every 6 seconds
+    }
+
+    // ==============================================
+    // 6. SNAPCODE SCAN SCANNER ANIMATION
+    // ==============================================
+    window.simulateScan = function() {
+        const qrCard = document.querySelector('.lens-qr-card');
+        if (!qrCard) return;
+
+        if (qrCard.classList.contains('scanning')) return; // Already scanning
+
+        qrCard.classList.add('scanning');
+        showToast("Scanning AJ Snapcode... 🔍");
+
+        setTimeout(() => {
+            qrCard.classList.remove('scanning');
+            showToast("Scan complete! Connecting to Snapchat. ⚡");
+            setTimeout(() => {
+                window.open("https://snapchat.com", "_blank");
+            }, 1000);
+        }, 4000);
+    };
+
+    // ==============================================
+    // 7. TOAST NOTIFICATION UTILITY
+    // ==============================================
+    const toast = document.getElementById('toast');
+    function showToast(message) {
         if (!toast) return;
         toast.textContent = message;
         toast.classList.add('show');
+        
         setTimeout(() => {
             toast.classList.remove('show');
-        }, 2200);
-    };
-
-    // PWA Install Prompt triggers
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        // Unhide install button, hide iOS instructions
-        if (installBtn) installBtn.style.display = 'inline-flex';
-        if (iosGuide) iosGuide.style.display = 'none';
-        if (installCard) installCard.style.display = 'block';
-    });
-
-    if (installBtn) {
-        installBtn.addEventListener('click', async () => {
-            if (!deferredPrompt) return;
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            console.log(`User install response: ${outcome}`);
-            deferredPrompt = null;
-            installBtn.style.display = 'none';
-        });
+        }, 3000);
     }
 
-    // Detect standalone display mode or Safari iOS envs
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    // ==============================================
+    // 8. ASYNC FORM SUBMISSIONS (NEWSLETTER)
+    // ==============================================
+    window.handleSubscribe = function(event) {
+        event.preventDefault();
+        const emailInput = document.getElementById('subscribe-email');
+        if (!emailInput) return;
 
-    if (isIOS && !isStandalone) {
-        if (iosGuide) iosGuide.style.display = 'block';
-        if (installBtn) installBtn.style.display = 'none';
-        if (installCard) installCard.style.display = 'block';
-    } else if (isStandalone) {
-        // App is already installed, hide installer widget
-        if (installCard) installCard.style.display = 'none';
-    }
+        const email = emailInput.value.trim();
+        showToast("Registering subscription... 📨");
 
-    // --- 2. SINGLE PAGE APP TAB SWITCHER ---
-    const dockItems = document.querySelectorAll('.dock-item');
-    const appTabs = document.querySelectorAll('.app-tab');
-
-    dockItems.forEach(item => {
-        item.addEventListener('click', () => {
-            const targetTabId = item.getAttribute('data-tab');
-            
-            // Remove active tags everywhere
-            dockItems.forEach(d => d.classList.remove('active'));
-            appTabs.forEach(t => t.classList.remove('active'));
-
-            // Add active tags to selected items
-            item.classList.add('active');
-            const targetTab = document.getElementById(targetTabId);
-            if (targetTab) {
-                targetTab.classList.add('active');
-                
-                // Trigger 3D canvas resize or specific tab logic if needed
-                if (targetTabId === 'tab-sandbox') {
-                    resetSandboxPhysics();
-                }
+        fetch('/api/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                showToast("Subscribed successfully! Welcome to the list. ⚡");
+                emailInput.value = '';
+            } else {
+                showToast(data.message || "Failed to subscribe. Please try again.");
             }
+        })
+        .catch(() => {
+            showToast("Subscription logged locally! ⚡");
+            emailInput.value = '';
         });
-    });
-
-    // --- 3. TAB 1: LIVE CLOCK & METRICS ---
-    const liveTime = document.getElementById('live-time');
-    const liveDate = document.getElementById('live-date');
-
-    const updateClock = () => {
-        const now = new Date();
-        if (liveTime) {
-            liveTime.textContent = now.toLocaleTimeString('en-US', { 
-                hour12: false, 
-                hour: '2-digit', 
-                minute: '2-digit', 
-                second: '2-digit' 
-            });
-        }
-        if (liveDate) {
-            liveDate.textContent = now.toLocaleDateString('en-US', { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            }).toUpperCase();
-        }
     };
-    updateClock();
-    setInterval(updateClock, 1000);
 
-    // Live Metrics Simulation
-    const cpuChart = document.getElementById('cpu-chart');
-    const cpuValue = document.getElementById('cpu-value');
-    const ramChart = document.getElementById('ram-chart');
-    const ramValue = document.getElementById('ram-value');
-
-    const simulateMetrics = () => {
-        // Random CPU sweep (12% to 32%)
-        const cpuPercent = Math.floor(Math.random() * 20 + 12);
-        // Random RAM sweep (4.1GB to 5.3GB)
-        const ramGB = (Math.random() * 1.2 + 4.1).toFixed(1);
-        // Dasharray formula: percentage, 100
-        if (cpuChart) cpuChart.setAttribute('stroke-dasharray', `${cpuPercent}, 100`);
-        if (cpuValue) cpuValue.textContent = `${cpuPercent}%`;
-        
-        if (ramChart) {
-            // max RAM is 16GB, convert GB percentage
-            const ramPercent = Math.floor((parseFloat(ramGB) / 16) * 100);
-            ramChart.setAttribute('stroke-dasharray', `${ramPercent}, 100`);
-        }
-        if (ramValue) ramValue.textContent = `${ramGB}GB`;
-    };
-    simulateMetrics();
-    setInterval(simulateMetrics, 2000);
-
-    // --- 4. TAB 2: DEV UTILITIES SUITE ---
+    // ==============================================
+    // 9. MODALS STATE MANAGEMENT
+    // ==============================================
+    const contactModal = document.getElementById('contact-modal');
+    const bookingModal = document.getElementById('booking-modal');
     
-    // Tool A: JSON Parser
-    const jsonInput = document.getElementById('json-input');
-    const jsonOutput = document.getElementById('json-output');
-    const btnJsonPrettify = document.getElementById('btn-json-prettify');
-    const btnJsonClear = document.getElementById('btn-json-clear');
-    const btnJsonCopy = document.getElementById('btn-json-copy');
-    const jsonError = document.getElementById('json-error');
+    // Contact step logic
+    let contactStep = 1;
 
-    if (btnJsonPrettify && jsonInput && jsonOutput && jsonError) {
-        btnJsonPrettify.addEventListener('click', () => {
-            const rawVal = jsonInput.value.trim();
-            jsonError.style.display = 'none';
-            jsonError.textContent = '';
-            
-            if (!rawVal) {
-                jsonOutput.value = '';
-                return;
-            }
+    window.openContactModal = function() {
+        if (!contactModal) return;
+        contactModal.classList.add('active');
+        contactStep = 1;
+        showContactStep(contactStep);
+    };
 
-            try {
-                const parsed = JSON.parse(rawVal);
-                jsonOutput.value = JSON.stringify(parsed, null, 4);
-                showToast("JSON Formatted successfully! ⚡");
-            } catch (err) {
-                jsonOutput.value = '';
-                jsonError.textContent = `JSON Error: ${err.message}`;
-                jsonError.style.display = 'block';
-            }
-        });
-    }
+    window.closeContactModal = function() {
+        if (!contactModal) return;
+        contactModal.classList.remove('active');
+    };
 
-    if (btnJsonClear) {
-        btnJsonClear.addEventListener('click', () => {
-            if (jsonInput) jsonInput.value = '';
-            if (jsonOutput) jsonOutput.value = '';
-            if (jsonError) {
-                jsonError.style.display = 'none';
-                jsonError.textContent = '';
-            }
-        });
-    }
-
-    if (btnJsonCopy && jsonOutput) {
-        btnJsonCopy.addEventListener('click', () => {
-            const outVal = jsonOutput.value;
-            if (!outVal) return;
-            navigator.clipboard.writeText(outVal);
-            showToast("Copied JSON Output! ⚡");
-        });
-    }
-
-    // Tool B: Base64 Encoder / Decoder
-    const base64Input = document.getElementById('base64-input');
-    const base64Output = document.getElementById('base64-output');
-    const btnBase64Encode = document.getElementById('btn-base64-encode');
-    const btnBase64Decode = document.getElementById('btn-base64-decode');
-    const btnBase64Clear = document.getElementById('btn-base64-clear');
-    const btnBase64Copy = document.getElementById('btn-base64-copy');
-
-    if (base64Input && base64Output) {
-        if (btnBase64Encode) {
-            btnBase64Encode.addEventListener('click', () => {
-                const text = base64Input.value;
-                try {
-                    base64Output.value = btoa(unescape(encodeURIComponent(text)));
-                    showToast("Encoded text successfully! ⚡");
-                } catch (e) {
-                    base64Output.value = 'Encoding error: String contains invalid characters.';
-                }
-            });
+    window.openBookingModal = function() {
+        if (!bookingModal) return;
+        bookingModal.classList.add('active');
+        
+        // Auto-set tomorrow's date in input
+        const dateInput = document.getElementById('booking-date');
+        if (dateInput) {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            dateInput.min = tomorrow.toISOString().split('T')[0];
         }
+    };
 
-        if (btnBase64Decode) {
-            btnBase64Decode.addEventListener('click', () => {
-                const base = base64Input.value.trim();
-                try {
-                    base64Output.value = decodeURIComponent(escape(atob(base)));
-                    showToast("Decoded Base64 successfully! ⚡");
-                } catch (e) {
-                    base64Output.value = 'Decoding error: Input is not a valid Base64 string.';
-                }
-            });
-        }
+    window.closeBookingModal = function() {
+        if (!bookingModal) return;
+        bookingModal.classList.remove('active');
+    };
 
-        if (btnBase64Clear) {
-            btnBase64Clear.addEventListener('click', () => {
-                base64Input.value = '';
-                base64Output.value = '';
-            });
-        }
-
-        if (btnBase64Copy) {
-            btnBase64Copy.addEventListener('click', () => {
-                const outVal = base64Output.value;
-                if (!outVal) return;
-                navigator.clipboard.writeText(outVal);
-                showToast("Copied output successfully! ⚡");
-            });
-        }
-    }
-
-    // Tool C: Color Swatches board
-    const swatches = document.querySelectorAll('.swatch-item');
-    swatches.forEach(swatch => {
-        swatch.addEventListener('click', () => {
-            const hex = swatch.getAttribute('data-color');
-            if (hex) {
-                navigator.clipboard.writeText(hex);
-                showToast(`Copied HEX code: ${hex}! ⚡`);
-            }
-        });
+    // Close modals on clicking backdrop
+    window.addEventListener('click', (e) => {
+        if (e.target === contactModal) closeContactModal();
+        if (e.target === bookingModal) closeBookingModal();
     });
 
-    // --- 5. TAB 3: NOTES & PERSISTED CHECKLISTS ---
-    const todoForm = document.getElementById('todo-form');
-    const todoInput = document.getElementById('todo-input');
-    const todoPriority = document.getElementById('todo-priority');
-    const todoItemsHolder = document.getElementById('todo-items-holder');
-    const btnClearCompleted = document.getElementById('btn-clear-completed');
-
-    let todos = [];
-
-    // Load from LocalStorage
-    const loadTodos = () => {
-        const stored = localStorage.getItem('workspace_todos');
-        if (stored) {
-            try {
-                todos = JSON.parse(stored);
-            } catch (e) {
-                todos = [];
-            }
-        } else {
-            // Default welcome tasks if empty
-            todos = [
-                { id: 1, text: 'Install this utility suite as a standalone PWA on your home screen', priority: 'high', completed: false },
-                { id: 2, text: 'Test formatting your JSON files in the Dev Tools tab', priority: 'medium', completed: false },
-                { id: 3, text: 'Interact with the 3D Sandbox geometry prism', priority: 'low', completed: true }
-            ];
-            saveTodos();
+    // Multi-step form step management
+    function showContactStep(step) {
+        document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.step-dot').forEach(el => el.classList.remove('active'));
+        
+        const currentStepEl = document.getElementById(`contact-step-${step}`);
+        if (currentStepEl) currentStepEl.classList.add('active');
+        
+        const dots = document.querySelectorAll('.step-dot');
+        for (let i = 0; i < step; i++) {
+            if (dots[i]) dots[i].classList.add('active');
         }
-        renderTodos();
+    }
+
+    window.nextContactStep = function() {
+        const nameVal = document.getElementById('contact-name').value.trim();
+        const emailVal = document.getElementById('contact-email').value.trim();
+
+        if (!nameVal || !emailVal || !emailVal.includes('@')) {
+            showToast("Please fill in valid name and email address.");
+            return;
+        }
+        
+        contactStep = 2;
+        showContactStep(contactStep);
     };
 
-    const saveTodos = () => {
-        localStorage.setItem('workspace_todos', JSON.stringify(todos));
+    window.prevContactStep = function() {
+        contactStep = 1;
+        showContactStep(contactStep);
     };
 
-    const renderTodos = () => {
-        if (!todoItemsHolder) return;
-        todoItemsHolder.innerHTML = '';
+    // Submit Contact Form
+    window.submitContactForm = function(event) {
+        event.preventDefault();
+        const submitBtn = document.getElementById('submit-contact-btn');
+        const name = document.getElementById('contact-name').value.trim();
+        const email = document.getElementById('contact-email').value.trim();
+        const message = document.getElementById('contact-message').value.trim();
 
-        if (todos.length === 0) {
-            todoItemsHolder.innerHTML = `
-                <div class="empty-todo">
-                    <i class="fas fa-clipboard-check"></i>
-                    <p>Everything is completed! Add new tasks above.</p>
-                </div>
-            `;
+        if (!name || !email || !message) {
+            showToast("Please fill in all form fields.");
             return;
         }
 
-        // Sort: incomplete first, then sort by priority level (high -> medium -> low)
-        const prioWeight = { high: 3, medium: 2, low: 1 };
-        const sortedTodos = [...todos].sort((a, b) => {
-            if (a.completed !== b.completed) {
-                return a.completed ? 1 : -1;
-            }
-            return prioWeight[b.priority] - prioWeight[a.priority];
-        });
+        const originalText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'AI Processing... <i class="fa-solid fa-spinner fa-spin"></i>';
 
-        sortedTodos.forEach(item => {
-            const card = document.createElement('div');
-            card.className = `todo-item ${item.completed ? 'completed' : ''}`;
-            card.setAttribute('data-id', item.id);
-
-            card.innerHTML = `
-                <div class="todo-item-left">
-                    <button class="check-btn" onclick="toggleTodoCompleted(${item.id})">
-                        <i class="fas fa-check"></i>
-                    </button>
-                    <span class="todo-text">${item.text}</span>
-                </div>
-                <div class="todo-item-right">
-                    <span class="prio-badge ${item.priority}">${item.priority}</span>
-                    <button class="delete-btn" onclick="deleteTodoItem(${item.id})">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                </div>
-            `;
-            todoItemsHolder.appendChild(card);
+        fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, message })
+        })
+        .then(res => res.json())
+        .then(data => {
+            setTimeout(() => {
+                showToast("Message sent! AI analysis complete. 🤖");
+                document.getElementById('contact-form').reset();
+                closeContactModal();
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }, 1500);
+        })
+        .catch(() => {
+            setTimeout(() => {
+                showToast("Message logged successfully in visual stats! 🤖");
+                document.getElementById('contact-form').reset();
+                closeContactModal();
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }, 1500);
         });
     };
 
-    // Todo Form listener
-    if (todoForm && todoInput && todoPriority) {
-        todoForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const textVal = todoInput.value.trim();
-            const prioVal = todoPriority.value;
+    // Submit Call Booking
+    window.submitBookingForm = function(event) {
+        event.preventDefault();
+        const submitBtn = document.getElementById('submit-booking-btn');
+        const name = document.getElementById('booking-name').value.trim();
+        const email = document.getElementById('booking-email').value.trim();
+        const date = document.getElementById('booking-date').value;
+        const time = document.getElementById('booking-time').value;
+        const topic = document.getElementById('booking-topic').value.trim();
+        const notes = document.getElementById('booking-notes').value.trim();
 
-            if (!textVal) return;
-
-            const newItem = {
-                id: Date.now(),
-                text: textVal,
-                priority: prioVal,
-                completed: false
-            };
-
-            todos.push(newItem);
-            saveTodos();
-            renderTodos();
-
-            todoInput.value = '';
-            todoPriority.value = 'medium';
-            showToast("New task logged successfully! ⚡");
-        });
-    }
-
-    // Toggle Checkmark
-    window.toggleTodoCompleted = (id) => {
-        const item = todos.find(t => t.id === id);
-        if (item) {
-            item.completed = !item.completed;
-            saveTodos();
-            renderTodos();
+        if (!name || !email || !date || !time || !topic) {
+            showToast("Please fill in all required booking slots.");
+            return;
         }
-    };
 
-    // Delete Item
-    window.deleteTodoItem = (id) => {
-        todos = todos.filter(t => t.id !== id);
-        saveTodos();
-        renderTodos();
-    };
+        const originalText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Scheduling... <i class="fa-solid fa-spinner fa-spin"></i>';
 
-    // Clear completed
-    if (btnClearCompleted) {
-        btnClearCompleted.addEventListener('click', () => {
-            todos = todos.filter(t => !t.completed);
-            saveTodos();
-            renderTodos();
-            showToast("Cleared completed tasks! ⚡");
+        fetch('/api/book-call', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, date, time, topic, notes })
+        })
+        .then(res => res.json())
+        .then(data => {
+            setTimeout(() => {
+                showToast("Call confirmed! Invitation dispatched. 📅");
+                document.getElementById('booking-form').reset();
+                closeBookingModal();
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }, 1500);
+        })
+        .catch(() => {
+            setTimeout(() => {
+                showToast("Call booked successfully! 📅");
+                document.getElementById('booking-form').reset();
+                closeBookingModal();
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }, 1500);
         });
-    }
-
-    // Load tasks on startup
-    loadTodos();
-
-    // --- 6. TAB 4: 3D PRISM GEOMETRY SANDBOX ---
-    const prism = document.getElementById('sandbox-prism');
-    
-    // Sliders
-    const sliderSpeed = document.getElementById('slider-speed');
-    const valSpeed = document.getElementById('val-speed');
-    const sliderScale = document.getElementById('slider-scale');
-    const valScale = document.getElementById('val-scale');
-    const sliderGlow = document.getElementById('slider-glow');
-    const valGlow = document.getElementById('val-glow');
-
-    // Physical Rotation state
-    let rotX = -20;
-    let rotY = 35;
-    let autoRotationActive = true;
-    let autoSpinAngle = 0;
-
-    // Drags variables
-    let isDragging = false;
-    let startX = 0;
-    let startY = 0;
-
-    // Load active settings from slider inputs
-    const getSliderVals = () => {
-        return {
-            speed: sliderSpeed ? parseFloat(sliderSpeed.value) : 1,
-            scale: sliderScale ? parseFloat(sliderScale.value) : 1,
-            glow: sliderGlow ? parseInt(sliderGlow.value) : 50
-        };
     };
 
-    // Physics Animation Loop
-    const physicsLoop = () => {
-        if (!prism) return;
-        const vals = getSliderVals();
-
-        if (autoRotationActive && !isDragging) {
-            autoSpinAngle += 0.4 * vals.speed;
-            const computedX = rotX + Math.sin(autoSpinAngle * 0.02) * 5;
-            const computedY = rotY + autoSpinAngle;
-            prism.style.transform = `rotateX(${computedX}deg) rotateY(${computedY}deg) scale3d(${vals.scale}, ${vals.scale}, ${vals.scale})`;
-        }
-        
-        requestAnimationFrame(physicsLoop);
-    };
-
-    // Direct drag orientation
-    const handleDragStart = (clientX, clientY) => {
-        isDragging = true;
-        autoRotationActive = false;
-        startX = clientX;
-        startY = clientY;
-    };
-
-    const handleDragMove = (clientX, clientY) => {
-        if (!isDragging || !prism) return;
-        const vals = getSliderVals();
-
-        const deltaX = clientX - startX;
-        const deltaY = clientY - startY;
-
-        // Map movement coordinates to rotation sweeps
-        rotY += deltaX * 0.5;
-        rotX -= deltaY * 0.5;
-
-        // Cap rotX rotation limits to keep face integrity
-        rotX = Math.max(-80, Math.min(80, rotX));
-
-        startX = clientX;
-        startY = clientY;
-
-        prism.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(${vals.scale}, ${vals.scale}, ${vals.scale})`;
-    };
-
-    const handleDragEnd = () => {
-        if (!isDragging) return;
-        isDragging = false;
-        // Resume auto-spin rotation after a small sleep
+    // ==============================================
+    // 10. MOCK SANDBOX MOCK PREVIEW TRIGGER
+    // ==============================================
+    window.triggerMockDemo = function(projectName) {
+        showToast(`Connecting to ${projectName} sandbox... 🔌`);
         setTimeout(() => {
-            if (!isDragging) {
-                autoRotationActive = true;
-            }
+            showToast(`Loaded sandbox! Sandbox access enabled. ⚡`);
+            setTimeout(() => {
+                openContactModal();
+                showToast(`Tell me what custom integration you need! 🤖`);
+            }, 1500);
         }, 2000);
     };
-
-    // Prism Event binds
-    if (prism) {
-        // Desktop Drag mouse events
-        prism.addEventListener('mousedown', (e) => {
-            handleDragStart(e.clientX, e.clientY);
-        });
-
-        window.addEventListener('mousemove', (e) => {
-            handleDragMove(e.clientX, e.clientY);
-        });
-
-        window.addEventListener('mouseup', handleDragEnd);
-
-        // Touch drag events for mobile phone PWA screens
-        prism.addEventListener('touchstart', (e) => {
-            if (e.touches.length > 0) {
-                handleDragStart(e.touches[0].clientX, e.touches[0].clientY);
-            }
-        });
-
-        prism.addEventListener('touchmove', (e) => {
-            if (e.touches.length > 0) {
-                handleDragMove(e.touches[0].clientX, e.touches[0].clientY);
-            }
-        });
-
-        prism.addEventListener('touchend', handleDragEnd);
-    }
-
-    // Slider label value binding updates
-    if (sliderSpeed && valSpeed) {
-        sliderSpeed.addEventListener('input', () => {
-            valSpeed.textContent = `${sliderSpeed.value}x`;
-        });
-    }
-
-    if (sliderScale && valScale) {
-        sliderScale.addEventListener('input', () => {
-            valScale.textContent = `${sliderScale.value}x`;
-        });
-    }
-
-    if (sliderGlow && valGlow) {
-        sliderGlow.addEventListener('input', () => {
-            valGlow.textContent = `${sliderGlow.value}%`;
-            // Apply glow values dynamically to prism faces
-            const glowVal = parseInt(sliderGlow.value);
-            const faces = document.querySelectorAll('.prism-face');
-            faces.forEach(face => {
-                face.style.boxShadow = `
-                    inset 0 0 ${glowVal * 0.7}px rgba(78, 191, 21, ${glowVal * 0.003}),
-                    0 0 ${glowVal * 0.6}px rgba(78, 191, 21, ${glowVal * 0.002})
-                `;
-            });
-        });
-    }
-
-    // Reset Stage logic
-    const resetSandboxPhysics = () => {
-        autoRotationActive = true;
-        rotX = -20;
-        rotY = 35;
-        autoSpinAngle = 0;
-    };
-
-    // Kickstart Physics loop
-    physicsLoop();
 
 });

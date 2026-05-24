@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="description" content="A minimalist, high-fidelity PWA developer workspace and utility dashboard.">
-    <meta name="theme-color" content="#ffffff">
-    <title>Workspace</title>
+    <meta name="description" content="Aryan Jha's portfolio website. AI Developer, Web Freelancer & Snapchat AR Lens Creator.">
+    <meta name="theme-color" content="#020215">
+    <title>Aryan Jha - AI & AR Developer Portfolio</title>
 
     <!-- PWA Standard Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Workspace">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Aryan Jha">
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=Workspace&background=4EBF15&color=fff&size=192&bold=true">
+    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=Aryan+Jha&background=6b21a8&color=fff&size=192&bold=true">
 
-    <!-- Fonts -->
+    <!-- Fonts (Outfit & Space Grotesk) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -24,315 +24,625 @@
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="style.css">
-
-    <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
 </head>
 <body>
-    <!-- App Container -->
-    <div class="app-container">
-        <!-- Ambient decorative background (clean off-white) -->
-        <div class="ambient-background"></div>
+    <!-- Premium Glowing Ambient Effects -->
+    <div class="glow-orb purple-glow" style="top: -200px; right: -200px;"></div>
+    <div class="glow-orb blue-glow" style="bottom: -200px; left: -200px;"></div>
+    <div class="glow-orb center-glow" style="top: 40%; left: 30%;"></div>
 
-        <!-- Global Toast Alert Box -->
-        <div id="toast" class="toast-notification">Copied to clipboard! ⚡</div>
+    <!-- Global Toast Alert Box -->
+    <div id="toast" class="toast-notification">Copied to clipboard! ⚡</div>
 
-        <!-- Main Workspace Contents -->
-        <main class="app-main">
-            
-            <!-- ============================================== -->
-            <!-- TAB 1: HOME COMMAND CENTER -->
-            <!-- ============================================== -->
-            <section id="tab-home" class="app-tab active">
-                <header class="tab-header">
-                    <div class="header-branding">
-                        <span class="logo-lightning">⚡</span>
-                        <h1>Workspace<span>.</span></h1>
-                    </div>
-                    <div class="status-indicator">
-                        <span class="led"></span> ONLINE
-                    </div>
-                </header>
+    <!-- Main Container -->
+    <div class="portfolio-container">
+        
+        <!-- ============================================== -->
+        <!-- HEADER / NAVIGATION -->
+        <!-- ============================================== -->
+        <header id="navbar" class="main-header">
+            <div class="header-content">
+                <a href="#home" class="logo-area">
+                    <span class="logo-badge">AJ</span>
+                    <span class="logo-text">Aryan Jha</span>
+                </a>
+                
+                <nav class="nav-menu" id="nav-menu">
+                    <a href="#home" class="nav-link active">Home</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#projects" class="nav-link">Projects</a>
+                    <a href="#snap-lenses" class="nav-link">Snap Lenses</a>
+                    <a href="#services" class="nav-link">Services</a>
+                    <a href="#testimonials" class="nav-link">Testimonials</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                </nav>
 
-                <div class="grid-layout">
-                    <!-- Performance Metrics Widget -->
-                    <div class="widget-card double-width">
-                        <h3><i class="fas fa-chart-line header-icon"></i> System Metrics</h3>
-                        <div class="metrics-grid">
-                            <div class="metric-dial">
-                                <svg viewBox="0 0 36 36" class="circular-chart green">
-                                    <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                                    <path id="cpu-chart" class="circle" stroke-dasharray="24, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                                </svg>
-                                <div class="dial-info">
-                                    <span id="cpu-value" class="dial-number">24%</span>
-                                    <span class="dial-label">CPU LOAD</span>
-                                </div>
-                            </div>
-                            <div class="metric-dial">
-                                <svg viewBox="0 0 36 36" class="circular-chart green">
-                                    <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                                    <path id="ram-chart" class="circle" stroke-dasharray="48, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                                </svg>
-                                <div class="dial-info">
-                                    <span id="ram-value" class="dial-number">4.8GB</span>
-                                    <span class="dial-label">MEM LOAD</span>
-                                </div>
-                            </div>
-                            <div class="metric-dial">
-                                <svg viewBox="0 0 36 36" class="circular-chart green">
-                                    <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                                    <path id="cache-chart" class="circle" stroke-dasharray="98, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                                </svg>
-                                <div class="dial-info">
-                                    <span class="dial-number">98%</span>
-                                    <span class="dial-label">CACHE OK</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Time & Clock Widget -->
-                    <div class="widget-card">
-                        <h3><i class="far fa-clock header-icon"></i> Local Clock</h3>
-                        <div class="clock-display">
-                            <span id="live-time" class="time-text">00:00:00</span>
-                            <span id="live-date" class="date-text">JANUARY 1, 2026</span>
-                        </div>
-                    </div>
-
-                    <!-- PWA Native Installer -->
-                    <div class="widget-card double-width installer-widget" id="install-card">
-                        <div class="installer-icon">📱</div>
-                        <div class="installer-info">
-                            <h3>Install Workspace App</h3>
-                            <p>Add this utility suite directly to your home screen. Experience high-performance offline tools, faster compilation, and fullscreen standalone viewports.</p>
-                            <button id="pwa-install-btn" class="install-btn"><i class="fas fa-download"></i> Install Standalone</button>
-                            <div id="ios-guide" class="ios-guide-text">
-                                <i class="fas fa-info-circle"></i> On iOS: Tap <span class="share-icon-mimic"><i class="fas fa-share-square"></i> Share</span> in Safari, then select <span class="add-icon-mimic">Add to Home Screen</span>.
-                            </div>
-                        </div>
-                    </div>
+                <div class="header-right">
+                    <button class="btn btn-primary hire-btn" onclick="openContactModal()">
+                        Hire Me <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                    <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle navigation menu">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
                 </div>
-            </section>
-
-            <!-- ============================================== -->
-            <!-- TAB 2: DEV UTILITIES SUITE -->
-            <!-- ============================================== -->
-            <section id="tab-tools" class="app-tab">
-                <header class="tab-header">
-                    <h2><i class="fas fa-tools tab-title-icon"></i> Developer Utilities</h2>
-                </header>
-
-                <div class="tools-container">
-                    <!-- Tool A: JSON Prettifier -->
-                    <div class="tool-card">
-                        <div class="tool-header">
-                            <h3><i class="fas fa-brackets-curly"></i> JSON Prettifier & Validator</h3>
-                        </div>
-                        <div class="tool-body">
-                            <textarea id="json-input" placeholder="Paste raw JSON string here..." autocomplete="off" spellcheck="false"></textarea>
-                            <div class="action-row">
-                                <button id="btn-json-prettify" class="btn btn-primary"><i class="fas fa-magic"></i> Format JSON</button>
-                                <button id="btn-json-clear" class="btn btn-secondary">Clear</button>
-                            </div>
-                            <div id="json-error" class="error-msg-box"></div>
-                            <textarea id="json-output" class="output-textarea" placeholder="Formatted output will appear here..." readonly autocomplete="off" spellcheck="false"></textarea>
-                            <button id="btn-json-copy" class="btn btn-secondary copy-btn"><i class="fas fa-copy"></i> Copy Output</button>
-                        </div>
-                    </div>
-
-                    <!-- Tool B: Base64 Text Converter -->
-                    <div class="tool-card">
-                        <div class="tool-header">
-                            <h3><i class="fas fa-barcode"></i> Base64 Text Tool</h3>
-                        </div>
-                        <div class="tool-body">
-                            <textarea id="base64-input" placeholder="Enter plain text or Base64 code here..." autocomplete="off" spellcheck="false"></textarea>
-                            <div class="action-row">
-                                <button id="btn-base64-encode" class="btn btn-primary">Encode Text</button>
-                                <button id="btn-base64-decode" class="btn btn-primary btn-secondary-green">Decode Base64</button>
-                                <button id="btn-base64-clear" class="btn btn-secondary">Clear</button>
-                            </div>
-                            <textarea id="base64-output" class="output-textarea" placeholder="Conversion output will appear here..." readonly autocomplete="off" spellcheck="false"></textarea>
-                            <button id="btn-base64-copy" class="btn btn-secondary copy-btn"><i class="fas fa-copy"></i> Copy Output</button>
-                        </div>
-                    </div>
-
-                    <!-- Tool C: Parrot Green Color Swatch -->
-                    <div class="tool-card">
-                        <div class="tool-header">
-                            <h3><i class="fas fa-palette"></i> Parrot Green Design Board</h3>
-                        </div>
-                        <div class="tool-body">
-                            <p class="tool-desc">Click any clean developer swatch below to instantly copy its color code.</p>
-                            <div class="swatches-grid">
-                                <div class="swatch-item" data-color="#39FF14">
-                                    <div class="swatch-preview" style="background-color: #39FF14; box-shadow: 0 4px 15px rgba(57,255,20,0.3);"></div>
-                                    <div class="swatch-details">
-                                        <span class="swatch-name">Neon Green</span>
-                                        <code class="swatch-hex">#39FF14</code>
-                                    </div>
-                                </div>
-                                <div class="swatch-item" data-color="#4EBF15">
-                                    <div class="swatch-preview" style="background-color: #4EBF15; box-shadow: 0 4px 15px rgba(78,191,21,0.3);"></div>
-                                    <div class="swatch-details">
-                                        <span class="swatch-name">Parrot Green</span>
-                                        <code class="swatch-hex">#4EBF15</code>
-                                    </div>
-                                </div>
-                                <div class="swatch-item" data-color="#38a60e">
-                                    <div class="swatch-preview" style="background-color: #38a60e; box-shadow: 0 4px 15px rgba(56,166,14,0.3);"></div>
-                                    <div class="swatch-details">
-                                        <span class="swatch-name">Forest Green</span>
-                                        <code class="swatch-hex">#38A60E</code>
-                                    </div>
-                                </div>
-                                <div class="swatch-item" data-color="#8CE85A">
-                                    <div class="swatch-preview" style="background-color: #8CE85A; box-shadow: 0 4px 15px rgba(140,232,90,0.3);"></div>
-                                    <div class="swatch-details">
-                                        <span class="swatch-name">Mint Pastel</span>
-                                        <code class="swatch-hex">#8CE85A</code>
-                                    </div>
-                                </div>
-                                <div class="swatch-item" data-color="#F2FDF0">
-                                    <div class="swatch-preview" style="background-color: #F2FDF0; border: 1px solid rgba(0,0,0,0.05);"></div>
-                                    <div class="swatch-details">
-                                        <span class="swatch-name">Soft Cream</span>
-                                        <code class="swatch-hex">#F2FDF0</code>
-                                    </div>
-                                </div>
-                                <div class="swatch-item" data-color="#0f172a">
-                                    <div class="swatch-preview" style="background-color: #0f172a; box-shadow: 0 4px 15px rgba(15,23,42,0.3);"></div>
-                                    <div class="swatch-details">
-                                        <span class="swatch-name">Deep Slate</span>
-                                        <code class="swatch-hex">#0F172A</code>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ============================================== -->
-            <!-- TAB 3: NOTES & PERSISTED CHECKLISTS -->
-            <!-- ============================================== -->
-            <section id="tab-notes" class="app-tab">
-                <header class="tab-header">
-                    <h2><i class="fas fa-tasks tab-title-icon"></i> Tasks & Workspace Notes</h2>
-                </header>
-
-                <div class="notes-container">
-                    <!-- Task Input Area -->
-                    <div class="widget-card no-margin">
-                        <h3>Create a New Note / Task</h3>
-                        <form id="todo-form" class="todo-form">
-                            <input type="text" id="todo-input" placeholder="Type notes or task details..." required autocomplete="off">
-                            <select id="todo-priority" class="priority-select">
-                                <option value="low">Low Priority</option>
-                                <option value="medium" selected>Medium Priority</option>
-                                <option value="high">High Priority</option>
-                            </select>
-                            <button type="submit" class="todo-add-btn"><i class="fas fa-plus"></i></button>
-                        </form>
-                    </div>
-
-                    <!-- Checklist Cards Holder -->
-                    <div class="todo-list-section">
-                        <div class="todo-list-header">
-                            <h3>Active List</h3>
-                            <button id="btn-clear-completed" class="btn btn-secondary btn-small">Clear Completed</button>
-                        </div>
-                        <div id="todo-items-holder" class="todo-items-holder">
-                            <!-- Items generated dynamically by script.js -->
-                            <div class="empty-todo">
-                                <i class="fas fa-clipboard-check"></i>
-                                <p>Everything is completed! Add new tasks above.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ============================================== -->
-            <!-- TAB 4: 3D PRISM GEOMETRY SANDBOX -->
-            <!-- ============================================== -->
-            <section id="tab-sandbox" class="app-tab">
-                <header class="tab-header">
-                    <h2><i class="fas fa-cube tab-title-icon"></i> 3D Prism Geometry Playground</h2>
-                </header>
-
-                <div class="sandbox-container">
-                    <!-- 3D Interactive Centerpiece -->
-                    <div class="sandbox-render-area">
-                        <div class="perspective-stage">
-                            <!-- 3D Draggable Box -->
-                            <div class="prism-3d" id="sandbox-prism">
-                                <div class="prism-face front">COMING</div>
-                                <div class="prism-face back">SOON</div>
-                                <div class="prism-face right">⚡</div>
-                                <div class="prism-face left">v2.0</div>
-                                <div class="prism-face top">CREATORS</div>
-                                <div class="prism-face bottom">WORKSPACE</div>
-                            </div>
-                        </div>
-                        <p class="drag-hint"><i class="fas fa-hand-pointer"></i> Drag or swipe directly on the 3D prism to spin it!</p>
-                    </div>
-
-                    <!-- Control Settings Panel -->
-                    <div class="widget-card">
-                        <h3>Playground Physics Controls</h3>
-                        <div class="controls-grid">
-                            <div class="control-slider-group">
-                                <div class="slider-label-row">
-                                    <span>Auto-Spin Speed</span>
-                                    <span id="val-speed">1x</span>
-                                </div>
-                                <input type="range" id="slider-speed" min="0" max="4" step="0.25" value="1">
-                            </div>
-                            <div class="control-slider-group">
-                                <div class="slider-label-row">
-                                    <span>Prism Dimension Scale</span>
-                                    <span id="val-scale">1.0x</span>
-                                </div>
-                                <input type="range" id="slider-scale" min="0.5" max="1.5" step="0.05" value="1">
-                            </div>
-                            <div class="control-slider-group">
-                                <div class="slider-label-row">
-                                    <span>Parrot Glow Intensity</span>
-                                    <span id="val-glow">50%</span>
-                                </div>
-                                <input type="range" id="slider-glow" min="10" max="100" step="5" value="50">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-        </main>
+            </div>
+        </header>
 
         <!-- ============================================== -->
-        <!-- PERSISTENT MOBILE-STYLE BOTTOM DOCK -->
+        <!-- HERO SECTION -->
         <!-- ============================================== -->
-        <nav class="app-dock" id="app-dock">
-            <button class="dock-item active" data-tab="tab-home">
-                <i class="fas fa-home"></i>
-                <span class="dock-label">Home</span>
-            </button>
-            <button class="dock-item" data-tab="tab-tools">
-                <i class="fas fa-laptop-code"></i>
-                <span class="dock-label">Tools</span>
-            </button>
-            <button class="dock-item" data-tab="tab-notes">
-                <i class="fas fa-tasks"></i>
-                <span class="dock-label">Tasks</span>
-            </button>
-            <button class="dock-item" data-tab="tab-sandbox">
-                <i class="fas fa-cube"></i>
-                <span class="dock-label">3D Play</span>
-            </button>
-        </nav>
+        <section id="home" class="hero-section">
+            <div class="hero-content">
+                <div class="hero-left">
+                    <div class="badge-capsule animate-slide-in">
+                        <span class="badge-text">AI DEVELOPER • FREELANCER • CREATOR</span>
+                    </div>
+                    
+                    <h1 class="hero-headline animate-slide-in" style="animation-delay: 0.1s;">
+                        Building <span class="text-cyan">AI</span> Solutions,<br>
+                        Web Experiences &<br>
+                        <span class="text-purple-gradient">AR</span> Magic
+                    </h1>
+                    
+                    <p class="hero-desc animate-slide-in" style="animation-delay: 0.2s;">
+                        I build intelligent web apps, AI-powered solutions and Snapchat AR Lenses that create impact.
+                    </p>
+                    
+                    <div class="hero-actions animate-slide-in" style="animation-delay: 0.3s;">
+                        <a href="#projects" class="btn btn-gradient">
+                            View My Work <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <button class="btn btn-outline" onclick="openContactModal()">
+                            Hire Me <i class="fa-solid fa-rocket"></i>
+                        </button>
+                    </div>
+
+                    <div class="socials-area animate-slide-in" style="animation-delay: 0.4s;">
+                        <span class="socials-label">Connect With Me</span>
+                        <div class="socials-grid">
+                            <a href="https://github.com/aryanjha209" target="_blank" class="social-icon" aria-label="GitHub">
+                                <i class="fa-brands fa-github"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/in/aryan-jha-71173822a/" target="_blank" class="social-icon" aria-label="LinkedIn">
+                                <i class="fa-brands fa-linkedin-in"></i>
+                            </a>
+                            <a href="https://instagram.com" target="_blank" class="social-icon" aria-label="Instagram">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+                            <a href="https://snapchat.com" target="_blank" class="social-icon snapchat-icon" aria-label="Snapchat">
+                                <i class="fa-brands fa-snapchat"></i>
+                            </a>
+                            <a href="https://youtube.com" target="_blank" class="social-icon" aria-label="YouTube">
+                                <i class="fa-brands fa-youtube"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-right">
+                    <div class="portrait-stage">
+                        <!-- Floating skill icons -->
+                        <div class="floating-icon icon-python" title="Python"><i class="fa-brands fa-python"></i></div>
+                        <div class="floating-icon icon-ai" title="AI / ML"><i class="fa-solid fa-microchip"></i></div>
+                        <div class="floating-icon icon-code" title="Web Development"><i class="fa-solid fa-code"></i></div>
+                        <div class="floating-icon icon-ar" title="Snapchat AR / Lens Studio"><i class="fa-solid fa-cube"></i></div>
+                        
+                        <div class="portrait-glowing-ring"></div>
+                        <div class="portrait-wrapper">
+                            <img src="aryan jha.png" alt="Aryan Jha" class="portrait-image">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- STATS SECTION -->
+        <!-- ============================================== -->
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-rocket"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-number" data-target="10">10+</span>
+                        <span class="stat-label">AI Projects<br>Completed</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-cubes"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-number" data-target="5">5+</span>
+                        <span class="stat-label">Snapchat Lenses<br>Published</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-number" data-target="3">3+</span>
+                        <span class="stat-label">Happy Clients<br>Worldwide</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-code"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-number" data-target="15">15+</span>
+                        <span class="stat-label">Technologies<br>Worked With</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-star"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-number" data-target="1000">1000+</span>
+                        <span class="stat-label">Lens Views<br>& Counting</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- SERVICES & PROJECTS SECTION -->
+        <!-- ============================================== -->
+        <section class="split-section">
+            <!-- Left Side: Services -->
+            <div id="services" class="split-left">
+                <h2 class="section-title">What I Do</h2>
+                
+                <div class="services-list">
+                    <div class="service-card" onclick="toggleServiceDrawer(this)">
+                        <div class="service-main">
+                            <div class="service-icon"><i class="fa-solid fa-brain"></i></div>
+                            <div class="service-meta">
+                                <h3>AI & ML Solutions</h3>
+                                <p>Chatbots, NLP, Computer Vision & Predictive Models</p>
+                            </div>
+                            <div class="service-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                        </div>
+                        <div class="service-drawer">
+                            <p>Designing, fine-tuning, and implementing deep learning models. I specialize in building custom conversational AI chatbots, NLP parsing systems, semantic databases, object detection computer vision architectures, and robust statistical predictive systems.</p>
+                            <ul class="service-tags">
+                                <li>PyTorch</li>
+                                <li>Transformers</li>
+                                <li>OpenCV</li>
+                                <li>LLMs</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="service-card" onclick="toggleServiceDrawer(this)">
+                        <div class="service-main">
+                            <div class="service-icon"><i class="fa-solid fa-globe"></i></div>
+                            <div class="service-meta">
+                                <h3>Web & PWA Development</h3>
+                                <p>Fast, responsive and engaging web applications</p>
+                            </div>
+                            <div class="service-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                        </div>
+                        <div class="service-drawer">
+                            <p>Structuring responsive mobile-first Progressive Web Applications (PWA) that load instantly offline and provide standalone fullscreen viewports. Designed with rich glassmorphism layouts, subtle micro-animations, and fast page performance.</p>
+                            <ul class="service-tags">
+                                <li>HTML5</li>
+                                <li>Vanilla CSS</li>
+                                <li>Service Workers</li>
+                                <li>Vite</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="service-card" onclick="toggleServiceDrawer(this)">
+                        <div class="service-main">
+                            <div class="service-icon"><i class="fa-solid fa-server"></i></div>
+                            <div class="service-meta">
+                                <h3>Backend Development</h3>
+                                <p>REST APIs, Databases, Flask, FastAPI & more</p>
+                            </div>
+                            <div class="service-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                        </div>
+                        <div class="service-drawer">
+                            <p>Developing ultra-performant, secure, and clean server backend architectures. I write scalable endpoints, custom database integrations, session management, secure web tokens, and high-frequency webhook listeners.</p>
+                            <ul class="service-tags">
+                                <li>Node.js</li>
+                                <li>Express</li>
+                                <li>FastAPI</li>
+                                <li>MongoDB</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="service-card" onclick="toggleServiceDrawer(this)">
+                        <div class="service-main">
+                            <div class="service-icon"><i class="fa-brands fa-snapchat"></i></div>
+                            <div class="service-meta">
+                                <h3>Snapchat AR Lenses</h3>
+                                <p>Custom interactive lenses using Lens Studio</p>
+                            </div>
+                            <div class="service-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                        </div>
+                        <div class="service-drawer">
+                            <p>Creating highly engaging Snapchat augmented reality experiences. Custom face mapping, hand tracking, neon visual shader filters, interactive physics, custom scripting, and sound designs that captivate users.</p>
+                            <ul class="service-tags">
+                                <li>Lens Studio</li>
+                                <li>Augmented Reality</li>
+                                <li>JS Scripting</li>
+                                <li>3D Textures</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="#contact" class="explore-services-link">
+                    Explore All Services <i class="fa-solid fa-plus icon-small"></i>
+                </a>
+            </div>
+
+            <!-- Right Side: Featured Projects -->
+            <div id="projects" class="split-right">
+                <div class="split-right-header">
+                    <h2 class="section-title">Featured Projects</h2>
+                    <a href="#contact" class="view-all-link">View All Projects <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <div class="projects-grid">
+                    <!-- Project 1 -->
+                    <div class="project-card">
+                        <div class="project-img-wrapper">
+                            <img src="featured_project_1.png" alt="AI Interview Coach" class="project-img">
+                        </div>
+                        <div class="project-info">
+                            <h3>AI Interview Coach</h3>
+                            <p>AI-powered interview preparation with voice analysis & feedback.</p>
+                            <div class="project-tags">
+                                <span class="tag">AI</span>
+                                <span class="tag">NLP</span>
+                                <span class="tag">PWA</span>
+                            </div>
+                            <div class="project-actions">
+                                <button class="btn btn-small btn-gradient-demo" onclick="triggerMockDemo('AI Interview Coach')">
+                                    <i class="fa-solid fa-eye"></i> Live Demo
+                                </button>
+                                <a href="https://github.com/aryanjha209" target="_blank" class="github-action-link" aria-label="GitHub Repository">
+                                    <i class="fa-brands fa-github"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 2 -->
+                    <div class="project-card">
+                        <div class="project-img-wrapper">
+                            <img src="featured_project_2.png" alt="Smart MIS Assistant" class="project-img">
+                        </div>
+                        <div class="project-info">
+                            <h3>Smart MIS Assistant</h3>
+                            <p>AI chatbot for student queries, attendance, notices & more.</p>
+                            <div class="project-tags">
+                                <span class="tag">Flask</span>
+                                <span class="tag">AI</span>
+                                <span class="tag">Dashboard</span>
+                            </div>
+                            <div class="project-actions">
+                                <button class="btn btn-small btn-gradient-demo" onclick="triggerMockDemo('Smart MIS Assistant')">
+                                    <i class="fa-solid fa-eye"></i> Live Demo
+                                </button>
+                                <a href="https://github.com/aryanjha209" target="_blank" class="github-action-link" aria-label="GitHub Repository">
+                                    <i class="fa-brands fa-github"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 3 -->
+                    <div class="project-card">
+                        <div class="project-img-wrapper">
+                            <img src="featured_project_3.png" alt="Neon Face Filter" class="project-img">
+                        </div>
+                        <div class="project-info">
+                            <h3>Neon Face Filter</h3>
+                            <p>Interactive Snapchat Lens with neon effects and face tracking.</p>
+                            <div class="project-tags">
+                                <span class="tag">Lens Studio</span>
+                                <span class="tag">AR</span>
+                            </div>
+                            <div class="project-actions">
+                                <a href="https://snapchat.com" target="_blank" class="btn btn-small btn-snapchat-action">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i> Try Lens
+                                </a>
+                                <a href="https://snapchat.com" target="_blank" class="snapchat-ghost-btn" aria-label="Snapchat Link">
+                                    <i class="fa-brands fa-snapchat"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- SNAPCHAT LENS & CONTACT CTA SECTION -->
+        <!-- ============================================== -->
+        <section id="snap-lenses" class="split-section bottom-split">
+            <!-- Left Side: Latest Snapchat Lens -->
+            <div class="split-left">
+                <div class="split-right-header">
+                    <h2 class="section-title">Latest Snapchat Lens</h2>
+                    <a href="https://snapchat.com" target="_blank" class="view-all-link">View All Lenses</a>
+                </div>
+
+                <div class="snapchat-lens-card">
+                    <div class="lens-card-inner">
+                        <div class="lens-image-area">
+                            <img src="latest_snapchat_lens.png" alt="Neon Devil Filter Preview" class="lens-preview-img">
+                        </div>
+                        
+                        <div class="lens-details-area">
+                            <div class="lens-title-row">
+                                <h3>Neon Devil</h3>
+                                <span class="new-badge">NEW</span>
+                            </div>
+                            <p class="lens-desc">Cool neon devil effects with dynamic animations and face tracking.</p>
+                            
+                            <div class="lens-stats-grid">
+                                <div class="lens-stat-item">
+                                    <i class="fa-solid fa-eye"></i>
+                                    <div class="lens-stat-meta">
+                                        <span class="lens-stat-val">842</span>
+                                        <span class="lens-stat-lbl">Views</span>
+                                    </div>
+                                </div>
+                                <div class="lens-stat-item">
+                                    <i class="fa-solid fa-face-smile"></i>
+                                    <div class="lens-stat-meta">
+                                        <span class="lens-stat-val">225</span>
+                                        <span class="lens-stat-lbl">Uses</span>
+                                    </div>
+                                </div>
+                                <div class="lens-stat-item">
+                                    <i class="fa-solid fa-star"></i>
+                                    <div class="lens-stat-meta">
+                                        <span class="lens-stat-val">4.9</span>
+                                        <span class="lens-stat-lbl">Rating</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="lens-qr-card">
+                                <div class="qr-image-wrapper">
+                                    <img src="snapcode_qr.png" alt="AJ Snapchat Snapcode" class="qr-image">
+                                    <div class="qr-scanner-overlay">
+                                        <div class="scan-laser"></div>
+                                    </div>
+                                </div>
+                                <div class="qr-details">
+                                    <a href="https://snapchat.com" target="_blank" class="btn btn-yellow-snap">
+                                        <i class="fa-brands fa-snapchat"></i> Try on Snapchat
+                                    </a>
+                                    <button class="btn btn-dark-scan" onclick="simulateScan()">
+                                        <i class="fa-solid fa-qrcode"></i> Scan QR
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Let's Work Together -->
+            <div id="contact" class="split-right">
+                <h2 class="section-title">Let's Work Together</h2>
+                
+                <div class="cta-work-card">
+                    <div class="cta-work-content">
+                        <div class="cta-info-side">
+                            <p class="cta-subtitle">I'm available for freelance projects and exciting opportunities.</p>
+                            
+                            <div class="cta-actions-row">
+                                <button class="btn btn-gradient" onclick="openContactModal()">
+                                    Hire Me <i class="fa-solid fa-paper-plane"></i>
+                                </button>
+                                <button class="btn btn-outline" onclick="openBookingModal()">
+                                    Book a Call <i class="fa-solid fa-calendar-days"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="cta-graphics-side">
+                            <!-- Premium wireframe laptop drawing -->
+                            <div class="isometric-laptop">
+                                <svg viewBox="0 0 160 120" class="laptop-svg">
+                                    <defs>
+                                        <linearGradient id="cyberGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.8"/>
+                                            <stop offset="100%" stop-color="#a855f7" stop-opacity="0.8"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <!-- Screen -->
+                                    <path d="M 30,30 L 110,15 L 140,65 L 60,80 Z" fill="none" stroke="url(#cyberGradient)" stroke-width="1.5" />
+                                    <!-- Screen inner glow -->
+                                    <polygon points="35,32 105,18 133,63 63,77" fill="url(#cyberGradient)" opacity="0.08"/>
+                                    <!-- Floating graphic inside screen -->
+                                    <circle cx="85" cy="48" r="10" fill="none" stroke="#a855f7" stroke-width="1" stroke-dasharray="3,3" />
+                                    <path d="M 75,48 L 95,48 M 85,38 L 85,58" fill="none" stroke="#06b6d4" stroke-width="1" />
+                                    <!-- Keyboard Base -->
+                                    <path d="M 60,80 L 140,65 L 110,105 L 30,120 Z" fill="none" stroke="url(#cyberGradient)" stroke-width="1.5" />
+                                    <!-- Keyboard Keys grid lines -->
+                                    <path d="M 50,92 L 122,78 M 42,104 L 114,90 M 34,116 L 106,102" fill="none" stroke="#a855f7" stroke-width="0.8" opacity="0.4" />
+                                    <path d="M 45,83 L 23,115 M 65,79 L 43,111 M 85,75 L 63,107 M 105,71 L 83,103 M 125,67 L 103,99" fill="none" stroke="#06b6d4" stroke-width="0.8" opacity="0.4" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subtle Newsletter Subscribe Area -->
+                <div class="subscribe-card">
+                    <h3>Subscribe for Updates</h3>
+                    <form id="subscribe-form" class="subscribe-form" onsubmit="handleSubscribe(event)">
+                        <input type="email" id="subscribe-email" placeholder="Enter your email" required autocomplete="off">
+                        <button type="submit" class="btn btn-subscribe">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- TESTIMONIALS SECTION -->
+        <!-- ============================================== -->
+        <section id="testimonials" class="testimonials-section">
+            <h2 class="section-title centered">Testimonials</h2>
+            <div class="testimonials-container">
+                <div class="testimonials-slider" id="testimonials-slider">
+                    <!-- Slides are handled dynamically, but keeping static placeholder for fast loading -->
+                    <div class="testimonial-slide active">
+                        <div class="client-avatar-row">
+                            <div class="client-avatar">S</div>
+                            <div class="client-meta">
+                                <h4>Sarah K.</h4>
+                                <p>Tech Operations Director</p>
+                            </div>
+                        </div>
+                        <p class="client-quote">"Aryan delivered a phenomenal AI chatbot for our student administration. The implementation was quick, clean, and the interface is incredibly responsive."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- FOOTER -->
+        <!-- ============================================== -->
+        <footer class="main-footer">
+            <div class="footer-content">
+                <p class="copyright">© 2026 Aryan Jha. All rights reserved.</p>
+                <p class="built-by">Built with ❤️ using HTML & Vanilla CSS</p>
+            </div>
+        </footer>
+
+        <!-- Scroll to Top Button -->
+        <button class="scroll-top-btn" id="scroll-top-btn" onclick="scrollToTop()" aria-label="Scroll to top">
+            <i class="fa-solid fa-arrow-up"></i>
+        </button>
     </div>
+
+    <!-- ============================================== -->
+    <!-- MODAL 1: HIRE ME / CONTACT FORM (MULTI-STEP) -->
+    <!-- ============================================== -->
+    <div id="contact-modal" class="modal-backdrop">
+        <div class="modal-container">
+            <button class="modal-close" onclick="closeContactModal()">&times;</button>
+            <div class="modal-header">
+                <h2>Hire Me</h2>
+                <p>Send me a message about your project idea</p>
+            </div>
+            
+            <form id="contact-form" class="modal-form" onsubmit="submitContactForm(event)">
+                <!-- Step indicator -->
+                <div class="step-indicator">
+                    <span class="step-dot active">1</span>
+                    <span class="step-line"></span>
+                    <span class="step-dot">2</span>
+                </div>
+
+                <!-- Step 1: Personal Details -->
+                <div id="contact-step-1" class="form-step active">
+                    <div class="input-group">
+                        <label for="contact-name">Your Name</label>
+                        <input type="text" id="contact-name" placeholder="John Doe" required autocomplete="off">
+                    </div>
+                    <div class="input-group">
+                        <label for="contact-email">Your Email</label>
+                        <input type="email" id="contact-email" placeholder="john@example.com" required autocomplete="off">
+                    </div>
+                    <div class="modal-footer-actions">
+                        <button type="button" class="btn btn-gradient" onclick="nextContactStep()">Continue <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Project Details -->
+                <div id="contact-step-2" class="form-step">
+                    <div class="input-group">
+                        <label for="contact-message">Message Details</label>
+                        <textarea id="contact-message" placeholder="Describe your project, timeline or general inquiry..." required></textarea>
+                    </div>
+                    <div class="modal-footer-actions">
+                        <button type="button" class="btn btn-outline" onclick="prevContactStep()"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                        <button type="submit" class="btn btn-gradient" id="submit-contact-btn">Send Message <i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MODAL 2: BOOK A CALL / LIVE CALENDAR SCHEDULER -->
+    <!-- ============================================== -->
+    <div id="booking-modal" class="modal-backdrop">
+        <div class="modal-container">
+            <button class="modal-close" onclick="closeBookingModal()">&times;</button>
+            <div class="modal-header">
+                <h2>Book a Call</h2>
+                <p>Select a slot for our 15-minute consultation</p>
+            </div>
+            
+            <form id="booking-form" class="modal-form" onsubmit="submitBookingForm(event)">
+                <div class="input-group">
+                    <label for="booking-name">Your Name</label>
+                    <input type="text" id="booking-name" placeholder="John Doe" required autocomplete="off">
+                </div>
+                
+                <div class="input-group">
+                    <label for="booking-email">Your Email</label>
+                    <input type="email" id="booking-email" placeholder="john@example.com" required autocomplete="off">
+                </div>
+
+                <div class="form-row">
+                    <div class="input-group half">
+                        <label for="booking-date">Select Date</label>
+                        <input type="date" id="booking-date" required>
+                    </div>
+                    <div class="input-group half">
+                        <label for="booking-time">Select Time</label>
+                        <select id="booking-time" required>
+                            <option value="" disabled selected>Select slot</option>
+                            <option value="10:00 AM">10:00 AM IST</option>
+                            <option value="11:30 AM">11:30 AM IST</option>
+                            <option value="02:00 PM">02:00 PM IST</option>
+                            <option value="04:30 PM">04:30 PM IST</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="booking-topic">Topic of Conversation</label>
+                    <input type="text" id="booking-topic" placeholder="e.g. AI Chatbot Integration" required autocomplete="off">
+                </div>
+
+                <div class="input-group">
+                    <label for="booking-notes">Inquiry Notes (Optional)</label>
+                    <textarea id="booking-notes" placeholder="Any details you want me to review before our call..."></textarea>
+                </div>
+
+                <div class="modal-footer-actions">
+                    <button type="submit" class="btn btn-gradient" id="submit-booking-btn">Confirm Call <i class="fa-solid fa-calendar-check"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <script>
+        // Track visit on page load
+        window.addEventListener('load', () => {
+            fetch('/api/visit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            }).catch(e => console.log('Tracking visit offline or server inactive.'));
+            
+            // Register service worker if available
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('./sw.js')
+                .then(() => console.log('PWA Service Worker active!'))
+                .catch(err => console.log('Service Worker failed:', err));
+            }
+        });
+    </script>
 </body>
 </html>
