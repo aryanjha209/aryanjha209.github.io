@@ -16,33 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 
 // Database Helper
-const dbPath = path.join(__dirname, 'backend', 'data', 'analytics.json');
-
-function loadDb() {
-    try {
-        if (fs.existsSync(dbPath)) {
-            const data = fs.readFileSync(dbPath, 'utf8');
-            return JSON.parse(data);
-        }
-    } catch (e) {
-        console.error("Error reading database:", e);
-    }
-    return { totalVisits: 0, uniqueIPs: [], subscribers: [], visits: [] };
-}
-
-function saveDb(data) {
-    try {
-        const dir = path.dirname(dbPath);
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
-        }
-        fs.writeFileSync(dbPath, JSON.stringify(data, null, 2), 'utf8');
-        return true;
-    } catch (e) {
-        console.error("Error saving database:", e);
-        return false;
-    }
-}
+const dbHelper = require('./backend/dbHelper');
 
 // Nodemailer Transporter Setup
 const transporter = nodemailer.createTransport({
@@ -54,37 +28,11 @@ const transporter = nodemailer.createTransport({
 });
 
 // Track Visit Endpoint
-app.post('/api/visit', (req, res) => {
+app.post('/api/visit', async (req, res) => {
     try {
         const ip = (req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1').split(',')[0].trim();
         const userAgent = req.headers['user-agent'] || 'Unknown';
-        const timestamp = new Date().toISOString();
-
-        const db = loadDb();
-        db.totalVisits = (db.totalVisits || 0) + 1;
-
-        if (!db.uniqueIPs) db.uniqueIPs = [];
-        if (!db.uniqueIPs.includes(ip)) {
-            db.uniqueIPs.push(ip);
-        }
-
-        if (!db.visits) db.visits = [];
-        let existingVisit = db.visits.find(v => v.ip === ip);
-        if (existingVisit) {
-            existingVisit.count = (existingVisit.count || 1) + 1;
-            existingVisit.lastVisit = timestamp;
-            existingVisit.userAgent = userAgent;
-        } else {
-            db.visits.push({
-                ip,
-                firstVisit: timestamp,
-                lastVisit: timestamp,
-                userAgent,
-                count: 1
-            });
-        }
-        
-        saveDb(db);
+        await dbHelper.trackVisit(ip, userAgent);
         res.status(200).json({ success: true, message: 'Visit tracked successfully' });
     } catch (error) {
         console.error('Visit tracking error:', error);
@@ -93,29 +41,14 @@ app.post('/api/visit', (req, res) => {
 });
 
 // Subscribe Endpoint with "Thanks" Email Sender
-app.post('/api/subscribe', (req, res) => {
+app.post('/api/subscribe', async (req, res) => {
     try {
         const { email } = req.body;
         if (!email || !email.includes('@')) {
             return res.status(400).json({ success: false, message: 'Please provide a valid email address.' });
         }
 
-        const db = loadDb();
-        if (!db.subscribers) db.subscribers = [];
-
-        const normalizedEmail = email.trim().toLowerCase();
-        const existing = db.subscribers.find(s => s.email.toLowerCase() === normalizedEmail);
-        
-        if (existing) {
-            return res.status(200).json({ success: true, message: 'You are already subscribed!' });
-        }
-
-        // Save subscriber to JSON DB
-        db.subscribers.push({
-            email: email.trim(),
-            date: new Date().toISOString()
-        });
-        saveDb(db);
+        const result = await dbHelper.addSubscriber(email);
 
         // Attempt to send "Thanks" Mail asynchronously
         if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
@@ -145,22 +78,19 @@ app.post('/api/subscribe', (req, res) => {
                     
                     <!-- Footer -->
                     <div style="background-color: #080721; padding: 20px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); font-size: 12px; color: #64748b;">
+                        <p style="margin: 0 0 8px 0;">This email was sent from Aryan Jha's digital system.</p>
                         <p style="margin: 0;">© 2026 Aryan Jha. All rights reserved.</p>
                     </div>
                 </div>
                 `
             };
 
-            transporter.sendMail(mailOptions, (err, info) => {
-                if (err) {
-                    console.error("Nodemailer subscription email error:", err);
-                } else {
-                    console.log("Subscription email sent successfully:", info.response);
-                }
+            transporter.sendMail(mailOptions, (err) => {
+                if (err) console.error("Nodemailer newsletter sub failed:", err.message);
             });
         }
 
-        res.status(200).json({ success: true, message: 'Thank you for subscribing!' });
+        res.status(200).json(result);
     } catch (error) {
         console.error('Subscription error:', error);
         res.status(500).json({ success: false, message: error.message });
@@ -168,25 +98,14 @@ app.post('/api/subscribe', (req, res) => {
 });
 
 // Contact Form Endpoint (/api/send-email)
-app.post('/api/send-email', (req, res) => {
+app.post('/api/send-email', async (req, res) => {
     try {
         const { name, email, message } = req.body;
         if (!name || !email || !message) {
             return res.status(400).json({ success: false, message: 'Please provide name, email, and message.' });
         }
 
-        const db = loadDb();
-        if (!db.messages) db.messages = [];
-
-        const newMessage = {
-            name: name.trim(),
-            email: email.trim(),
-            message: message.trim(),
-            date: new Date().toISOString()
-        };
-
-        db.messages.push(newMessage);
-        saveDb(db);
+        await dbHelper.saveMessage(name, email, message);
 
         // Nodemailer Delivery
         if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
@@ -210,7 +129,7 @@ app.post('/api/send-email', (req, res) => {
                 `
             };
 
-            transporter.sendMail(mailOptions, (err, info) => {
+            transporter.sendMail(mailOptions, (err) => {
                 if (err) console.error("Email sending error:", err);
             });
         }
@@ -223,28 +142,14 @@ app.post('/api/send-email', (req, res) => {
 });
 
 // Book a Call Endpoint (/api/book-call)
-app.post('/api/book-call', (req, res) => {
+app.post('/api/book-call', async (req, res) => {
     try {
         const { name, email, date, time, topic, notes } = req.body;
         if (!name || !email || !date || !time || !topic) {
             return res.status(400).json({ success: false, message: 'Please provide name, email, date, time, and topic.' });
         }
 
-        const db = loadDb();
-        if (!db.bookings) db.bookings = [];
-
-        const newBooking = {
-            name: name.trim(),
-            email: email.trim(),
-            date,
-            time,
-            topic,
-            notes: notes ? notes.trim() : '',
-            dateBooked: new Date().toISOString()
-        };
-
-        db.bookings.push(newBooking);
-        saveDb(db);
+        await dbHelper.bookCall({ name, email, date, time, topic, notes });
 
         // Nodemailer notification to Client and Admin
         if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
@@ -300,7 +205,6 @@ app.post('/api/book-call', (req, res) => {
             transporter.sendMail(adminMail, () => {});
             transporter.sendMail(clientMail, () => {});
         }
-
         res.status(200).json({ success: true, message: 'Call scheduled successfully!' });
     } catch (error) {
         console.error('Call booking endpoint error:', error);
@@ -308,14 +212,42 @@ app.post('/api/book-call', (req, res) => {
     }
 });
 
+// ==============================================
+// TESTIMONIALS ENDPOINTS (GET & POST)
+// ==============================================
+app.get('/api/testimonials', async (req, res) => {
+    try {
+        const testimonials = await dbHelper.getTestimonials();
+        res.status(200).json({ success: true, testimonials });
+    } catch (error) {
+        console.error('Get testimonials error:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.post('/api/testimonials', async (req, res) => {
+    try {
+        const { name, org, comment, avatar } = req.body;
+        if (!name || !org || !comment) {
+            return res.status(400).json({ success: false, message: 'Name, organization, and comment are required.' });
+        }
+        const testimonial = await dbHelper.addTestimonial(name, org, comment, avatar);
+        res.status(200).json({ success: true, message: 'Testimonial submitted successfully!', testimonial });
+    } catch (error) {
+        console.error('Post testimonial error:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
 // Stats Visual Dashboard HTML (Redesigned with Premium Dark Theme)
-app.get('/stats', (req, res) => {
-    const db = loadDb();
+app.get('/stats', async (req, res) => {
+    const db = await dbHelper.getStatsData();
     
     const sortedVisits = [...(db.visits || [])].sort((a, b) => new Date(b.lastVisit) - new Date(a.lastVisit));
     const sortedSubscribers = [...(db.subscribers || [])].sort((a, b) => new Date(b.date) - new Date(a.date));
     const sortedMessages = [...(db.messages || [])].sort((a, b) => new Date(b.date) - new Date(a.date));
     const sortedBookings = [...(db.bookings || [])].sort((a, b) => new Date(b.dateBooked) - new Date(a.dateBooked));
+    const sortedTestimonials = [...(db.testimonials || [])].sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
 
     let subscriberRows = '';
     if (sortedSubscribers.length === 0) {
@@ -351,7 +283,7 @@ app.get('/stats', (req, res) => {
 
     let messageRows = '';
     if (sortedMessages.length === 0) {
-        messageRows = `<tr><td colspan="4" class="empty-state"><i class="fas fa-comment-slash"></i><p>No messages received yet.</p></td></tr>`;
+        messageRows = `<tr><td colspan="3" class="empty-state"><i class="fas fa-comment-slash"></i><p>No messages received yet.</p></td></tr>`;
     } else {
         sortedMessages.forEach(m => {
             const dateStr = new Date(m.date).toLocaleString('en-US', { hour12: true });
@@ -383,6 +315,28 @@ app.get('/stats', (req, res) => {
         });
     }
 
+    let testimonialRows = '';
+    if (sortedTestimonials.length === 0) {
+        testimonialRows = `<tr><td colspan="4" class="empty-state"><i class="fas fa-quote-left"></i><p>No submitted testimonials yet.</p></td></tr>`;
+    } else {
+        sortedTestimonials.forEach(t => {
+            const dateStr = t.date ? new Date(t.date).toLocaleString('en-US', { hour12: true }) : 'N/A';
+            const hasBase64 = t.avatar && t.avatar.startsWith('data:image/');
+            const avatarHtml = hasBase64 
+                ? `<img src="${escapeHtml(t.avatar)}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; vertical-align: middle; margin-right: 8px;">`
+                : `<span style="width: 24px; height: 24px; border-radius: 50%; background: #a855f7; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; margin-right: 8px; color: #ffffff; vertical-align: middle;">${escapeHtml(t.avatar)}</span>`;
+            
+            testimonialRows += `
+                <tr>
+                    <td>${avatarHtml}<strong>${escapeHtml(t.name)}</strong></td>
+                    <td>${escapeHtml(t.role)}</td>
+                    <td>${dateStr}</td>
+                    <td style="max-width: 250px; font-size:0.85rem; color:#cbd5e1; white-space: pre-wrap;">${escapeHtml(t.quote)}</td>
+                </tr>
+            `;
+        });
+    }
+
     const html = `
     <!DOCTYPE html>
     <html lang="en">
@@ -405,86 +359,58 @@ app.get('/stats', (req, res) => {
                 --border: rgba(255, 255, 255, 0.05);
             }
             * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
-            body { background-color: var(--bg); color: var(--text); line-height: 1.5; padding: 2rem 1rem; }
-            .container { max-width: 1300px; margin: 0 auto; }
+            body { background: var(--bg); color: var(--text); padding: 2rem 1rem; line-height: 1.5; min-height: 100vh; }
+            .container { max-width: 1200px; margin: 0 auto; }
             
-            header { 
-                display: flex; 
-                flex-direction: column;
-                gap: 0.5rem;
-                margin-bottom: 2.5rem; 
-                border-bottom: 1px solid var(--border); 
-                padding-bottom: 1.5rem; 
-            }
-            @media(min-width: 768px) {
-                header {
-                    flex-direction: row;
-                    justify-content: space-between;
-                    align-items: center;
-                }
-            }
-            h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.5px; }
-            h1 span { background: linear-gradient(135deg, var(--primary) 0%, var(--cyan) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-            
-            .refresh-btn {
-                background: var(--card-bg);
-                border: 1px solid var(--border);
-                color: #fff;
-                padding: 0.6rem 1.2rem;
-                border-radius: 50px;
-                cursor: pointer;
-                font-weight: 600;
-                display: inline-flex;
-                align-items: center;
-                gap: 0.5rem;
-                transition: all 0.2s ease;
-            }
-            .refresh-btn:hover {
-                border-color: var(--cyan);
-                box-shadow: 0 0 15px var(--cyan-glow);
-            }
-            
-            .badge { padding: 0.25rem 0.6rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; border: 1px solid transparent; }
-            .badge-cyan { background: var(--cyan-glow); color: #22d3ee; border-color: rgba(6, 182, 212, 0.2); }
-            .badge-purple { background: var(--primary-glow); color: #c084fc; border-color: rgba(168, 85, 247, 0.2); }
-            
-            .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
-            .card { background: var(--card-bg); border-radius: 20px; padding: 1.5rem; border: 1px solid var(--border); display: flex; align-items: center; gap: 1.25rem; }
-            .card-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 1px solid rgba(255,255,255,0.05); }
+            /* Header */
+            .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; }
+            .header h1 { font-size: 2rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem; }
+            .header h1 i { color: var(--primary); text-shadow: 0 0 15px rgba(168, 85, 247, 0.4); }
+            .refresh-btn { background: rgba(255,255,255,0.02); border: 1px solid var(--border); color: #ffffff; padding: 0.6rem 1.2rem; border-radius: 50px; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 0.45rem; transition: all 0.2s ease; }
+            .refresh-btn:hover { background: rgba(168, 85, 247, 0.1); border-color: var(--primary); }
+
+            /* Stats Grid cards */
+            .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
+            .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 1.5rem; display: flex; align-items: center; gap: 1rem; box-shadow: 0 4px 30px rgba(0,0,0,0.2); backdrop-filter: blur(10px); }
+            .card-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
             .icon-cyan { background: var(--cyan-glow); color: var(--cyan); }
             .icon-purple { background: var(--primary-glow); color: var(--primary); }
-            .card-info h3 { font-size: 2rem; font-weight: 800; line-height: 1.1; margin-bottom: 0.1rem; }
-            .card-info p { color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+            .card-info h3 { font-size: 1.6rem; font-weight: 800; }
+            .card-info p { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
 
-            .tables-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
-            .table-container { background: var(--card-bg); border-radius: 20px; border: 1px solid var(--border); overflow: hidden; }
-            .table-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.01); }
-            .table-header h2 { font-size: 1.15rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; }
-            .table-header h2 i { color: var(--cyan); }
-            
-            .table-wrapper { overflow-x: auto; max-height: 400px; }
-            table { width: 100%; border-collapse: collapse; text-align: left; }
-            th { background: rgba(0,0,0,0.2); color: var(--text-dim); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); letter-spacing: 0.5px; }
-            td { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+            /* Tables Grid */
+            .tables-grid { display: flex; flex-direction: column; gap: 2.5rem; }
+            .table-container { background: var(--card-bg); border: 1px solid var(--border); border-radius: 24px; padding: 1.75rem; box-shadow: 0 4px 30px rgba(0,0,0,0.2); backdrop-filter: blur(10px); }
+            .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+            .table-header h2 { font-size: 1.15rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; color: #ffffff; }
+            .table-header h2 i { color: var(--primary); }
+            .badge { font-size: 0.72rem; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 50px; letter-spacing: 0.5px; text-transform: uppercase; }
+            .badge-cyan { background: var(--cyan-glow); color: var(--cyan); border: 1px solid rgba(6,182,212,0.15); }
+            .badge-purple { background: var(--primary-glow); color: var(--primary); border: 1px solid rgba(168,85,247,0.15); }
+
+            /* Base Table */
+            .table-wrapper { overflow-x: auto; }
+            table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
+            th { color: var(--text-dim); font-weight: 600; text-transform: uppercase; font-size: 0.72rem; letter-spacing: 1px; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); }
+            td { padding: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.02); color: #cbd5e1; }
             tr:last-child td { border-bottom: none; }
-            tr:hover { background: rgba(255, 255, 255, 0.01); }
+            tr:hover td { background: rgba(255, 255, 255, 0.01); }
+
+            /* Empty states */
+            .empty-state { text-align: center; padding: 3rem 0 !important; color: var(--text-dim); }
+            .empty-state i { font-size: 2rem; margin-bottom: 0.75rem; opacity: 0.3; color: var(--primary); }
+            .empty-state p { font-size: 0.85rem; }
             
-            .empty-state { padding: 3rem 2rem; text-align: center; color: var(--text-dim); }
-            .empty-state i { font-size: 2.2rem; margin-bottom: 0.5rem; color: rgba(255,255,255,0.1); }
-            .empty-state p { font-weight: 500; font-size: 0.9rem; }
-            
-            code { font-family: monospace; font-size: 0.85rem; background: rgba(255,255,255,0.05); padding: 0.2rem 0.4rem; border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); }
+            code { background: rgba(255,255,255,0.05); padding: 0.2rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.8rem; color: var(--cyan); }
+            small { font-size: 0.75rem; }
         </style>
     </head>
     <body>
         <div class="container">
-            <header>
-                <div>
-                    <h1>Portfolio <span>Analytics</span></h1>
-                    <p style="color: var(--text-dim); font-size: 0.95rem;">Real-time visitors, contacts, and calendar bookings</p>
-                </div>
-                <button class="refresh-btn" onclick="window.location.reload()"><i class="fas fa-sync-alt"></i> Refresh</button>
-            </header>
+            <div class="header">
+                <h1><i class="fas fa-chart-line"></i> Aryan Jha &bull; Visual Analytics</h1>
+                <button class="refresh-btn" onclick="window.location.reload()"><i class="fas fa-sync-alt"></i> Refresh Stats</button>
+            </div>
 
             <div class="stats-grid">
                 <div class="card">
@@ -522,6 +448,13 @@ app.get('/stats', (req, res) => {
                         <p>Booked Calls</p>
                     </div>
                 </div>
+                <div class="card">
+                    <div class="card-icon icon-purple"><i class="fas fa-quote-left"></i></div>
+                    <div class="card-info">
+                        <h3>${(db.testimonials || []).length}</h3>
+                        <p>Testimonials</p>
+                    </div>
+                </div>
             </div>
 
             <div class="tables-grid">
@@ -549,23 +482,24 @@ app.get('/stats', (req, res) => {
                     </div>
                 </div>
 
-                <!-- Messages -->
+                <!-- Submitted Testimonials -->
                 <div class="table-container">
                     <div class="table-header">
-                        <h2><i class="fas fa-comments"></i> Contact Form Messages</h2>
-                        <span class="badge badge-cyan">${sortedMessages.length} Messages</span>
+                        <h2><i class="fas fa-quote-left"></i> Client Submitted Testimonials</h2>
+                        <span class="badge badge-purple">${sortedTestimonials.length} Reviews</span>
                     </div>
                     <div class="table-wrapper">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Sender</th>
-                                    <th>Date Received</th>
-                                    <th>Message Context</th>
+                                    <th>Client / Avatar</th>
+                                    <th>Organization / Title</th>
+                                    <th>Submitted Date</th>
+                                    <th>Testimonial Comment</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                ${messageRows}
+                                ${testimonialRows}
                             </tbody>
                         </table>
                     </div>

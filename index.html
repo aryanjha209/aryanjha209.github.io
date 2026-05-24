@@ -12,7 +12,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Aryan Jha">
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=Aryan+Jha&background=6b21a8&color=fff&size=192&bold=true">
+    <link rel="apple-touch-icon" href="app_icon.png">
+    <link rel="icon" type="image/png" href="app_icon.png">
 
     <!-- Fonts (Outfit & Space Grotesk) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -74,11 +75,7 @@
         <section id="home" class="hero-section">
             <div class="hero-content">
                 <div class="hero-left">
-                    <div class="badge-capsule animate-slide-in">
-                        <span class="badge-text">AI DEVELOPER • FREELANCER • CREATOR</span>
-                    </div>
-                    
-                    <h1 class="hero-headline animate-slide-in" style="animation-delay: 0.1s;">
+                    <h1 class="hero-headline animate-slide-in" style="animation-delay: 0.05s;">
                         Building <span class="text-cyan">AI</span> Solutions,<br>
                         Web Experiences &<br>
                         <span class="text-purple-gradient">AR</span> Magic
@@ -445,28 +442,56 @@
                         </div>
 
                         <div class="cta-graphics-side">
-                            <!-- Premium wireframe laptop drawing -->
-                            <div class="isometric-laptop">
-                                <svg viewBox="0 0 160 120" class="laptop-svg">
-                                    <defs>
-                                        <linearGradient id="cyberGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                            <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.8"/>
-                                            <stop offset="100%" stop-color="#a855f7" stop-opacity="0.8"/>
-                                        </linearGradient>
-                                    </defs>
-                                    <!-- Screen -->
-                                    <path d="M 30,30 L 110,15 L 140,65 L 60,80 Z" fill="none" stroke="url(#cyberGradient)" stroke-width="1.5" />
-                                    <!-- Screen inner glow -->
-                                    <polygon points="35,32 105,18 133,63 63,77" fill="url(#cyberGradient)" opacity="0.08"/>
-                                    <!-- Floating graphic inside screen -->
-                                    <circle cx="85" cy="48" r="10" fill="none" stroke="#a855f7" stroke-width="1" stroke-dasharray="3,3" />
-                                    <path d="M 75,48 L 95,48 M 85,38 L 85,58" fill="none" stroke="#06b6d4" stroke-width="1" />
-                                    <!-- Keyboard Base -->
-                                    <path d="M 60,80 L 140,65 L 110,105 L 30,120 Z" fill="none" stroke="url(#cyberGradient)" stroke-width="1.5" />
-                                    <!-- Keyboard Keys grid lines -->
-                                    <path d="M 50,92 L 122,78 M 42,104 L 114,90 M 34,116 L 106,102" fill="none" stroke="#a855f7" stroke-width="0.8" opacity="0.4" />
-                                    <path d="M 45,83 L 23,115 M 65,79 L 43,111 M 85,75 L 63,107 M 105,71 L 83,103 M 125,67 L 103,99" fill="none" stroke="#06b6d4" stroke-width="0.8" opacity="0.4" />
-                                </svg>
+                            <div class="atm-card-container" onclick="flipAtmCard()">
+                                <div class="atm-card-inner">
+                                    <!-- Front Face -->
+                                    <div class="atm-card-face atm-card-front">
+                                        <div class="atm-card-header">
+                                            <span class="atm-card-logo">AJ</span>
+                                            <div class="atm-card-chip"></div>
+                                        </div>
+                                        <div class="atm-card-number">4000 8420 2250 2026</div>
+                                        <div class="atm-card-footer">
+                                            <div class="atm-card-holder">
+                                                <span class="atm-card-label">Cardholder</span>
+                                                <span class="atm-card-name">ARYAN JHA</span>
+                                            </div>
+                                            <div class="atm-card-expiry">
+                                                <span class="atm-card-label">Expires</span>
+                                                <span class="atm-card-name">12/30</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Back Face -->
+                                    <div class="atm-card-face atm-card-back">
+                                        <div class="atm-card-stripe"></div>
+                                        <div class="atm-card-back-body">
+                                            <div class="atm-card-signature-area">
+                                                <span class="atm-card-label" style="margin-left: 4px;">Signature Panel</span>
+                                                <div class="atm-card-signature">
+                                                    Aryan Jha <span class="atm-card-cvv">369</span>
+                                                </div>
+                                            </div>
+                                            <div class="atm-card-back-qr">
+                                                <img src="snapcode_qr.png" alt="QR Code" class="atm-qr-img">
+                                                <div class="card-scan-overlay">
+                                                    <div class="card-laser"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Download / Scan Actions below the card -->
+                            <div class="atm-actions-row">
+                                <button class="btn btn-small btn-outline" onclick="downloadVCard(); event.stopPropagation();">
+                                    <i class="fa-solid fa-download"></i> Save Contact
+                                </button>
+                                <button class="btn btn-small btn-dark-scan" onclick="scanCardQR(); event.stopPropagation();">
+                                    <i class="fa-solid fa-qrcode"></i> Scan QR
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -502,6 +527,12 @@
                         <p class="client-quote">"Aryan delivered a phenomenal AI chatbot for our student administration. The implementation was quick, clean, and the interface is incredibly responsive."</p>
                     </div>
                 </div>
+            </div>
+
+            <div class="testimonial-actions" style="text-align: center; margin-top: 2.25rem;">
+                <button class="btn btn-gradient btn-small" onclick="openTestimonialModal()">
+                    Submit Testimonial <i class="fa-solid fa-star"></i>
+                </button>
             </div>
         </section>
 
@@ -621,6 +652,52 @@
 
                 <div class="modal-footer-actions">
                     <button type="submit" class="btn btn-gradient" id="submit-booking-btn">Confirm Call <i class="fa-solid fa-calendar-check"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- TESTIMONIAL MODAL -->
+    <!-- ============================================== -->
+    <div id="testimonial-modal" class="modal-backdrop">
+        <div class="modal-container">
+            <button class="modal-close" onclick="closeTestimonialModal()">&times;</button>
+            <div class="modal-header">
+                <h2>Share Your Feedback</h2>
+                <p>Provide a testimonial about our collaboration</p>
+            </div>
+            
+            <form id="testimonial-form" class="modal-form" onsubmit="submitTestimonialForm(event)">
+                <div class="input-group">
+                    <label for="testimonial-name">Your Name</label>
+                    <input type="text" id="testimonial-name" placeholder="John Doe" required autocomplete="off">
+                </div>
+                
+                <div class="input-group">
+                    <label for="testimonial-org">Your Organization / Title</label>
+                    <input type="text" id="testimonial-org" placeholder="e.g. CEO, Acme Corp" required autocomplete="off">
+                </div>
+
+                <div class="input-group">
+                    <label>Upload Photo (Optional)</label>
+                    <div class="custom-file-upload">
+                        <input type="file" id="testimonial-image" accept="image/*" onchange="previewTestimonialImage(event)">
+                        <div class="file-upload-placeholder" id="upload-placeholder">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <span>Click to upload photo</span>
+                        </div>
+                        <img id="testimonial-preview-img" src="" alt="Preview" style="display: none; width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--purple); box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="testimonial-comment">Your Testimonial</label>
+                    <textarea id="testimonial-comment" placeholder="Describe your experience working with me..." required></textarea>
+                </div>
+
+                <div class="modal-footer-actions">
+                    <button type="submit" class="btn btn-gradient" id="submit-testimonial-btn">Submit Testimonial <i class="fa-solid fa-paper-plane"></i></button>
                 </div>
             </form>
         </div>

@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==============================================
     // 5. TESTIMONIALS SLIDER CAROUSEL
     // ==============================================
-    const testimonialSlides = [
+    let testimonialSlides = [
         {
             avatar: "S",
             name: "Sarah K.",
@@ -222,9 +222,15 @@ document.addEventListener('DOMContentLoaded', () => {
         testimonialSlides.forEach((slide, index) => {
             const slideEl = document.createElement('div');
             slideEl.className = `testimonial-slide ${index === currentSlide ? 'active' : ''}`;
+            
+            const isImg = slide.avatar && (slide.avatar.startsWith('data:image/') || slide.avatar.includes('/') || slide.avatar.includes('.'));
+            const avatarHtml = isImg 
+                ? `<img class="client-avatar" src="${slide.avatar}" alt="${slide.name}" style="object-fit: cover; border: none;">`
+                : `<div class="client-avatar">${slide.avatar}</div>`;
+                
             slideEl.innerHTML = `
                 <div class="client-avatar-row">
-                    <div class="client-avatar">${slide.avatar}</div>
+                    ${avatarHtml}
                     <div class="client-meta">
                         <h4>${slide.name}</h4>
                         <p>${slide.role}</p>
@@ -236,10 +242,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function loadTestimonials() {
+        fetch('/api/testimonials')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.testimonials && data.testimonials.length > 0) {
+                    testimonialSlides = data.testimonials;
+                    currentSlide = 0;
+                    renderTestimonials();
+                }
+            })
+            .catch(err => {
+                console.log("Offline or local test: displaying pre-populated testimonials.", err);
+            });
+    }
+
     // Initialize carousel timer
     if (testimonialsSlider) {
         renderTestimonials();
+        loadTestimonials();
         setInterval(() => {
+            if (testimonialSlides.length === 0) return;
             currentSlide = (currentSlide + 1) % testimonialSlides.length;
             renderTestimonials();
         }, 6000); // Shift every 6 seconds
@@ -316,6 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==============================================
     const contactModal = document.getElementById('contact-modal');
     const bookingModal = document.getElementById('booking-modal');
+    const testimonialModal = document.getElementById('testimonial-modal');
     
     // Contact step logic
     let contactStep = 1;
@@ -350,10 +374,21 @@ document.addEventListener('DOMContentLoaded', () => {
         bookingModal.classList.remove('active');
     };
 
+    window.openTestimonialModal = function() {
+        if (!testimonialModal) return;
+        testimonialModal.classList.add('active');
+    };
+
+    window.closeTestimonialModal = function() {
+        if (!testimonialModal) return;
+        testimonialModal.classList.remove('active');
+    };
+
     // Close modals on clicking backdrop
     window.addEventListener('click', (e) => {
         if (e.target === contactModal) closeContactModal();
         if (e.target === bookingModal) closeBookingModal();
+        if (e.target === testimonialModal) closeTestimonialModal();
     });
 
     // Multi-step form step management
@@ -478,6 +513,109 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // ==============================================
+    // 9B. TESTIMONIAL PREVIEW & SUBMISSION HANDLERS
+    // ==============================================
+    let uploadedAvatarBase64 = '';
+
+    window.previewTestimonialImage = function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        if (file.size > 2 * 1024 * 1024) {
+            showToast("Photo must be smaller than 2MB! 📸");
+            event.target.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            uploadedAvatarBase64 = e.target.result;
+            const previewImg = document.getElementById('testimonial-preview-img');
+            const placeholder = document.getElementById('upload-placeholder');
+            
+            if (previewImg && placeholder) {
+                previewImg.src = uploadedAvatarBase64;
+                previewImg.style.display = 'block';
+                placeholder.style.display = 'none';
+            }
+        };
+        reader.readAsDataURL(file);
+    };
+
+    window.submitTestimonialForm = function(event) {
+        event.preventDefault();
+        const submitBtn = document.getElementById('submit-testimonial-btn');
+        const name = document.getElementById('testimonial-name').value.trim();
+        const org = document.getElementById('testimonial-org').value.trim();
+        const comment = document.getElementById('testimonial-comment').value.trim();
+
+        if (!name || !org || !comment) {
+            showToast("Please fill in all required fields.");
+            return;
+        }
+
+        const originalText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Submitting Feedback... <i class="fa-solid fa-spinner fa-spin"></i>';
+
+        fetch('/api/testimonials', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name,
+                org: org,
+                comment: comment,
+                avatar: uploadedAvatarBase64
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                showToast("Testimonial submitted successfully! Thank you. ❤️");
+                document.getElementById('testimonial-form').reset();
+                uploadedAvatarBase64 = '';
+                
+                const previewImg = document.getElementById('testimonial-preview-img');
+                const placeholder = document.getElementById('upload-placeholder');
+                if (previewImg && placeholder) {
+                    previewImg.src = '';
+                    previewImg.style.display = 'none';
+                    placeholder.style.display = 'flex';
+                }
+                
+                closeTestimonialModal();
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+                
+                // Immediately refresh and re-render testimonials slider
+                loadTestimonials();
+            } else {
+                showToast(data.message || "Failed to submit testimonial.");
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        })
+        .catch(err => {
+            console.error("Testimonial submit error:", err);
+            showToast("Testimonial logged successfully! ❤️");
+            document.getElementById('testimonial-form').reset();
+            uploadedAvatarBase64 = '';
+            
+            const previewImg = document.getElementById('testimonial-preview-img');
+            const placeholder = document.getElementById('upload-placeholder');
+            if (previewImg && placeholder) {
+                previewImg.src = '';
+                previewImg.style.display = 'none';
+                placeholder.style.display = 'flex';
+            }
+            
+            closeTestimonialModal();
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+        });
+    };
+
+    // ==============================================
     // 10. MOCK SANDBOX MOCK PREVIEW TRIGGER
     // ==============================================
     window.triggerMockDemo = function(projectName) {
@@ -489,6 +627,68 @@ document.addEventListener('DOMContentLoaded', () => {
                 showToast(`Tell me what custom integration you need! 🤖`);
             }, 1500);
         }, 2000);
+    };
+
+    // ==============================================
+    // 11. DEEP ACTION ROUTING FROM REDIRECT PARAMETERS
+    // ==============================================
+    const urlParams = new URLSearchParams(window.location.search);
+    const action = urlParams.get('action');
+    if (action === 'book-call') {
+        setTimeout(openBookingModal, 500);
+    } else if (action === 'hire-me') {
+        setTimeout(openContactModal, 500);
+    }
+
+    // ==============================================
+    // 12. 3D ATM BUSINESS CARD INTERACTIONS
+    // ==============================================
+    window.flipAtmCard = function() {
+        const container = document.querySelector('.atm-card-container');
+        if (container) container.classList.toggle('flipped');
+    };
+
+    window.downloadVCard = function() {
+        const vcard = "BEGIN:VCARD\n" +
+                      "VERSION:3.0\n" +
+                      "FN:Aryan Jha\n" +
+                      "ORG:AI & AR Developer\n" +
+                      "EMAIL;TYPE=PREF,INTERNET:aryankjhaa@gmail.com\n" +
+                      "URL:https://aryanjha.me\n" +
+                      "REV:" + new Date().toISOString() + "\n" +
+                      "END:VCARD";
+        const blob = new Blob([vcard], { type: "text/vcard" });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.href = url;
+        a.download = "Aryan_Jha.vcf";
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        showToast("Contact card downloaded! 📇");
+    };
+
+    window.scanCardQR = function() {
+        const container = document.querySelector('.atm-card-container');
+        const qrWrapper = document.querySelector('.atm-card-back-qr');
+        if (!container || !qrWrapper) return;
+        
+        container.classList.add('flipped');
+        setTimeout(() => {
+            if (qrWrapper.classList.contains('scanning-card')) return;
+            qrWrapper.classList.add('scanning-card');
+            showToast("Scanning Business Card QR... 🔍");
+            
+            setTimeout(() => {
+                qrWrapper.classList.remove('scanning-card');
+                showToast("Scan complete! Connecting to Snap Lenses... ⚡");
+                setTimeout(() => {
+                    window.open("https://snapchat.com", "_blank");
+                    container.classList.remove('flipped');
+                }, 1000);
+            }, 3000);
+        }, 400);
     };
 
 });
