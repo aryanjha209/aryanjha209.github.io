@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const app = express();
@@ -41,6 +42,15 @@ function saveDb(data) {
         return false;
     }
 }
+
+// Nodemailer Transporter Setup
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
 
 // Track Visit Endpoint
 app.post('/api/visit', (req, res) => {
@@ -81,7 +91,7 @@ app.post('/api/visit', (req, res) => {
     }
 });
 
-// Subscribe Endpoint
+// Subscribe Endpoint with "Thanks" Email Sender
 app.post('/api/subscribe', (req, res) => {
     try {
         const { email } = req.body;
@@ -99,12 +109,58 @@ app.post('/api/subscribe', (req, res) => {
             return res.status(200).json({ success: true, message: 'You are already subscribed!' });
         }
 
+        // Save subscriber to JSON DB
         db.subscribers.push({
             email: email.trim(),
             date: new Date().toISOString()
         });
-
         saveDb(db);
+
+        // Attempt to send "Thanks" Mail asynchronously
+        if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+            const mailOptions = {
+                from: `"Coming Soon" <${process.env.EMAIL_USER}>`,
+                to: email.trim(),
+                subject: "You're on the list! ⚡ Coming Soon",
+                html: `
+                <div style="font-family: 'Outfit', -apple-system, BlinkMacSystemFont, Arial, sans-serif; max-width: 550px; margin: 20px auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
+                    <!-- Header -->
+                    <div style="background: linear-gradient(135deg, #4EBF15 0%, #3a8f10 100%); padding: 35px 20px; text-align: center;">
+                        <span style="font-size: 40px; display: inline-block; filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));">⚡</span>
+                        <h1 style="color: #ffffff; margin: 10px 0 0 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">Coming Soon</h1>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div style="padding: 40px 30px; text-align: center; color: #0f172a;">
+                        <h2 style="font-size: 22px; font-weight: 800; margin-top: 0; margin-bottom: 15px;">You're on the list!</h2>
+                        <p style="font-size: 15px; line-height: 1.6; color: #64748b; margin-bottom: 25px;">
+                            Thank you for subscribing to get notified of our launch. We are working hard to build a minimalist developer environment and utility suite styled in clean white and parrot green.
+                        </p>
+                        
+                        <div style="background-color: #F2FDF0; color: #3a8f10; border: 1px solid rgba(78, 191, 21, 0.2); padding: 8px 18px; border-radius: 50px; font-size: 13px; font-weight: 700; display: inline-block; letter-spacing: 1px;">
+                            STATUS: SUBSCRIBED ⚡
+                        </div>
+                    </div>
+                    
+                    <!-- Footer -->
+                    <div style="background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8;">
+                        <p style="margin: 0;">© 2026. All rights reserved.</p>
+                    </div>
+                </div>
+                `
+            };
+
+            transporter.sendMail(mailOptions, (err, info) => {
+                if (err) {
+                    console.error("Nodemailer subscription email error:", err);
+                } else {
+                    console.log("Subscription email sent successfully:", info.response);
+                }
+            });
+        } else {
+            console.warn("Skipping 'Thanks' mail: EMAIL_USER or EMAIL_PASS environment variables are not configured.");
+        }
+
         res.status(200).json({ success: true, message: 'Thank you! We will notify you when we launch.' });
     } catch (error) {
         console.error('Subscription error:', error);
@@ -116,12 +172,9 @@ app.post('/api/subscribe', (req, res) => {
 app.get('/stats', (req, res) => {
     const db = loadDb();
     
-    // Sort visits by lastVisit desc
     const sortedVisits = [...(db.visits || [])].sort((a, b) => new Date(b.lastVisit) - new Date(a.lastVisit));
-    // Sort subscribers by date desc
     const sortedSubscribers = [...(db.subscribers || [])].sort((a, b) => new Date(b.date) - new Date(a.date));
 
-    // Create Subscriber Rows HTML
     let subscriberRows = '';
     if (sortedSubscribers.length === 0) {
         subscriberRows = `<tr><td colspan="2" class="empty-state"><i class="fas fa-envelope-open"></i><p>No subscribers yet.</p></td></tr>`;
@@ -137,7 +190,6 @@ app.get('/stats', (req, res) => {
         });
     }
 
-    // Create Visitor Rows HTML
     let visitorRows = '';
     if (sortedVisits.length === 0) {
         visitorRows = `<tr><td colspan="4" class="empty-state"><i class="fas fa-users-slash"></i><p>No visits logged yet.</p></td></tr>`;
@@ -161,7 +213,7 @@ app.get('/stats', (req, res) => {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Jha-OS - Analytics Dashboard</title>
+        <title>Coming Soon - Analytics Dashboard</title>
         <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <style>
@@ -217,14 +269,12 @@ app.get('/stats', (req, res) => {
             
             .badge { background-color: var(--primary-glow); color: var(--primary-dark); padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; border: 1px solid rgba(78,191,21,0.2); }
             
-            /* Stats Grid */
             .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
             .card { background: var(--card-bg); border-radius: 16px; padding: 1.5rem; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 1.25rem; }
             .card-icon { background: var(--primary-glow); color: var(--primary); width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.75rem; border: 1px solid rgba(78,191,21,0.15); }
             .card-info h3 { font-size: 2.2rem; font-weight: 800; line-height: 1.1; margin-bottom: 0.2rem; }
             .card-info p { color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
 
-            /* Tables Grid */
             .tables-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
             @media(min-width: 992px) {
                 .tables-grid { grid-template-columns: 3fr 2fr; }
@@ -252,7 +302,7 @@ app.get('/stats', (req, res) => {
         <div class="container">
             <header>
                 <div>
-                    <h1>Jha-OS <span>Analytics</span></h1>
+                    <h1>Coming Soon <span>Analytics</span></h1>
                     <p style="color: var(--text-dim); font-size: 0.95rem;">Real-time visitor logs and subscriptions</p>
                 </div>
                 <button class="refresh-btn" onclick="window.location.reload()"><i class="fas fa-sync-alt"></i> Refresh</button>
@@ -283,7 +333,6 @@ app.get('/stats', (req, res) => {
             </div>
 
             <div class="tables-grid">
-                <!-- Visitors Logs Card -->
                 <div class="table-container">
                     <div class="table-header">
                         <h2><i class="fas fa-history"></i> Recent Visitors</h2>
@@ -306,7 +355,6 @@ app.get('/stats', (req, res) => {
                     </div>
                 </div>
 
-                <!-- Subscribers Card -->
                 <div class="table-container">
                     <div class="table-header">
                         <h2><i class="fas fa-envelope"></i> Notifications List</h2>
