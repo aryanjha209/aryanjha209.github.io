@@ -3,9 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Jha-OS - Futuristic AI-Powered Developer Workspace launching soon.">
-    <meta name="theme-color" content="#4EBF15">
-    <title>Jha-OS | Launching Soon</title>
+    <meta name="description" content="Futuristic AI-Powered Developer Workspace launching soon.">
+    <meta name="theme-color" content="#ffffff">
+    <title>Coming Soon</title>
+
+    <!-- PWA iOS Standalone Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Coming Soon">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=Coming+Soon&background=4EBF15&color=fff&size=192&bold=true">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,10 +29,8 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
 </head>
 <body>
-    <!-- Ambient 3D Shapes Background -->
-    <div class="ambient-background">
-        <canvas id="ambient-canvas"></canvas>
-    </div>
+    <!-- Ambient Canvas is removed for pure simple white background -->
+    <div class="ambient-background"></div>
 
     <!-- Main Container -->
     <main class="viewport">
@@ -35,14 +40,14 @@
                 <!-- Branding Header -->
                 <div class="brand">
                     <span class="brand-logo">⚡</span>
-                    <h1>Jha-OS<span>.</span></h1>
+                    <h1>Coming Soon<span>.</span></h1>
                 </div>
 
                 <!-- Launch Banner -->
-                <div class="launch-badge">INITIALIZING WORKSPACE v2.0</div>
+                <div class="launch-badge">WORKSPACE v2.0</div>
 
-                <h2>LAUNCHING SOON</h2>
-                <p class="tagline">A hardware-accelerated, AI-powered developer environment and utility suite built for the next generation of creators.</p>
+                <h2>COMING SOON</h2>
+                <p class="tagline">A minimalist developer environment and utility suite built for the next generation of creators.</p>
 
                 <!-- 3D Countdown Grid -->
                 <div class="countdown-grid" id="countdown">
@@ -81,7 +86,7 @@
 
                 <!-- Minimal Info Footer -->
                 <footer>
-                    <p>&copy; 2026 Jha-OS. All rights reserved.</p>
+                    <p>&copy; 2026. All rights reserved.</p>
                 </footer>
             </div>
         </div>
@@ -89,5 +94,17 @@
 
     <!-- Custom Scripts -->
     <script src="script.js"></script>
+    <script>
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    console.log('Service Worker registered successfully:', reg);
+                }).catch(err => {
+                    console.warn('Service Worker registration failed:', err);
+                });
+            });
+        }
+    </script>
 </body>
 </html>

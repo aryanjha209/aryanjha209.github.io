@@ -3,9 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Launch Date: July 8, 2026 at 00:00:00 (IST)
     const launchDate = new Date('July 8, 2026 00:00:00').getTime();
     
-    // Auto-visit tracking API URL
-    // We try to auto-detect base URL (works for local and Vercel hosting)
-    const apiBaseUrl = window.location.origin;
+    // Auto-detect base API URL to prevent CORS / Port / JSON errors
+    const apiBaseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || !window.location.hostname
+        ? 'http://localhost:5000'
+        : 'https://aryan-backend-tan.vercel.app';
 
     // --- 2. OS VISITOR TRACKING API PING ---
     const trackVisitor = async () => {
@@ -38,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (secondsEl) secondsEl.textContent = '00';
             
             const titleEl = document.querySelector('.coming-soon-card h2');
-            if (titleEl) titleEl.textContent = 'INITIALIZING SYSTEM';
+            if (titleEl) titleEl.textContent = 'INITIALIZING WORKSPACE';
             return;
         }
 
@@ -63,173 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCountdown();
     setInterval(updateCountdown, 1000);
 
-    // --- 4. HIGH-PERFORMANCE 3D SHAPES FLOATING CANVAS ---
-    const canvas = document.getElementById('ambient-canvas');
-    const ctx = canvas.getContext('2d');
-
-    let shapes = [];
-    const mouse = { x: null, y: null, radius: 180 };
-
-    const resizeCanvas = () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    };
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    // Track mouse
-    window.addEventListener('mousemove', (e) => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-    });
-
-    window.addEventListener('mouseleave', () => {
-        mouse.x = null;
-        mouse.y = null;
-    });
-
-    // Handle touch movement on mobile for interactive physics
-    window.addEventListener('touchmove', (e) => {
-        if (e.touches.length > 0) {
-            mouse.x = e.touches[0].clientX;
-            mouse.y = e.touches[0].clientY;
-        }
-    });
-
-    window.addEventListener('touchend', () => {
-        mouse.x = null;
-        mouse.y = null;
-    });
-
-    // 3D-feeling Shape Class
-    class GeometricShape {
-        constructor() {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
-            this.z = Math.random() * 2 + 0.5; // Depth multiplier
-            this.size = (Math.random() * 30 + 15) * this.z;
-            this.baseSize = this.size;
-            
-            // Movement parameters
-            this.speedX = (Math.random() - 0.5) * 0.4 * this.z;
-            this.speedY = (Math.random() - 0.5) * 0.4 * this.z;
-            
-            // Type of shapes: 0=Circle, 1=Square, 2=Torus, 3=Triangle
-            this.type = Math.floor(Math.random() * 4);
-            
-            this.angle = Math.random() * Math.PI * 2;
-            this.spin = (Math.random() - 0.5) * 0.005;
-            
-            // Coloring matching Parrot Green
-            this.opacity = (Math.random() * 0.15 + 0.05) / this.z;
-            this.color = `rgba(78, 191, 21, ${this.opacity})`;
-            this.borderOpacity = this.opacity * 2;
-            this.borderColor = `rgba(78, 191, 21, ${this.borderOpacity})`;
-        }
-
-        draw() {
-            ctx.save();
-            ctx.translate(this.x, this.y);
-            ctx.rotate(this.angle);
-            ctx.fillStyle = this.color;
-            ctx.strokeStyle = this.borderColor;
-            ctx.lineWidth = 1.5 * this.z;
-
-            // Apply light shadow glows
-            ctx.shadowColor = 'rgba(78, 191, 21, 0.1)';
-            ctx.shadowBlur = 10 * this.z;
-
-            ctx.beginPath();
-            if (this.type === 0) {
-                // Circle
-                ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.stroke();
-            } else if (this.type === 1) {
-                // Square/Cube front
-                ctx.rect(-this.size / 2, -this.size / 2, this.size, this.size);
-                ctx.fill();
-                ctx.stroke();
-            } else if (this.type === 2) {
-                // Torus/Donut
-                ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.arc(0, 0, this.size / 4, 0, Math.PI * 2);
-                ctx.fillStyle = '#ffffff'; // match clean white background
-                ctx.fill();
-                ctx.stroke();
-            } else if (this.type === 3) {
-                // Triangle
-                ctx.moveTo(0, -this.size / 2);
-                ctx.lineTo(this.size / 2, this.size / 2);
-                ctx.lineTo(-this.size / 2, this.size / 2);
-                ctx.closePath();
-                ctx.fill();
-                ctx.stroke();
-            }
-            ctx.restore();
-        }
-
-        update() {
-            // Normal drifting movement
-            this.x += this.speedX;
-            this.y += this.speedY;
-            this.angle += this.spin;
-
-            // Boundary checks
-            if (this.x < -this.size) this.x = canvas.width + this.size;
-            if (this.x > canvas.width + this.size) this.x = -this.size;
-            if (this.y < -this.size) this.y = canvas.height + this.size;
-            if (this.y > canvas.height + this.size) this.y = -this.size;
-
-            // Cursor interaction / Parallax push
-            if (mouse.x !== null && mouse.y !== null) {
-                const dx = mouse.x - this.x;
-                const dy = mouse.y - this.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-
-                if (distance < mouse.radius) {
-                    const force = (mouse.radius - distance) / mouse.radius;
-                    // Push away proportional to force and shape z-depth
-                    this.x -= (dx / distance) * force * 1.5 * this.z;
-                    this.y -= (dy / distance) * force * 1.5 * this.z;
-                    
-                    // Light pulse scale effect
-                    this.size = this.baseSize * (1 + force * 0.15);
-                } else {
-                    // Gradual spring return
-                    if (this.size > this.baseSize) {
-                        this.size -= 0.2;
-                    }
-                }
-            }
-        }
-    }
-
-    const initShapes = () => {
-        shapes = [];
-        // High density count for premium parallax effect
-        const shapeCount = Math.floor((canvas.width * canvas.height) / 25000);
-        const cappedCount = Math.max(15, Math.min(shapeCount, 40));
-        for (let i = 0; i < cappedCount; i++) {
-            shapes.push(new GeometricShape());
-        }
-    };
-
-    const animateShapes = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        shapes.forEach(shape => {
-            shape.update();
-            shape.draw();
-        });
-        requestAnimationFrame(animateShapes);
-    };
-
-    initShapes();
-    animateShapes();
-
-    // --- 5. HIGH-FIDELITY 3D INTERACTIVE TILT EFFECT ---
+    // --- 4. HIGH-FIDELITY 3D INTERACTIVE TILT EFFECT ---
     const card3D = document.getElementById('3d-card');
 
     if (card3D) {
@@ -242,9 +77,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const x = clientX - rect.left - width / 2;
             const y = clientY - rect.top - height / 2;
 
-            // Calculate rotation percentages (max 15 degrees)
-            const rotateX = (-y / (height / 2)) * 12;
-            const rotateY = (x / (width / 2)) * 12;
+            // Calculate rotation percentages (max 12 degrees)
+            const rotateX = (-y / (height / 2)) * 10;
+            const rotateY = (x / (width / 2)) * 10;
 
             card3D.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
         };
@@ -255,7 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Desktop mouse tracking
         window.addEventListener('mousemove', (e) => {
-            // Dynamic check: only tilt if mouse is somewhat near the card area to keep it premium
             const rect = card3D.getBoundingClientRect();
             const buffer = 150; // trigger range buffer
             if (
@@ -281,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
         card3D.addEventListener('mouseleave', resetTilt);
     }
 
-    // --- 6. AJAX EMAIL SUBSCRIPTION HANDLER ---
+    // --- 5. AJAX EMAIL SUBSCRIPTION HANDLER ---
     const subscribeForm = document.getElementById('subscribe-form');
     const formMsg = document.getElementById('form-msg');
     const emailInput = document.getElementById('subscriber-email');
@@ -317,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     formMsg.classList.add('success');
                     emailInput.value = '';
                     
-                    // Small visual burst confirmation
+                    // Visual confirmation
                     submitBtn.style.background = '#4EBF15';
                     submitBtn.innerHTML = `
                         <span class="btn-text">Saved!</span>
