@@ -389,6 +389,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === contactModal) closeContactModal();
         if (e.target === bookingModal) closeBookingModal();
         if (e.target === testimonialModal) closeTestimonialModal();
+        const scanModal = document.getElementById('card-scan-modal');
+        if (e.target === scanModal) closeCardScanModal();
     });
 
     // Multi-step form step management
@@ -651,10 +653,16 @@ document.addEventListener('DOMContentLoaded', () => {
     window.downloadVCard = function() {
         const vcard = "BEGIN:VCARD\n" +
                       "VERSION:3.0\n" +
-                      "FN:Aryan Jha\n" +
-                      "ORG:AI & AR Developer\n" +
+                      "FN:Aryan Kumar\n" +
+                      "ORG:AI/ML & Web Developer\n" +
+                      "TITLE:AI/ML Intern at BISAG\n" +
+                      "TEL;TYPE=CELL,VOICE;TYPE=pref:+919835089300\n" +
+                      "TEL;TYPE=CELL,VOICE;TYPE=alt:+919572698575\n" +
                       "EMAIL;TYPE=PREF,INTERNET:aryankjhaa@gmail.com\n" +
+                      "EMAIL;TYPE=INTERNET;TYPE=alt:aryankr2029@gmail.com\n" +
                       "URL:https://aryanjha.me\n" +
+                      "ADR;TYPE=HOME:;;Vadodara;Gujarat;;India\n" +
+                      "NOTE:AI/ML Intern at BISAG | B.Tech CSE (AI) Parul University\n" +
                       "REV:" + new Date().toISOString() + "\n" +
                       "END:VCARD";
         const blob = new Blob([vcard], { type: "text/vcard" });
@@ -662,11 +670,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const a = document.createElement("a");
         a.style.display = "none";
         a.href = url;
-        a.download = "Aryan_Jha.vcf";
+        a.download = "Aryan_Kumar.vcf";
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
         showToast("Contact card downloaded! 📇");
+    };
+
+    window.downloadResume = function() {
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.href = "./aryan.pdf";
+        a.download = "Aryan_Kumar_Resume.pdf";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showToast("Resume PDF downloaded! 📄");
     };
 
     window.scanCardQR = function() {
@@ -682,13 +701,23 @@ document.addEventListener('DOMContentLoaded', () => {
             
             setTimeout(() => {
                 qrWrapper.classList.remove('scanning-card');
-                showToast("Scan complete! Connecting to Snap Lenses... ⚡");
+                showToast("Scan complete! Retrieved contact credentials. ⚡");
                 setTimeout(() => {
-                    window.open("https://snapchat.com", "_blank");
+                    window.openCardScanModal();
                     container.classList.remove('flipped');
-                }, 1000);
+                }, 800);
             }, 3000);
         }, 400);
+    };
+
+    window.openCardScanModal = function() {
+        const modal = document.getElementById('card-scan-modal');
+        if (modal) modal.classList.add('active');
+    };
+
+    window.closeCardScanModal = function() {
+        const modal = document.getElementById('card-scan-modal');
+        if (modal) modal.classList.remove('active');
     };
 
 });

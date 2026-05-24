@@ -447,14 +447,14 @@
                                     <!-- Front Face -->
                                     <div class="atm-card-face atm-card-front">
                                         <div class="atm-card-header">
-                                            <span class="atm-card-logo">AJ</span>
+                                            <span class="atm-card-logo">AK</span>
                                             <div class="atm-card-chip"></div>
                                         </div>
                                         <div class="atm-card-number">4000 8420 2250 2026</div>
                                         <div class="atm-card-footer">
                                             <div class="atm-card-holder">
                                                 <span class="atm-card-label">Cardholder</span>
-                                                <span class="atm-card-name">ARYAN JHA</span>
+                                                <span class="atm-card-name">ARYAN KUMAR</span>
                                             </div>
                                             <div class="atm-card-expiry">
                                                 <span class="atm-card-label">Expires</span>
@@ -470,7 +470,7 @@
                                             <div class="atm-card-signature-area">
                                                 <span class="atm-card-label" style="margin-left: 4px;">Signature Panel</span>
                                                 <div class="atm-card-signature">
-                                                    Aryan Jha <span class="atm-card-cvv">369</span>
+                                                    Aryan Kumar <span class="atm-card-cvv">369</span>
                                                 </div>
                                             </div>
                                             <div class="atm-card-back-qr">
@@ -700,6 +700,90 @@
                     <button type="submit" class="btn btn-gradient" id="submit-testimonial-btn">Submit Testimonial <i class="fa-solid fa-paper-plane"></i></button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MODAL 4: BUSINESS CARD SCANNED & DOWNLOADS -->
+    <!-- ============================================== -->
+    <div id="card-scan-modal" class="modal-backdrop">
+        <div class="modal-container glass-card card-scan-modal-container">
+            <button class="modal-close" onclick="closeCardScanModal()">&times;</button>
+            <div class="modal-header">
+                <div class="modal-scan-badge"><i class="fa-solid fa-square-check"></i> Scanned Successfully</div>
+                <h2>Aryan Kumar</h2>
+                <p>AI/ML & Web Developer</p>
+            </div>
+            
+            <div class="scanned-card-preview">
+                <!-- Mini visual glassmorphic card representation -->
+                <div class="scanned-card-visual">
+                    <div class="scanned-card-glow"></div>
+                    <div class="scanned-card-header">
+                        <span class="scanned-card-logo">AK</span>
+                        <div class="scanned-card-chip"></div>
+                    </div>
+                    <div class="scanned-card-number">4000 8420 2250 2026</div>
+                    <div class="scanned-card-footer">
+                        <div>
+                            <span class="scanned-label">Cardholder</span>
+                            <span class="scanned-val">ARYAN KUMAR</span>
+                        </div>
+                        <div>
+                            <span class="scanned-label">Expires</span>
+                            <span class="scanned-val">12/30</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info grid details from aryan.pdf -->
+                <div class="scanned-info-list">
+                    <div class="scanned-info-item">
+                        <i class="fa-solid fa-briefcase icon-accent"></i>
+                        <div>
+                            <span class="info-label">Current Role</span>
+                            <span class="info-value">AI/ML Intern at BISAG, Gandhinagar</span>
+                        </div>
+                    </div>
+                    <div class="scanned-info-item">
+                        <i class="fa-solid fa-graduation-cap icon-accent"></i>
+                        <div>
+                            <span class="info-label">Education</span>
+                            <span class="info-value">B.Tech CSE (Artificial Intelligence)</span>
+                        </div>
+                    </div>
+                    <div class="scanned-info-item">
+                        <i class="fa-solid fa-envelope icon-accent"></i>
+                        <div>
+                            <span class="info-label">Primary Email</span>
+                            <span class="info-value">aryankjhaa@gmail.com</span>
+                        </div>
+                    </div>
+                    <div class="scanned-info-item">
+                        <i class="fa-solid fa-phone icon-accent"></i>
+                        <div>
+                            <span class="info-label">Contact Number</span>
+                            <span class="info-value">+91 9835089300</span>
+                        </div>
+                    </div>
+                    <div class="scanned-info-item">
+                        <i class="fa-solid fa-location-dot icon-accent"></i>
+                        <div>
+                            <span class="info-label">Location</span>
+                            <span class="info-value">Vadodara, Gujarat, India</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer-actions scanned-actions-row">
+                <button class="btn btn-outline btn-small-scan" onclick="downloadVCard(); event.stopPropagation();">
+                    <i class="fa-solid fa-address-card"></i> Save Contact
+                </button>
+                <button class="btn btn-gradient btn-small-scan" onclick="downloadResume(); event.stopPropagation();">
+                    <i class="fa-solid fa-file-arrow-down"></i> Download Resume
+                </button>
+            </div>
         </div>
     </div>
 
