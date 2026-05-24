@@ -1,789 +1,358 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Loader Logic
-    const loader = document.getElementById('loader');
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            loader.style.opacity = '0';
-            setTimeout(() => {
-                loader.style.display = 'none';
-            }, 600);
-        }, 800);
-    });
+    // --- 1. CONFIGURATION & STATE ---
+    // Launch Date: July 8, 2026 at 00:00:00 (IST)
+    const launchDate = new Date('July 8, 2026 00:00:00').getTime();
+    
+    // Auto-visit tracking API URL
+    // We try to auto-detect base URL (works for local and Vercel hosting)
+    const apiBaseUrl = window.location.origin;
 
-        // 2. Typing Animation
-    const typingText = document.querySelector('.typing-text');
-    const roles = ['AI/ML Engineer', 'Web Developer', 'Python Enthusiast', 'Cloud Architect', 'Generative AI Developer'];
-    let roleIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    let typeSpeed = 100;
+    // --- 2. OS VISITOR TRACKING API PING ---
+    const trackVisitor = async () => {
+        try {
+            await fetch(`${apiBaseUrl}/api/visit`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+        } catch (err) {
+            // Silence silent logger fails
+            console.warn('Analytics logging is currently offline.');
+        }
+    };
+    trackVisitor();
 
-    function type() {
-        const currentRole = roles[roleIndex];
-        if (isDeleting) {
-            typingText.textContent = currentRole.substring(0, charIndex - 1);
-            charIndex--;
-            typeSpeed = 50;
-        } else {
-            typingText.textContent = currentRole.substring(0, charIndex + 1);
-            charIndex++;
-            typeSpeed = 150;
+    // --- 3. DYNAMIC COUNTDOWN TIMER ---
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+
+    const updateCountdown = () => {
+        const now = new Date().getTime();
+        const gap = launchDate - now;
+
+        if (gap <= 0) {
+            if (daysEl) daysEl.textContent = '00';
+            if (hoursEl) hoursEl.textContent = '00';
+            if (minutesEl) minutesEl.textContent = '00';
+            if (secondsEl) secondsEl.textContent = '00';
+            
+            const titleEl = document.querySelector('.coming-soon-card h2');
+            if (titleEl) titleEl.textContent = 'INITIALIZING SYSTEM';
+            return;
         }
 
-        if (!isDeleting && charIndex === currentRole.length) {
-            isDeleting = true;
-            typeSpeed = 2000;
-        } else if (isDeleting && charIndex === 0) {
-            isDeleting = false;
-            roleIndex = (roleIndex + 1) % roles.length;
-            typeSpeed = 500;
-        }
+        // Time calculations
+        const second = 1000;
+        const minute = second * 60;
+        const hour = minute * 60;
+        const day = hour * 24;
 
-        setTimeout(type, typeSpeed);
-    }
-    type();
+        const d = Math.floor(gap / day);
+        const h = Math.floor((gap % day) / hour);
+        const m = Math.floor((gap % hour) / minute);
+        const s = Math.floor((gap % minute) / second);
 
-    // 3. Mobile Menu Logic
-    const mobileMenu = document.getElementById('mobile-menu');
-    const navLinks = document.querySelector('.nav-links');
-    const navItems = document.querySelectorAll('.nav-links li a');
-
-    mobileMenu.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-        mobileMenu.classList.toggle('is-active');
-
-        const bars = mobileMenu.querySelectorAll('.bar');
-        if (navLinks.classList.contains('active')) {
-            bars[0].style.transform = 'rotate(-45deg) translate(-5px, 6px)';
-            bars[1].style.opacity = '0';
-            bars[2].style.transform = 'rotate(45deg) translate(-5px, -6px)';
-        } else {
-            bars[0].style.transform = 'none';
-            bars[1].style.opacity = '1';
-            bars[2].style.transform = 'none';
-        }
-    });
-
-        navItems.forEach(item => {
-        item.addEventListener('click', () => {
-            navLinks.classList.remove('active');
-            mobileMenu.classList.remove('is-active');
-            const bars = mobileMenu.querySelectorAll('.bar');
-            bars[0].style.transform = 'none';
-            bars[1].style.opacity = '1';
-            bars[2].style.transform = 'none';
-        });
-
-        });
-
-        // 4. Scroll Reveal Logic
-    const reveals = document.querySelectorAll('.reveal, .project-card, .skill-category, .stat-card, .exp-card');
-    const revealOptions = {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px"
+        // Format leading zeros
+        if (daysEl) daysEl.textContent = d < 10 ? '0' + d : d;
+        if (hoursEl) hoursEl.textContent = h < 10 ? '0' + h : h;
+        if (minutesEl) minutesEl.textContent = m < 10 ? '0' + m : m;
+        if (secondsEl) secondsEl.textContent = s < 10 ? '0' + s : s;
     };
 
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('active');
-            }
-        });
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
 
-        }, revealOptions);
-
-    reveals.forEach(reveal => revealObserver.observe(reveal));
-
-    // 5. Progress Bar Animation
-    const skillsSection = document.getElementById('skills');
-    const progressObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const progressBars = document.querySelectorAll('.progress');
-                progressBars.forEach(bar => {
-                    const width = bar.getAttribute('data-width');
-                    bar.style.width = width;
-                });
-
-                }
-        });
-
-        }, { threshold: 0.2 });
-
-        if (skillsSection) progressObserver.observe(skillsSection);
-
-    // 6. Counter Animation
-    const counters = document.querySelectorAll('.counter');
-    const counterObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const counter = entry.target;
-                const target = +counter.getAttribute('data-target');
-                const duration = 2000;
-                const increment = target / (duration / 16);
-
-                let count = 0;
-                const updateCount = () => {
-                    if (count < target) {
-                        count += increment;
-                        counter.innerText = Math.ceil(count);
-                        setTimeout(updateCount, 16);
-                    } else {
-                        counter.innerText = target;
-                    }
-                };
-                updateCount();
-                counterObserver.unobserve(counter);
-            }
-        });
-
-        }, { threshold: 1 });
-
-        counters.forEach(counter => counterObserver.observe(counter));
-
-    // 7. Scroll Progress & Sticky Navbar Logic
-    const scrollProgress = document.getElementById('scroll-progress');
-    const scrollTopBtn = document.getElementById('scroll-top');
-    const navbar = document.querySelector('.navbar-container');
-    let lastScrollY = window.scrollY;
-
-    window.addEventListener('scroll', () => {
-        // Scroll Progress
-        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = (window.scrollY / totalHeight) * 100;
-        scrollProgress.style.width = progress + '%';
-
-        // Show/Hide Scroll Top Button
-        if (window.scrollY > 500) {
-            scrollTopBtn.classList.add('show');
-        } else {
-            scrollTopBtn.classList.remove('show');
-        }
-
-        // Hide/Show Navbar on Scroll
-        if (window.scrollY > 100) {
-            if (window.scrollY > lastScrollY) {
-                navbar.style.transform = 'translateY(-100%)';
-            } else {
-                navbar.style.transform = 'translateY(0)';
-                navbar.style.background = 'rgba(15, 23, 42, 0.9)';
-            }
-        } else {
-            navbar.style.background = 'rgba(15, 23, 42, 0.1)';
-        }
-        lastScrollY = window.scrollY;
-
-        // Active Link Highlight
-        const sections = document.querySelectorAll('section');
-        let current = "";
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            if (window.pageYOffset >= sectionTop - 150) {
-                current = section.getAttribute('id');
-            }
-        });
-
-            navItems.forEach(item => {
-            item.classList.remove('active');
-            if (item.getAttribute('href') === `#${current}`) {
-                item.classList.add('active');
-            }
-        });
-
-        });
-
-        scrollTopBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-
-        });
-
-        // 8. Custom Cursor Logic
-    const cursor = document.querySelector('.cursor');
-    const follower = document.querySelector('.cursor-follower');
-
-    document.addEventListener('mousemove', (e) => {
-        cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
-
-        setTimeout(() => {
-            follower.style.transform = `translate3d(${e.clientX - 20}px, ${e.clientY - 20}px, 0)`;
-        }, 50);
-    });
-
-        document.querySelectorAll('a, button, .menu-toggle, .project-card, .skill-category, .stat-card').forEach(element => {
-        element.addEventListener('mouseenter', () => {
-            cursor.style.transform += ' scale(2.5)';
-            follower.style.transform += ' scale(1.5)';
-            follower.style.background = 'rgba(99, 102, 241, 0.1)';
-            follower.style.borderColor = 'transparent';
-        });
-
-            element.addEventListener('mouseleave', () => {
-            // Transform resets in the mousemove listener
-            follower.style.background = 'transparent';
-            follower.style.borderColor = 'var(--primary-color)';
-        });
-
-        });
-
-        // 9. Particle Background Logic (Advanced)
-    const canvas = document.getElementById('particle-canvas');
+    // --- 4. HIGH-PERFORMANCE 3D SHAPES FLOATING CANVAS ---
+    const canvas = document.getElementById('ambient-canvas');
     const ctx = canvas.getContext('2d');
-    let particles = [];
-    const mouse = { x: null, y: null, radius: 150 };
 
+    let shapes = [];
+    const mouse = { x: null, y: null, radius: 180 };
+
+    const resizeCanvas = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    };
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Track mouse
     window.addEventListener('mousemove', (e) => {
-        mouse.x = e.x;
-        mouse.y = e.y;
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
     });
 
-        class Particle {
+    window.addEventListener('mouseleave', () => {
+        mouse.x = null;
+        mouse.y = null;
+    });
+
+    // Handle touch movement on mobile for interactive physics
+    window.addEventListener('touchmove', (e) => {
+        if (e.touches.length > 0) {
+            mouse.x = e.touches[0].clientX;
+            mouse.y = e.touches[0].clientY;
+        }
+    });
+
+    window.addEventListener('touchend', () => {
+        mouse.x = null;
+        mouse.y = null;
+    });
+
+    // 3D-feeling Shape Class
+    class GeometricShape {
         constructor() {
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height;
-            this.size = Math.random() * 2 + 1;
-            this.baseX = this.x;
-            this.baseY = this.y;
-            this.density = (Math.random() * 30) + 1;
-            this.speedX = (Math.random() - 0.5) * 0.8;
-            this.speedY = (Math.random() - 0.5) * 0.8;
-            this.opacity = Math.random() * 0.5 + 0.2;
+            this.z = Math.random() * 2 + 0.5; // Depth multiplier
+            this.size = (Math.random() * 30 + 15) * this.z;
+            this.baseSize = this.size;
+            
+            // Movement parameters
+            this.speedX = (Math.random() - 0.5) * 0.4 * this.z;
+            this.speedY = (Math.random() - 0.5) * 0.4 * this.z;
+            
+            // Type of shapes: 0=Circle, 1=Square, 2=Torus, 3=Triangle
+            this.type = Math.floor(Math.random() * 4);
+            
+            this.angle = Math.random() * Math.PI * 2;
+            this.spin = (Math.random() - 0.5) * 0.005;
+            
+            // Coloring matching Parrot Green
+            this.opacity = (Math.random() * 0.15 + 0.05) / this.z;
+            this.color = `rgba(78, 191, 21, ${this.opacity})`;
+            this.borderOpacity = this.opacity * 2;
+            this.borderColor = `rgba(78, 191, 21, ${this.borderOpacity})`;
         }
 
         draw() {
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            ctx.rotate(this.angle);
+            ctx.fillStyle = this.color;
+            ctx.strokeStyle = this.borderColor;
+            ctx.lineWidth = 1.5 * this.z;
+
+            // Apply light shadow glows
+            ctx.shadowColor = 'rgba(78, 191, 21, 0.1)';
+            ctx.shadowBlur = 10 * this.z;
+
             ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(99, 102, 241, ${this.opacity})`;
-            ctx.fill();
+            if (this.type === 0) {
+                // Circle
+                ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+            } else if (this.type === 1) {
+                // Square/Cube front
+                ctx.rect(-this.size / 2, -this.size / 2, this.size, this.size);
+                ctx.fill();
+                ctx.stroke();
+            } else if (this.type === 2) {
+                // Torus/Donut
+                ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(0, 0, this.size / 4, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffffff'; // match clean white background
+                ctx.fill();
+                ctx.stroke();
+            } else if (this.type === 3) {
+                // Triangle
+                ctx.moveTo(0, -this.size / 2);
+                ctx.lineTo(this.size / 2, this.size / 2);
+                ctx.lineTo(-this.size / 2, this.size / 2);
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+            }
+            ctx.restore();
         }
 
         update() {
-            // Movement
+            // Normal drifting movement
             this.x += this.speedX;
             this.y += this.speedY;
+            this.angle += this.spin;
 
-            if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-            if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            // Boundary checks
+            if (this.x < -this.size) this.x = canvas.width + this.size;
+            if (this.x > canvas.width + this.size) this.x = -this.size;
+            if (this.y < -this.size) this.y = canvas.height + this.size;
+            if (this.y > canvas.height + this.size) this.y = -this.size;
 
-            // Mouse Interaction
-            let dx = mouse.x - this.x;
-            let dy = mouse.y - this.y;
-            let distance = Math.sqrt(dx * dx + dy * dy);
+            // Cursor interaction / Parallax push
+            if (mouse.x !== null && mouse.y !== null) {
+                const dx = mouse.x - this.x;
+                const dy = mouse.y - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
 
-            if (distance < mouse.radius) {
-                const forceDirectionX = dx / distance;
-                const forceDirectionY = dy / distance;
-                const force = (mouse.radius - distance) / mouse.radius;
-                const directionX = forceDirectionX * force * this.density;
-                const directionY = forceDirectionY * force * this.density;
-
-                this.x -= directionX;
-                this.y -= directionY;
-            }
-        }
-    }
-
-    function initParticles() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        particles = [];
-        const particleCount = Math.floor((canvas.width * canvas.height) / 9000);
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
-        }
-    }
-
-    function connectParticles() {
-        for (let a = 0; a < particles.length; a++) {
-            for (let b = a; b < particles.length; b++) {
-                let dx = particles[a].x - particles[b].x;
-                let dy = particles[a].y - particles[b].y;
-                let distance = Math.sqrt(dx * dx + dy * dy);
-
-                if (distance < 120) {
-                    ctx.strokeStyle = `rgba(99, 102, 241, ${0.2 * (1 - distance / 120)})`;
-                    ctx.lineWidth = 1;
-                    ctx.beginPath();
-                    ctx.moveTo(particles[a].x, particles[a].y);
-                    ctx.lineTo(particles[b].x, particles[b].y);
-                    ctx.stroke();
+                if (distance < mouse.radius) {
+                    const force = (mouse.radius - distance) / mouse.radius;
+                    // Push away proportional to force and shape z-depth
+                    this.x -= (dx / distance) * force * 1.5 * this.z;
+                    this.y -= (dy / distance) * force * 1.5 * this.z;
+                    
+                    // Light pulse scale effect
+                    this.size = this.baseSize * (1 + force * 0.15);
+                } else {
+                    // Gradual spring return
+                    if (this.size > this.baseSize) {
+                        this.size -= 0.2;
+                    }
                 }
             }
         }
     }
 
-    function animateParticles() {
+    const initShapes = () => {
+        shapes = [];
+        // High density count for premium parallax effect
+        const shapeCount = Math.floor((canvas.width * canvas.height) / 25000);
+        const cappedCount = Math.max(15, Math.min(shapeCount, 40));
+        for (let i = 0; i < cappedCount; i++) {
+            shapes.push(new GeometricShape());
+        }
+    };
+
+    const animateShapes = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach(p => {
-            p.update();
-            p.draw();
+        shapes.forEach(shape => {
+            shape.update();
+            shape.draw();
+        });
+        requestAnimationFrame(animateShapes);
+    };
+
+    initShapes();
+    animateShapes();
+
+    // --- 5. HIGH-FIDELITY 3D INTERACTIVE TILT EFFECT ---
+    const card3D = document.getElementById('3d-card');
+
+    if (card3D) {
+        const handleTilt = (clientX, clientY) => {
+            const rect = card3D.getBoundingClientRect();
+            const width = rect.width;
+            const height = rect.height;
+
+            // Coordinates relative to card center
+            const x = clientX - rect.left - width / 2;
+            const y = clientY - rect.top - height / 2;
+
+            // Calculate rotation percentages (max 15 degrees)
+            const rotateX = (-y / (height / 2)) * 12;
+            const rotateY = (x / (width / 2)) * 12;
+
+            card3D.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        };
+
+        const resetTilt = () => {
+            card3D.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        };
+
+        // Desktop mouse tracking
+        window.addEventListener('mousemove', (e) => {
+            // Dynamic check: only tilt if mouse is somewhat near the card area to keep it premium
+            const rect = card3D.getBoundingClientRect();
+            const buffer = 150; // trigger range buffer
+            if (
+                e.clientX >= rect.left - buffer &&
+                e.clientX <= rect.right + buffer &&
+                e.clientY >= rect.top - buffer &&
+                e.clientY <= rect.bottom + buffer
+            ) {
+                handleTilt(e.clientX, e.clientY);
+            } else {
+                resetTilt();
+            }
         });
 
-            connectParticles();
-        requestAnimationFrame(animateParticles);
+        // Touch drag gestures for mobile
+        card3D.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                handleTilt(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        });
+
+        card3D.addEventListener('touchend', resetTilt);
+        card3D.addEventListener('mouseleave', resetTilt);
     }
 
-    initParticles();
-    animateParticles();
-    window.addEventListener('resize', initParticles);
-
-    // 10. 3D Tilt Effect
-    const tiltElements = document.querySelectorAll('.project-card, .stat-card, .skill-category, .img-box, .exp-card');
-
-    tiltElements.forEach(el => {
-        el.addEventListener('mousemove', (e) => {
-            const rect = el.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-
-            const rotateX = (y - centerY) / 10;
-            const rotateY = (centerX - x) / 10;
-
-            el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
-        });
-
-            el.addEventListener('mouseleave', () => {
-            el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-        });
-
-        });
-
-        // 11. Magnetic Button Effect
-    const magneticBtns = document.querySelectorAll('.btn, .social-hero a, .logo a');
-
-    magneticBtns.forEach(btn => {
-        btn.addEventListener('mousemove', (e) => {
-            const rect = btn.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-
-            btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
-        });
-
-            btn.addEventListener('mouseleave', () => {
-            btn.style.transform = `translate(0px, 0px)`;
-        });
-
-        });
-
-        // 12. Contact Form Logic (Integrated with Backend)
-    const contactForm = document.getElementById('contact-form');
+    // --- 6. AJAX EMAIL SUBSCRIPTION HANDLER ---
+    const subscribeForm = document.getElementById('subscribe-form');
     const formMsg = document.getElementById('form-msg');
+    const emailInput = document.getElementById('subscriber-email');
 
-    if (contactForm) {
-        contactForm.addEventListener('submit', async (e) => {
+    if (subscribeForm && formMsg && emailInput) {
+        subscribeForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const submitBtn = contactForm.querySelector('.submit-btn');
-            const originalText = submitBtn.innerHTML;
+            const emailValue = emailInput.value.trim();
+            const submitBtn = subscribeForm.querySelector('.submit-btn');
+            const originalBtnHtml = submitBtn.innerHTML;
 
-            // Get form data
-            const formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                subject: document.getElementById('subject').value,
-                message: document.getElementById('message').value
-            };
-
+            // Set loading state
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            submitBtn.innerHTML = `
+                <span class="btn-text">Saving...</span>
+                <span class="btn-icon"><i class="fas fa-spinner fa-spin"></i></span>
+            `;
+            
+            formMsg.className = 'form-msg';
+            formMsg.textContent = '';
 
             try {
-                // Always use the deployed Vercel backend to prevent local connection errors
-                const apiUrl = 'https://aryan-backend-tan.vercel.app/api/contact';
-
-                const response = await fetch(apiUrl, {
+                const response = await fetch(`${apiBaseUrl}/api/subscribe`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: emailValue })
                 });
-
-                    if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Server responded with ${response.status}: ${errorText}`);
-                }
 
                 const result = await response.json();
 
-                if (result.success) {
-                    submitBtn.innerHTML = '<i class="fas fa-check"></i> Sent!';
-                    submitBtn.style.background = '#10b981';
-                    formMsg.textContent = 'Message sent successfully!';
-                    formMsg.style.color = '#10b981';
-                    contactForm.reset();
+                if (response.ok && result.success) {
+                    formMsg.textContent = result.message || 'Subscribed successfully!';
+                    formMsg.classList.add('success');
+                    emailInput.value = '';
+                    
+                    // Small visual burst confirmation
+                    submitBtn.style.background = '#4EBF15';
+                    submitBtn.innerHTML = `
+                        <span class="btn-text">Saved!</span>
+                        <span class="btn-icon"><i class="fas fa-check"></i></span>
+                    `;
                 } else {
-                    throw new Error(result.message || 'Failed to send');
+                    throw new Error(result.message || 'Subscription failed.');
                 }
             } catch (error) {
-                console.error('Contact Form Error:', error);
-                submitBtn.innerHTML = '<i class="fas fa-times"></i> Error';
+                console.error('Subscription error:', error);
+                formMsg.textContent = error.message || 'Network error. Please try again later.';
+                formMsg.classList.add('error');
+                
                 submitBtn.style.background = '#ef4444';
-                
-                // Show the actual error message from the server if available
-                let errorMessage = 'Connection error. Please try again later.';
-                if (error.message.includes('Server responded with 500')) {
-                    errorMessage = 'Server configuration error (Email credentials missing).';
-                }
-                
-                formMsg.textContent = errorMessage;
-                formMsg.style.color = '#ef4444';
-                alert('Message Failed: ' + error.message);
+                submitBtn.innerHTML = `
+                    <span class="btn-text">Error</span>
+                    <span class="btn-icon"><i class="fas fa-times"></i></span>
+                `;
             } finally {
+                // Restore button state after a small delay
                 setTimeout(() => {
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = originalText;
                     submitBtn.style.background = '';
+                    submitBtn.innerHTML = originalBtnHtml;
+                    
+                    // Clear messages after a long delay
                     setTimeout(() => {
-                        formMsg.textContent = '';
-                    }, 3000);
-                }, 3000);
-            }
-        });
-
-        }
-
-    // --- NEW SURPRISE FEATURES ---
-    
-    // 1. Dark/Light Mode Toggle
-    const themeToggle = document.getElementById('theme-toggle');
-    const body = document.body;
-    const icon = themeToggle ? themeToggle.querySelector('i') : null;
-    
-    // Check saved theme
-    const savedTheme = localStorage.getItem('portfolioTheme');
-    if (savedTheme === 'dark') {
-        body.classList.add('dark-mode');
-        if (icon) icon.classList.replace('fa-moon', 'fa-sun');
-    }
-    
-    if (themeToggle) {
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-            if (body.classList.contains('dark-mode')) {
-                if (icon) icon.classList.replace('fa-moon', 'fa-sun');
-                localStorage.setItem('portfolioTheme', 'dark');
-                // Show a quick notification
-                if (window.confetti) confetti({ particleCount: 40, spread: 60, origin: { y: 0.9 }, colors: ['#10b981'] });
-            } else {
-                if (icon) icon.classList.replace('fa-sun', 'fa-moon');
-                localStorage.setItem('portfolioTheme', 'light');
+                        formMsg.style.opacity = '0';
+                        setTimeout(() => {
+                            formMsg.textContent = '';
+                            formMsg.style.opacity = '1';
+                        }, 300);
+                    }, 4000);
+                }, 2000);
             }
         });
     }
-
-    // 2. Easter Egg (Konami Code / Type 'aryan')
-    let pressed = [];
-    const secretCode = 'aryan'; // Type a r y a n on keyboard
-    window.addEventListener('keyup', (e) => {
-        pressed.push(e.key.toLowerCase());
-        pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length);
-        if (pressed.join('').includes(secretCode)) {
-            console.log('DING DING! Easter Egg Found!');
-            if (window.confetti) {
-                var duration = 3000;
-                var end = Date.now() + duration;
-                (function frame() {
-                    confetti({
-                        particleCount: 5,
-                        angle: 60,
-                        spread: 55,
-                        origin: { x: 0 },
-                        colors: ['#10b981', '#34D399', '#ffffff']
-                    });
-                    confetti({
-                        particleCount: 5,
-                        angle: 120,
-                        spread: 55,
-                        origin: { x: 1 },
-                        colors: ['#10b981', '#34D399', '#ffffff']
-                    });
-                    if (Date.now() < end) requestAnimationFrame(frame);
-                }());
-            }
-        }
-    });
-    
-    // 3. Custom Context Menu (Right Click)
-    const contextMenu = document.getElementById('context-menu');
-    
-    if (contextMenu) {
-        document.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            
-            let x = e.clientX;
-            let y = e.clientY;
-            
-            const menuWidth = contextMenu.offsetWidth;
-            const menuHeight = contextMenu.offsetHeight;
-            
-            if (x + menuWidth > window.innerWidth) x = window.innerWidth - menuWidth;
-            if (y + menuHeight > window.innerHeight) y = window.innerHeight - menuHeight;
-            
-            contextMenu.style.left = `${x}px`;
-            contextMenu.style.top = `${y}px`;
-            contextMenu.classList.add('active');
-        });
-
-        document.addEventListener('click', () => {
-            contextMenu.classList.remove('active');
-        });
-
-        const ctxTheme = document.getElementById('ctx-theme');
-        const ctxCv = document.getElementById('ctx-cv');
-        const ctxCopy = document.getElementById('ctx-copy');
-        const ctxTerm = document.getElementById('ctx-term');
-        
-        if (ctxTheme && themeToggle) ctxTheme.addEventListener('click', () => themeToggle.click());
-        if (ctxCv) ctxCv.addEventListener('click', () => window.open('aryan.pdf', '_blank'));
-        if (ctxCopy) ctxCopy.addEventListener('click', () => {
-            navigator.clipboard.writeText('aryankjhaa@gmail.com');
-            alert('Email copied to clipboard!');
-        });
-        if (ctxTerm) ctxTerm.addEventListener('click', () => openTerminal());
-    }
-
-    // 4. Interactive Terminal
-    const termBtn = document.getElementById('terminal-btn');
-    const termOverlay = document.getElementById('terminal-overlay');
-    const termClose = document.getElementById('term-close');
-    const termInput = document.getElementById('terminal-input');
-    const termBody = document.getElementById('terminal-body');
-
-    function openTerminal() {
-        if (!termOverlay || !termInput) return;
-        termOverlay.classList.add('active');
-        setTimeout(() => termInput.focus(), 100);
-    }
-    
-    if (termBtn) termBtn.addEventListener('click', openTerminal);
-    if (termClose && termOverlay) termClose.addEventListener('click', () => termOverlay.classList.remove('active'));
-    
-    // Close on click outside
-    if (termOverlay) {
-        termOverlay.addEventListener('click', (e) => {
-            if(e.target === termOverlay) termOverlay.classList.remove('active');
-        });
-    }
-
-    const commands = {
-        'help': 'Available commands: <br> - <span class="term-highlight">whoami</span>: Displays info about me<br> - <span class="term-highlight">skills</span>: Lists my technical skills<br> - <span class="term-highlight">contact</span>: Shows how to reach me<br> - <span class="term-highlight">clear</span>: Clears terminal',
-        'whoami': 'Aryan Kumar. AI/ML Engineer & Web Developer. I build intelligent solutions.',
-        'skills': 'Python, JavaScript, React, Node.js, Next.js, Flask, FastAPI, Machine Learning.',
-        'contact': 'Email: aryankjhaa@gmail.com | LinkedIn: /in/jhaaryaan',
-        'sudo': 'Nice try. This incident will be reported. 🚨',
-    };
-
-    if (termInput && termBody) {
-        termInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                const val = termInput.value.trim().toLowerCase();
-                if (val === 'clear') {
-                    const outputs = termBody.querySelectorAll('p');
-                    outputs.forEach(p => p.remove());
-                    termInput.value = '';
-                    return;
-                }
-                
-                const newOutput = document.createElement('p');
-                newOutput.className = 'term-output';
-                newOutput.innerHTML = `<span class="term-prompt">aryan@portfolio:~$</span> ${val}`;
-                
-                const response = document.createElement('p');
-                response.className = 'term-output';
-                response.style.marginBottom = '10px';
-                
-                if (val === '') {
-                    response.innerHTML = '';
-                } else if (commands[val]) {
-                    response.innerHTML = commands[val];
-                } else {
-                    response.innerHTML = `bash: ${val}: command not found. Type 'help'.`;
-                }
-
-                termInput.parentNode.before(newOutput);
-                if(response.innerHTML) termInput.parentNode.before(response);
-                
-                termInput.value = '';
-                termBody.scrollTop = termBody.scrollHeight;
-            }
-        });
-    }
-
-    
-    // 5. AI Chat Assistant
-    const aiChatBtn = document.getElementById('ai-chat-btn');
-    const aiChatWindow = document.getElementById('ai-chat-window');
-    const aiChatClose = document.getElementById('ai-chat-close');
-    const aiChatInput = document.getElementById('ai-chat-input');
-    const aiChatSubmit = document.getElementById('ai-chat-submit');
-    const aiChatBody = document.getElementById('ai-chat-body');
-
-    if (aiChatBtn && aiChatWindow) {
-        aiChatBtn.addEventListener('click', () => {
-            aiChatWindow.classList.toggle('active');
-            if (aiChatWindow.classList.contains('active')) {
-                setTimeout(() => aiChatInput.focus(), 300);
-            }
-        });
-
-        aiChatClose.addEventListener('click', () => {
-            aiChatWindow.classList.remove('active');
-        });
-
-        const handleChatSubmit = async () => {
-            const text = aiChatInput.value.trim();
-            if (!text) return;
-            
-            // Add user message
-            const userMsg = document.createElement('div');
-            userMsg.className = 'user-msg';
-            userMsg.textContent = text;
-            aiChatBody.appendChild(userMsg);
-            
-            aiChatInput.value = '';
-            aiChatBody.scrollTop = aiChatBody.scrollHeight;
-
-            // Show typing indicator
-            const typingMsg = document.createElement('div');
-            typingMsg.className = 'ai-msg';
-            typingMsg.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
-            aiChatBody.appendChild(typingMsg);
-            aiChatBody.scrollTop = aiChatBody.scrollHeight;
-
-            try {
-                let aiResponseText = "";
-                
-                // First try to hit the backend
-                try {
-                    const apiUrl = 'https://aryan-backend-tan.vercel.app/api/chat';
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: text })
-                    });
-                    
-                    if (response.ok) {
-                        const data = await response.json();
-                        if (data.success) {
-                            aiResponseText = data.reply;
-                        }
-                    }
-                } catch (backendError) {
-                    console.warn("Backend chat failed, falling back to direct Pollinations API", backendError);
-                }
-                
-                // Fallback to direct Pollinations AI if backend failed or returned no text
-                if (!aiResponseText) {
-                    const prompt = `You are an AI assistant for Aryan Kumar's portfolio website. Answer the user's question concisely. User says: ${text}`;
-                    const url = `https://text.pollinations.ai/prompt/${encodeURIComponent(prompt)}`;
-                    const response = await fetch(url);
-                    
-                    if (!response.ok) {
-                        throw new Error(`Pollinations API Error: ${response.status}`);
-                    }
-                    
-                    aiResponseText = await response.text();
-                    
-                    // If the response is somehow JSON with an error message
-                    if (aiResponseText.trim().startsWith('{') && aiResponseText.includes('"error"')) {
-                        throw new Error('Pollinations API returned a JSON error object');
-                    }
-                }
-
-                typingMsg.remove();
-                const aiMsg = document.createElement('div');
-                aiMsg.className = 'ai-msg';
-                aiMsg.textContent = aiResponseText;
-                aiChatBody.appendChild(aiMsg);
-                aiChatBody.scrollTop = aiChatBody.scrollHeight;
-            } catch (error) {
-                console.error("AI Error:", error);
-                typingMsg.remove();
-                const errorMsg = document.createElement('div');
-                errorMsg.className = 'ai-msg';
-                errorMsg.style.color = '#ef4444';
-                errorMsg.textContent = "My servers are currently resting 💤. Please use the contact form to reach out to Aryan!";
-                aiChatBody.appendChild(errorMsg);
-                aiChatBody.scrollTop = aiChatBody.scrollHeight;
-            }
-        };
-
-        aiChatSubmit.addEventListener('click', handleChatSubmit);
-        aiChatInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') handleChatSubmit();
-        });
-    }
-
-    // 6. Voice Navigation (Web Speech API)
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (SpeechRecognition) {
-        const recognition = new SpeechRecognition();
-        recognition.continuous = false;
-        recognition.lang = 'en-US';
-        
-        // Add a mic button to the navbar
-        const navLinksList = document.querySelector('.nav-links');
-        if (navLinksList && !document.getElementById('voice-btn')) {
-            const micLi = document.createElement('li');
-            micLi.innerHTML = '<a href="javascript:void(0)" id="voice-btn" title="Voice Commands (Try \'Go to projects\')"><i class="fas fa-microphone"></i></a>';
-            navLinksList.appendChild(micLi);
-
-            const voiceBtn = document.getElementById('voice-btn');
-            let isListening = false;
-
-            voiceBtn.addEventListener('click', () => {
-                if (isListening) {
-                    recognition.stop();
-                } else {
-                    recognition.start();
-                    voiceBtn.querySelector('i').classList.remove('fa-microphone');
-                    voiceBtn.querySelector('i').classList.add('fa-microphone-slash', 'fa-beat');
-                    voiceBtn.querySelector('i').style.color = '#ef4444';
-                }
-            });
-
-            recognition.onresult = (event) => {
-                const command = event.results[0][0].transcript.toLowerCase();
-                console.log('Voice Command:', command);
-                
-                if (command.includes('home')) document.querySelector('a[href="#home"]').click();
-                else if (command.includes('about')) document.querySelector('a[href="#about"]').click();
-                else if (command.includes('skills')) document.querySelector('a[href="#skills"]').click();
-                else if (command.includes('project')) document.querySelector('a[href="#projects"]').click();
-                else if (command.includes('experience')) document.querySelector('a[href="#experience"]').click();
-                else if (command.includes('education')) document.querySelector('a[href="#education"]').click();
-                else if (command.includes('contact')) document.querySelector('a[href="#contact"]').click();
-                else if (command.includes('dark')) {
-                    if (!document.body.classList.contains('dark-mode')) document.getElementById('theme-toggle').click();
-                }
-                else if (command.includes('light')) {
-                    if (document.body.classList.contains('dark-mode')) document.getElementById('theme-toggle').click();
-                }
-                else if (command.includes('terminal')) document.getElementById('terminal-btn').click();
-                
-                // Alert isn't great, better to show a small toast or just let it happen naturally
-                // alert(`Voice Command Recognized: "${command}"`);
-            };
-
-            recognition.onend = () => {
-                isListening = false;
-                voiceBtn.querySelector('i').classList.add('fa-microphone');
-                voiceBtn.querySelector('i').classList.remove('fa-microphone-slash', 'fa-beat');
-                voiceBtn.querySelector('i').style.color = '';
-            };
-
-            recognition.onstart = () => {
-                isListening = true;
-            };
-        }
-    }
-
-    // --- END SURPRISE FEATURES ---
-
 });
-
-    
