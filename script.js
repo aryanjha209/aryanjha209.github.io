@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/json' }
             });
         } catch (err) {
-            // Silence silent logger fails
             console.warn('Analytics logging is currently offline.');
         }
     };
@@ -64,58 +63,85 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCountdown();
     setInterval(updateCountdown, 1000);
 
-    // --- 4. HIGH-FIDELITY 3D INTERACTIVE TILT EFFECT ---
-    const card3D = document.getElementById('3d-card');
+    // --- 4. 3D CARD COIN-FLIP MECHANICS ---
+    const cardWrapper = document.getElementById('3d-card-wrapper');
+    const viewLensesBtn = document.getElementById('view-lenses-btn');
+    const backToLaunchBtn = document.getElementById('back-to-launch-btn');
 
-    if (card3D) {
-        const handleTilt = (clientX, clientY) => {
-            const rect = card3D.getBoundingClientRect();
-            const width = rect.width;
-            const height = rect.height;
-
-            // Coordinates relative to card center
-            const x = clientX - rect.left - width / 2;
-            const y = clientY - rect.top - height / 2;
-
-            // Calculate rotation percentages (max 12 degrees)
-            const rotateX = (-y / (height / 2)) * 10;
-            const rotateY = (x / (width / 2)) * 10;
-
-            card3D.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-        };
-
-        const resetTilt = () => {
-            card3D.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-        };
-
-        // Desktop mouse tracking
-        window.addEventListener('mousemove', (e) => {
-            const rect = card3D.getBoundingClientRect();
-            const buffer = 150; // trigger range buffer
-            if (
-                e.clientX >= rect.left - buffer &&
-                e.clientX <= rect.right + buffer &&
-                e.clientY >= rect.top - buffer &&
-                e.clientY <= rect.bottom + buffer
-            ) {
-                handleTilt(e.clientX, e.clientY);
-            } else {
-                resetTilt();
-            }
+    if (viewLensesBtn && cardWrapper) {
+        viewLensesBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            cardWrapper.classList.add('flipped');
+            resetTilt();
         });
+    }
 
-        // Touch drag gestures for mobile
-        card3D.addEventListener('touchmove', (e) => {
+    if (backToLaunchBtn && cardWrapper) {
+        backToLaunchBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            cardWrapper.classList.remove('flipped');
+            resetTilt();
+        });
+    }
+
+    // --- 5. HIGH-FIDELITY 3D INTERACTIVE TILT EFFECT ---
+    const handleTilt = (clientX, clientY) => {
+        if (!cardWrapper) return;
+        const rect = cardWrapper.getBoundingClientRect();
+        const width = rect.width;
+        const height = rect.height;
+
+        // Coordinates relative to card center
+        const x = clientX - rect.left - width / 2;
+        const y = clientY - rect.top - height / 2;
+
+        // Calculate rotation percentages (max 10 degrees)
+        const rotateX = (-y / (height / 2)) * 10;
+        
+        // If the card is flipped, reverse horizontal tilt to align with back's perspective
+        const isFlipped = cardWrapper.classList.contains('flipped');
+        const rotateY = (x / (width / 2)) * 10 * (isFlipped ? -1 : 1);
+
+        // Apply 3D matrix rotation including the 180deg flip state
+        cardWrapper.style.transform = `rotateY(${isFlipped ? 180 + rotateY : rotateY}deg) rotateX(${rotateX}deg) scale3d(1.01, 1.01, 1.01)`;
+    };
+
+    const resetTilt = () => {
+        if (!cardWrapper) return;
+        const isFlipped = cardWrapper.classList.contains('flipped');
+        cardWrapper.style.transform = `rotateY(${isFlipped ? 180 : 0}deg) rotateX(0deg) scale3d(1, 1, 1)`;
+    };
+
+    // Desktop mouse tracking
+    window.addEventListener('mousemove', (e) => {
+        if (!cardWrapper) return;
+        const rect = cardWrapper.getBoundingClientRect();
+        const buffer = 150; // trigger range buffer
+        if (
+            e.clientX >= rect.left - buffer &&
+            e.clientX <= rect.right + buffer &&
+            e.clientY >= rect.top - buffer &&
+            e.clientY <= rect.bottom + buffer
+        ) {
+            handleTilt(e.clientX, e.clientY);
+        } else {
+            resetTilt();
+        }
+    });
+
+    // Touch drag gestures for mobile
+    if (cardWrapper) {
+        cardWrapper.addEventListener('touchmove', (e) => {
             if (e.touches.length > 0) {
                 handleTilt(e.touches[0].clientX, e.touches[0].clientY);
             }
         });
 
-        card3D.addEventListener('touchend', resetTilt);
-        card3D.addEventListener('mouseleave', resetTilt);
+        cardWrapper.addEventListener('touchend', resetTilt);
+        cardWrapper.addEventListener('mouseleave', resetTilt);
     }
 
-    // --- 5. AJAX EMAIL SUBSCRIPTION HANDLER ---
+    // --- 6. AJAX EMAIL SUBSCRIPTION HANDLER ---
     const subscribeForm = document.getElementById('subscribe-form');
     const formMsg = document.getElementById('form-msg');
     const emailInput = document.getElementById('subscriber-email');

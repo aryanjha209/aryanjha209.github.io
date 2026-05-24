@@ -35,72 +35,221 @@
     <main class="viewport">
         <!-- 3D Card Wrapper -->
         <div class="perspective-container">
-            <div class="coming-soon-card" id="3d-card">
-                <!-- Branding Header -->
-                <div class="brand">
-                    <span class="brand-logo">⚡</span>
-                    <h1>Coming Soon<span>.</span></h1>
-                </div>
-
-                <!-- Circular 3D Floating Avatar -->
-                <div class="avatar-container">
-                    <img src="aryan jha.png" alt="Aryan Kumar" class="profile-avatar">
-                </div>
-
-                <!-- Launch Banner -->
-                <div class="launch-badge">WORKSPACE v2.0</div>
-
-                <h2>COMING SOON</h2>
-                <p class="tagline">A minimalist developer environment and utility suite built for the next generation of creators.</p>
-
-                <!-- 3D Countdown Grid -->
-                <div class="countdown-grid" id="countdown">
-                    <div class="countdown-box">
-                        <span id="days" class="number">00</span>
-                        <span class="label">DAYS</span>
+            <!-- Inner Flipper Container -->
+            <div class="card-flipper" id="3d-card-wrapper">
+                
+                <!-- ================= FRONT: COMING SOON CARD ================= -->
+                <div class="coming-soon-card front-card" id="front-card">
+                    <!-- Branding Header -->
+                    <div class="brand">
+                        <span class="brand-logo">⚡</span>
+                        <h1>Coming Soon<span>.</span></h1>
                     </div>
-                    <div class="countdown-box">
-                        <span id="hours" class="number">00</span>
-                        <span class="label">HOURS</span>
-                    </div>
-                    <div class="countdown-box">
-                        <span id="minutes" class="number">00</span>
-                        <span class="label">MINS</span>
-                    </div>
-                    <div class="countdown-box">
-                        <span id="seconds" class="number">00</span>
-                        <span class="label">SECS</span>
-                    </div>
-                </div>
 
-                <!-- Subscription Form -->
-                <form id="subscribe-form" class="subscribe-form">
-                    <div class="input-group">
-                        <i class="far fa-envelope mail-icon"></i>
-                        <input type="email" id="subscriber-email" placeholder="Enter your email address" required autocomplete="off">
-                        <button type="submit" class="submit-btn">
-                            <span class="btn-text">Notify Me</span>
-                            <span class="btn-icon"><i class="fas fa-paper-plane"></i></span>
+                    <!-- Circular 3D Floating Avatar -->
+                    <div class="avatar-container">
+                        <img src="aryan jha.png" alt="Aryan Kumar" class="profile-avatar">
+                    </div>
+
+                    <!-- Launch Banner -->
+                    <div class="launch-badge">WORKSPACE v2.0</div>
+
+                    <h2>COMING SOON</h2>
+                    <p class="tagline">A minimalist developer environment and utility suite built for the next generation of creators.</p>
+
+                    <!-- 3D Countdown Grid -->
+                    <div class="countdown-grid" id="countdown">
+                        <div class="countdown-box">
+                            <span id="days" class="number">00</span>
+                            <span class="label">DAYS</span>
+                        </div>
+                        <div class="countdown-box">
+                            <span id="hours" class="number">00</span>
+                            <span class="label">HOURS</span>
+                        </div>
+                        <div class="countdown-box">
+                            <span id="minutes" class="number">00</span>
+                            <span class="label">MINS</span>
+                        </div>
+                        <div class="countdown-box">
+                            <span id="seconds" class="number">00</span>
+                            <span class="label">SECS</span>
+                        </div>
+                    </div>
+
+                    <!-- Subscription Form -->
+                    <form id="subscribe-form" class="subscribe-form">
+                        <div class="input-group">
+                            <i class="far fa-envelope mail-icon"></i>
+                            <input type="email" id="subscriber-email" placeholder="Enter your email address" required autocomplete="off">
+                            <button type="submit" class="submit-btn">
+                                <span class="btn-text">Notify Me</span>
+                                <span class="btn-icon"><i class="fas fa-paper-plane"></i></span>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Feedback Message -->
+                    <div id="form-msg" class="form-msg"></div>
+
+                    <!-- Lens Showcase Call-to-action -->
+                    <div class="showcase-cta-wrapper">
+                        <button id="view-lenses-btn" class="cta-outline-btn">
+                            <i class="fab fa-snapchat"></i> Try Snapchat Lenses
                         </button>
                     </div>
-                </form>
 
-                <!-- Feedback Message -->
-                <div id="form-msg" class="form-msg"></div>
+                    <!-- Social Icons Row -->
+                    <div class="social-links">
+                        <a href="https://linkedin.com/in/jhaaryaan" target="_blank" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://github.com/aryanjha205" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="https://twitter.com/jhaaryaan" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com/jhaaryaan" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.snapchat.com/@jhaaryaan" target="_blank" title="Snapchat"><i class="fab fa-snapchat"></i></a>
+                    </div>
 
-                <!-- Social Icons Row -->
-                <div class="social-links">
-                    <a href="https://linkedin.com/in/jhaaryaan" target="_blank" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="https://github.com/aryanjha205" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
-                    <a href="https://twitter.com/jhaaryaan" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="https://instagram.com/jhaaryaan" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="https://snapchat.com/add/jhaaryaan" target="_blank" title="Snapchat"><i class="fab fa-snapchat"></i></a>
+                    <!-- Minimal Info Footer -->
+                    <footer>
+                        <p>&copy; 2026. All rights reserved.</p>
+                    </footer>
                 </div>
 
-                <!-- Minimal Info Footer -->
-                <footer>
-                    <p>&copy; 2026. All rights reserved.</p>
-                </footer>
+                <!-- ================= BACK: SNAPCHAT LENS CARD ================= -->
+                <div class="coming-soon-card back-card" id="back-card">
+                    <!-- Branding Header -->
+                    <div class="brand">
+                        <span class="brand-logo"><i class="fab fa-snapchat"></i></span>
+                        <h1>Snapchat Lenses<span>.</span></h1>
+                    </div>
+
+                    <div class="launch-badge">AR CREATOR</div>
+
+                    <h2>AR PORTAL</h2>
+                    <p class="tagline">Explore my custom, high-fidelity Snapchat Augmented Reality (AR) filters. Tap to unlock in Snapchat!</p>
+
+                    <!-- Lenses Grid List (Scrollable) -->
+                    <div class="lenses-wrapper">
+                        <div class="lenses-grid">
+                            
+                            <!-- Lens 1 -->
+                            <div class="lens-item">
+                                <div class="lens-icon-box"><i class="fas fa-magic"></i></div>
+                                <div class="lens-info">
+                                    <h3>Cyber-Green HUD</h3>
+                                    <p>Futuristic tech overlay</p>
+                                </div>
+                                <a href="https://www.snapchat.com/unlock/?type=SNAPCODE&uuid=f9781d45bd71424eb06cc72ccf3b25f2&metadata=01" target="_blank" class="lens-try-btn">Try <i class="fas fa-chevron-right"></i></a>
+                            </div>
+
+                            <!-- Lens 2 -->
+                            <div class="lens-item">
+                                <div class="lens-icon-box"><i class="fas fa-cube"></i></div>
+                                <div class="lens-info">
+                                    <h3>Neon Glassmorphism</h3>
+                                    <p>3D Floating glass rings</p>
+                                </div>
+                                <a href="https://www.snapchat.com/unlock/?type=SNAPCODE&uuid=3b318d18408f42fa88cecf8f972b2512&metadata=01" target="_blank" class="lens-try-btn">Try <i class="fas fa-chevron-right"></i></a>
+                            </div>
+
+                            <!-- Lens 3 -->
+                            <div class="lens-item">
+                                <div class="lens-icon-box"><i class="fas fa-feather"></i></div>
+                                <div class="lens-info">
+                                    <h3>Parrot Aura</h3>
+                                    <p>Green particle storm</p>
+                                </div>
+                                <a href="https://www.snapchat.com/unlock/?type=SNAPCODE&uuid=2b988f56ef454cfa88cfdf8f97cf2512&metadata=01" target="_blank" class="lens-try-btn">Try <i class="fas fa-chevron-right"></i></a>
+                            </div>
+
+                            <!-- Lens 4 -->
+                            <div class="lens-item">
+                                <div class="lens-icon-box"><i class="fas fa-code"></i></div>
+                                <div class="lens-info">
+                                    <h3>Matrix Rain Code</h3>
+                                    <p>Falling green code</p>
+                                </div>
+                                <a href="https://www.snapchat.com/unlock/?type=SNAPCODE&uuid=a53bc7cd87ba447bb411fa7ac3cc2b6f&metadata=01" target="_blank" class="lens-try-btn">Try <i class="fas fa-chevron-right"></i></a>
+                            </div>
+
+                            <!-- Lens 5 -->
+                            <div class="lens-item">
+                                <div class="lens-icon-box"><i class="fas fa-brain"></i></div>
+                                <div class="lens-info">
+                                    <h3>AI Face Mesh</h3>
+                                    <p>Deep learning grid</p>
+                                </div>
+                                <a href="https://www.snapchat.com/unlock/?type=SNAPCODE&uuid=c3488f56ef454cfa88cfdf8f97cf2512&metadata=01" target="_blank" class="lens-try-btn">Try <i class="fas fa-chevron-right"></i></a>
+                            </div>
+
+                            <!-- Lens 6 -->
+                            <div class="lens-item">
+                                <div class="lens-icon-box"><i class="fas fa-gamepad"></i></div>
+                                <div class="lens-info">
+                                    <h3>Retro Pixel Spects</h3>
+                                    <p>8-bit glowing glasses</p>
+                                </div>
+                                <a href="https://www.snapchat.com/unlock/?type=SNAPCODE&uuid=e73bc7cd87ba447bb411fa7ac3cc2b6f&metadata=01" target="_blank" class="lens-try-btn">Try <i class="fas fa-chevron-right"></i></a>
+                            </div>
+
+                            <!-- Lens 7 -->
+                            <div class="lens-item">
+                                <div class="lens-icon-box"><i class="fas fa-infinity"></i></div>
+                                <div class="lens-info">
+                                    <h3>Torus Crown</h3>
+                                    <p>Minimalist geometric crown</p>
+                                </div>
+                                <a href="https://www.snapchat.com/unlock/?type=SNAPCODE&uuid=d83bc7cd87ba447bb411fa7ac3cc2b6f&metadata=01" target="_blank" class="lens-try-btn">Try <i class="fas fa-chevron-right"></i></a>
+                            </div>
+
+                            <!-- Lens 8 -->
+                            <div class="lens-item">
+                                <div class="lens-icon-box"><i class="fas fa-ghost"></i></div>
+                                <div class="lens-info">
+                                    <h3>Synthwave Glitch</h3>
+                                    <p>Retro purple & green filters</p>
+                                </div>
+                                <a href="https://www.snapchat.com/unlock/?type=SNAPCODE&uuid=f13bc7cd87ba447bb411fa7ac3cc2b6f&metadata=01" target="_blank" class="lens-try-btn">Try <i class="fas fa-chevron-right"></i></a>
+                            </div>
+
+                            <!-- Lens 9 -->
+                            <div class="lens-item">
+                                <div class="lens-icon-box"><i class="fas fa-laptop-code"></i></div>
+                                <div class="lens-info">
+                                    <h3>Cyber Deck Hologram</h3>
+                                    <p>Interactive AR workspace</p>
+                                </div>
+                                <a href="https://www.snapchat.com/unlock/?type=SNAPCODE&uuid=9a3bc7cd87ba447bb411fa7ac3cc2b6f&metadata=01" target="_blank" class="lens-try-btn">Try <i class="fas fa-chevron-right"></i></a>
+                            </div>
+
+                            <!-- Lens 10 -->
+                            <div class="lens-item">
+                                <div class="lens-icon-box"><i class="fas fa-sparkles"></i></div>
+                                <div class="lens-info">
+                                    <h3>Parrot Crown Glow</h3>
+                                    <p>Fairy dust trails</p>
+                                </div>
+                                <a href="https://www.snapchat.com/unlock/?type=SNAPCODE&uuid=8a3bc7cd87ba447bb411fa7ac3cc2b6f&metadata=01" target="_blank" class="lens-try-btn">Try <i class="fas fa-chevron-right"></i></a>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Connect Action Docks -->
+                    <div class="connect-row">
+                        <a href="https://www.snapchat.com/@jhaaryaan" target="_blank" class="connect-snap-btn">
+                            <i class="fab fa-snapchat"></i> Connect on Snapchat
+                        </a>
+                        <button id="back-to-launch-btn" class="back-link-btn">
+                            <i class="fas fa-arrow-left"></i> Back to Launch
+                        </button>
+                    </div>
+
+                    <!-- Minimal Info Footer -->
+                    <footer>
+                        <p>&copy; 2026. All rights reserved.</p>
+                    </footer>
+                </div>
+
             </div>
         </div>
     </main>
