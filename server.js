@@ -558,8 +558,14 @@ app.get('/stats', async (req, res) => {
 });
 
 // JSON API endpoint for stats
-app.get('/api/stats', (req, res) => {
-    res.status(200).json(loadDb());
+app.get('/api/stats', async (req, res) => {
+    try {
+        const stats = await dbHelper.getStatsData();
+        res.status(200).json(stats);
+    } catch (error) {
+        console.error('Stats API error:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
 });
 
 // Helper validation & string escaping

@@ -1737,7 +1737,8 @@ body {
 }
 
 /* ============================================== */
-/* 17. 3D ATM BUSINESS CARD STYLES */
+/* ============================================== */
+/* 17. PREMIUM 3D GLASSMORPHIC BUSINESS CARD STYLES */
 /* ============================================== */
 .atm-card-container {
     perspective: 1000px;
@@ -1778,14 +1779,16 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.05);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.55), inset 0 1px 1px rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.08);
     overflow: hidden;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 }
 
 /* Front Face Styling */
 .atm-card-front {
-    background: linear-gradient(135deg, #07071f 0%, #020215 100%);
+    background: linear-gradient(135deg, rgba(7, 7, 31, 0.95) 0%, rgba(2, 2, 21, 0.98) 100%);
     z-index: 2;
 }
 
@@ -1798,8 +1801,8 @@ body {
     width: 100%;
     height: 100%;
     background-image: 
-        radial-gradient(rgba(168, 85, 247, 0.1) 1px, transparent 0),
-        radial-gradient(rgba(6, 182, 212, 0.1) 1px, transparent 0);
+        radial-gradient(rgba(168, 85, 247, 0.08) 1px, transparent 0),
+        radial-gradient(rgba(6, 182, 212, 0.08) 1px, transparent 0);
     background-size: 8px 8px;
     background-position: 0 0, 4px 4px;
     opacity: 0.6;
@@ -1814,7 +1817,7 @@ body {
 }
 
 .atm-card-logo {
-    font-size: 1.15rem;
+    font-size: 1.2rem;
     font-weight: 900;
     background: linear-gradient(135deg, var(--cyan) 0%, var(--purple) 100%);
     -webkit-background-clip: text;
@@ -1823,161 +1826,154 @@ body {
     letter-spacing: -0.5px;
 }
 
-/* Gold ATM Chip Graphic */
-.atm-card-chip {
-    width: 38px;
-    height: 28px;
-    background: linear-gradient(135deg, #e5c060 0%, #f7eaab 50%, #c49d37 100%);
-    border-radius: 6px;
-    position: relative;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 5px rgba(0,0,0,0.3);
-}
-
-.atm-card-chip::before {
-    content: '';
-    position: absolute;
-    top: 15%;
-    left: 15%;
-    width: 70%;
-    height: 70%;
-    border: 1px solid rgba(0,0,0,0.2);
-    border-radius: 4px;
-}
-
-/* Card Numbers */
-.atm-card-number {
-    font-family: 'Space Grotesk', monospace;
-    font-size: 1.1rem;
-    letter-spacing: 2px;
-    color: #ffffff;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
-    margin: 1.5rem 0 0.5rem 0;
-    text-align: left;
-}
-
-@media (min-width: 576px) {
-    .atm-card-number {
-        font-size: 1.22rem;
-        letter-spacing: 2.5px;
-    }
-}
-
-.atm-card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    width: 100%;
-}
-
-.atm-card-holder, .atm-card-expiry {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-}
-
-.atm-card-expiry {
-    align-items: flex-end;
-}
-
-.atm-card-label {
-    font-size: 0.5rem;
+/* Premium Badge styling */
+.biz-card-badge {
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
     text-transform: uppercase;
-    color: var(--text-dim);
-    letter-spacing: 1px;
+    color: var(--cyan);
+    background: rgba(6, 182, 212, 0.08);
+    border: 1px solid rgba(6, 182, 212, 0.25);
+    padding: 0.25rem 0.6rem;
+    border-radius: 50px;
+    box-shadow: 0 2px 10px rgba(6, 182, 212, 0.1);
+}
+
+/* Card identity segment */
+.biz-card-identity {
+    text-align: left;
+    margin-top: 0.75rem;
+}
+
+.biz-card-name {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 0.3px;
     margin-bottom: 0.15rem;
 }
 
-.atm-card-name {
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    color: #ffffff;
+.biz-card-title {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--cyan);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Contact info badges section */
+.biz-card-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-top: 0.75rem;
+}
+
+.biz-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.biz-detail-item i {
+    font-size: 0.72rem;
+    color: var(--purple);
+    width: 14px;
+    text-align: center;
+}
+
+.biz-detail-item span {
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.2px;
 }
 
 /* Back Face Styling */
 .atm-card-back {
-    background: linear-gradient(135deg, #020215 0%, #07071f 100%);
+    background: linear-gradient(135deg, rgba(2, 2, 21, 0.98) 0%, rgba(7, 7, 31, 0.95) 100%);
     transform: rotateY(180deg);
-    padding: 0;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: space-between;
 }
 
-.atm-card-stripe {
-    width: 100%;
-    height: 38px;
-    background: #000000;
-    margin-top: 1rem;
-}
-
-.atm-card-back-body {
-    padding: 1rem 1.25rem 1.25rem 1.25rem;
+.biz-card-back-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex: 1;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 0.4rem;
     width: 100%;
 }
 
-.atm-card-signature-area {
+.biz-card-back-logo {
+    font-size: 1.1rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--cyan) 0%, var(--purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+}
+
+.biz-card-back-tagline {
+    font-size: 0.5rem;
+    font-weight: 700;
+    color: var(--text-dim);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+
+.biz-card-back-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    margin-top: 0.75rem;
+    width: 100%;
+}
+
+.biz-card-qr-instructions {
+    flex: 1;
+    text-align: left;
+    padding-right: 0.75rem;
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
-    flex: 1;
-    text-align: left;
 }
 
-.atm-card-signature {
-    width: 130px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    padding-left: 0.5rem;
-    color: #0c0a21;
-    font-family: 'Outfit', sans-serif;
-    font-style: italic;
-    font-size: 0.85rem;
-    font-weight: 800;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+.biz-card-qr-instructions i {
+    font-size: 1.15rem;
+    color: var(--cyan);
+    filter: drop-shadow(0 0 5px rgba(6, 182, 212, 0.4));
 }
 
-@media (min-width: 576px) {
-    .atm-card-signature {
-        width: 155px;
-    }
-}
-
-.atm-card-cvv {
-    background: #ffffff;
-    color: #000000;
-    padding: 0.1rem 0.3rem;
-    border-radius: 2px;
+.biz-card-qr-instructions p {
     font-size: 0.6rem;
-    font-weight: 800;
-    margin-left: 0.5rem;
-    font-style: normal;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    color: var(--text-dim);
+    line-height: 1.35;
+    font-weight: 400;
 }
 
 /* QR Code area on back */
 .atm-card-back-qr {
-    width: 66px;
-    height: 66px;
+    width: 68px;
+    height: 68px;
     background: #ffffff;
     border-radius: 10px;
     padding: 0.25rem;
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     position: relative;
     overflow: hidden;
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
+    flex-shrink: 0;
 }
 
 @media (min-width: 576px) {
     .atm-card-back-qr {
-        width: 72px;
-        height: 72px;
+        width: 76px;
+        height: 76px;
     }
 }
 
@@ -2004,8 +2000,8 @@ body {
     left: 0;
     width: 100%;
     height: 3px;
-    background: rgba(6, 182, 212, 0.8);
-    box-shadow: 0 0 8px var(--cyan);
+    background: rgba(6, 182, 212, 0.95);
+    box-shadow: 0 0 10px var(--cyan), 0 0 5px var(--cyan);
 }
 
 .scanning-card .card-scan-overlay {
@@ -2162,63 +2158,81 @@ body {
     pointer-events: none;
 }
 
-.scanned-card-header {
+.biz-scanned-card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: relative;
     z-index: 3;
+    width: 100%;
 }
 
-.scanned-card-logo {
-    font-size: 0.85rem;
+.biz-scanned-card-logo {
+    font-size: 0.8rem;
     font-weight: 900;
     background: linear-gradient(135deg, var(--cyan) 0%, var(--purple) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-.scanned-card-chip {
-    width: 24px;
-    height: 18px;
-    background: linear-gradient(135deg, #e5c060 0%, #f7eaab 50%, #c49d37 100%);
-    border-radius: 4px;
+.biz-scanned-card-badge {
+    font-size: 0.48rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    background: rgba(6, 182, 212, 0.08);
+    border: 1px solid rgba(6, 182, 212, 0.25);
+    padding: 0.15rem 0.4rem;
+    border-radius: 20px;
 }
 
-.scanned-card-number {
-    font-family: 'Space Grotesk', monospace;
-    font-size: 0.78rem;
-    letter-spacing: 1.5px;
-    color: #ffffff;
-    margin: 0.5rem 0;
+.biz-scanned-card-identity {
+    text-align: left;
+    margin-top: 0.4rem;
     position: relative;
     z-index: 3;
-    text-align: left;
 }
 
-.scanned-card-footer {
+.biz-scanned-name {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 0.1rem;
+}
+
+.biz-scanned-title {
+    font-size: 0.52rem;
+    font-weight: 600;
+    color: var(--cyan);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.biz-scanned-card-footer {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
     position: relative;
     z-index: 3;
+    width: 100%;
 }
 
-.scanned-label {
-    display: block;
-    font-size: 0.4rem;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    letter-spacing: 0.5px;
-    text-align: left;
+.biz-scanned-detail {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: rgba(255, 255, 255, 0.7);
 }
 
-.scanned-val {
-    display: block;
+.biz-scanned-detail i {
     font-size: 0.55rem;
-    font-weight: 700;
-    color: #ffffff;
-    text-align: left;
+    color: var(--purple);
+}
+
+.biz-scanned-detail span {
+    font-size: 0.52rem;
+    font-weight: 400;
 }
 
 .scanned-info-list {
