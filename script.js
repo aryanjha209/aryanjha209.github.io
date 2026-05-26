@@ -136,19 +136,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==============================================
-    // 3. STATS IN-VIEW INCREMENT COUNTERS
+    // 3. STATS IN-VIEW INCREMENT COUNTERS & SUFFIX PARSER
     // ==============================================
     const statsSection = document.querySelector('.stats-section');
     const statNumbers = document.querySelectorAll('.stat-number');
     let countersStarted = false;
 
-    // Intersection observer for counters
     if (statsSection && statNumbers.length > 0) {
         const statsObserver = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting && !countersStarted) {
                 countersStarted = true;
                 statNumbers.forEach(stat => {
-                    const target = parseInt(stat.getAttribute('data-target'));
+                    const target = stat.getAttribute('data-target');
                     animateCount(stat, target);
                 });
             }
@@ -157,22 +156,138 @@ document.addEventListener('DOMContentLoaded', () => {
         statsObserver.observe(statsSection);
     }
 
-    function animateCount(element, target) {
+    function animateCount(element, rawTarget) {
+        let isSuffix = false;
+        let suffix = "";
+        let targetNum = 0;
+        
+        if (typeof rawTarget === 'string' && (rawTarget.endsWith('B') || rawTarget.endsWith('M') || rawTarget.endsWith('k'))) {
+            isSuffix = true;
+            suffix = rawTarget.slice(-1);
+            targetNum = parseFloat(rawTarget.slice(0, -1));
+        } else {
+            targetNum = parseFloat(rawTarget);
+        }
+
         let current = 0;
         const duration = 1500; // Total count duration (1.5 seconds)
         const frameRate = 1000 / 60; // 60 FPS
-        const increment = target / (duration / frameRate);
+        const totalSteps = duration / frameRate;
+        const increment = targetNum / totalSteps;
 
         const timer = setInterval(() => {
             current += increment;
-            if (current >= target) {
+            if (current >= targetNum) {
                 clearInterval(timer);
-                element.textContent = target === 1000 ? "1000+" : `${Math.floor(target)}+`;
+                if (isSuffix) {
+                    element.textContent = `${targetNum}${suffix}+`;
+                } else {
+                    element.textContent = `${Math.floor(targetNum)}+`;
+                }
             } else {
-                element.textContent = `${Math.floor(current)}+`;
+                if (isSuffix) {
+                    element.textContent = `${current.toFixed(1)}${suffix}+`;
+                } else {
+                    element.textContent = `${Math.floor(current)}+`;
+                }
             }
         }, frameRate);
     }
+
+    // Secondary animate function for metrics (without + suffix)
+    function animateMetric(element, rawTarget) {
+        let isSuffix = false;
+        let suffix = "";
+        let targetNum = 0;
+        
+        if (rawTarget.endsWith('B') || rawTarget.endsWith('M') || rawTarget.endsWith('k')) {
+            isSuffix = true;
+            suffix = rawTarget.slice(-1);
+            targetNum = parseFloat(rawTarget.slice(0, -1));
+        } else {
+            targetNum = parseFloat(rawTarget.replace(/,/g, ''));
+        }
+
+        let current = 0;
+        const duration = 1200; // 1.2 seconds
+        const frameRate = 1000 / 60;
+        const increment = targetNum / (duration / frameRate);
+
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= targetNum) {
+                clearInterval(timer);
+                if (isSuffix) {
+                    element.textContent = `${targetNum}${suffix}`;
+                } else {
+                    element.textContent = Math.floor(targetNum).toLocaleString();
+                }
+            } else {
+                if (isSuffix) {
+                    element.textContent = `${current.toFixed(1)}${suffix}`;
+                } else {
+                    element.textContent = Math.floor(current).toLocaleString();
+                }
+            }
+        }, frameRate);
+    }
+
+    // ==============================================
+    // 3B. SNAPCHAT CREATOR INSIGHTS TAB SWITCHER
+    // ==============================================
+    const insightsTabs = document.querySelectorAll('.insights-tab');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    if (insightsTabs.length > 0) {
+        insightsTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active classes
+                insightsTabs.forEach(t => t.classList.remove('active'));
+                tabPanels.forEach(p => p.classList.remove('active'));
+
+                // Add active to current tab
+                tab.classList.add('active');
+                
+                // Activate corresponding panel
+                const targetId = tab.getAttribute('data-tab');
+                const panel = document.getElementById(targetId);
+                if (panel) {
+                    panel.classList.add('active');
+                    
+                    // Re-animate panel metrics
+                    const panelMetrics = panel.querySelectorAll('.metric-val[data-target]');
+                    panelMetrics.forEach(metric => {
+                        const target = metric.getAttribute('data-target');
+                        animateMetric(metric, target);
+                    });
+                }
+            });
+        });
+
+        // Initial animation for active metrics on load
+        window.addEventListener('load', () => {
+            const activePanel = document.querySelector('.tab-panel.active');
+            if (activePanel) {
+                setTimeout(() => {
+                    activePanel.querySelectorAll('.metric-val[data-target]').forEach(metric => {
+                        const target = metric.getAttribute('data-target');
+                        animateMetric(metric, target);
+                    });
+                }, 1000);
+            }
+        });
+    }
+
+    // Simulated scanning for individual lenses
+    window.simulateScanLens = function(lensName) {
+        showToast(`Opening Snapcode scanner for ${lensName}... 🔍`);
+        setTimeout(() => {
+            showToast(`Scan complete! Launching ${lensName} on Snapchat. ⚡`);
+            setTimeout(() => {
+                window.open("https://snapchat.com", "_blank");
+            }, 1000);
+        }, 3000);
+    };
 
     // ==============================================
     // 4. WHAT I DO - EXPANDABLE SERVICE DRAWERS
@@ -655,7 +770,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.downloadVCard = function() {
         const vcard = "BEGIN:VCARD\n" +
                       "VERSION:3.0\n" +
-                      "FN:Aryan Kumar Jha\n" +
+                      "FN:Aryan Jha\n" +
                       "ORG:AI/ML & Web Developer\n" +
                       "TITLE:AI/ML Intern at BISAG\n" +
                       "TEL;TYPE=CELL,VOICE;TYPE=pref:+919835089300\n" +

@@ -2295,3 +2295,769 @@ body {
     border-radius: 50px;
 }
 
+/* ============================================== */
+/* 16. SNAPCHAT CREATOR INSIGHTS HUB DASHBOARD */
+/* ============================================== */
+.creator-badge {
+    background: rgba(255, 252, 0, 0.15);
+    border: 1px solid rgba(255, 252, 0, 0.35);
+    color: #c9b100;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.3rem 0.65rem;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    box-shadow: 0 0 10px rgba(255, 252, 0, 0.1);
+}
+
+.creator-insights-hub {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 1.5rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 28px;
+    margin-top: 1rem;
+}
+
+/* Dashboard Tab Bar */
+.insights-tabs {
+    display: flex;
+    gap: 0.5rem;
+    border-bottom: 1.5px solid rgba(15, 23, 42, 0.05);
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.insights-tab {
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    transition: var(--transition-fast);
+}
+
+.insights-tab:hover {
+    color: var(--text-main);
+    background: rgba(15, 23, 42, 0.03);
+}
+
+.insights-tab.active {
+    color: var(--text-main);
+    background: rgba(255, 252, 0, 0.25);
+    border: 1px solid rgba(255, 252, 0, 0.5);
+    box-shadow: 0 4px 10px rgba(255, 252, 0, 0.15);
+}
+
+/* Tab Panels Switching */
+.tab-panel {
+    display: none;
+    animation: tabSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+@keyframes tabSlideUp {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Tab Sub-Navigation */
+.tab-sub-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.sub-nav-links {
+    display: flex;
+    gap: 1.25rem;
+}
+
+.sub-link {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-dim);
+    cursor: pointer;
+    padding-bottom: 0.3rem;
+    border-bottom: 2px solid transparent;
+    transition: var(--transition-fast);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+#lens-insights .sub-link.active {
+    color: #0284c7;
+    border-bottom-color: #0284c7;
+}
+
+#profile-insights .sub-link.active {
+    color: #c9b100;
+    border-bottom-color: #c9b100;
+}
+
+.new-pill {
+    background: #fffc00;
+    color: #0f172a;
+    font-size: 0.55rem;
+    font-weight: 800;
+    padding: 0.05rem 0.3rem;
+    border-radius: 4px;
+    margin-left: 0.15rem;
+    vertical-align: middle;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.time-filter {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-main);
+    background: rgba(15, 23, 42, 0.03);
+    border: 1px solid rgba(15, 23, 42, 0.05);
+    padding: 0.35rem 0.75rem;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.btn-download-report {
+    background: none;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    color: var(--text-main);
+    font-weight: 600;
+    font-size: 0.72rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 50px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: var(--transition-fast);
+}
+
+.btn-download-report:hover {
+    background: rgba(15, 23, 42, 0.04);
+    border-color: rgba(15, 23, 42, 0.15);
+}
+
+/* Metrics Grid Inside Dashboard */
+.insights-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.85rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (min-width: 576px) {
+    .insights-metrics-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.metric-box {
+    background: #ffffff;
+    border: 1.5px solid rgba(15, 23, 42, 0.04);
+    border-radius: 18px;
+    padding: 0.85rem 1.15rem;
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.01);
+    transition: var(--transition-fast);
+    text-align: left;
+}
+
+.metric-box:hover {
+    border-color: rgba(15, 23, 42, 0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(15, 23, 42, 0.02);
+}
+
+.metric-box.disabled-box {
+    opacity: 0.65;
+}
+
+.metric-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.tooltip-icon {
+    font-size: 0.6rem;
+    color: rgba(15, 23, 42, 0.25);
+    cursor: help;
+}
+
+.metric-val {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-top: 0.15rem;
+    line-height: 1.1;
+}
+
+/* Metric Badges for Follower Gains */
+.metric-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.62rem;
+    font-weight: 700;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    margin-top: 0.45rem;
+}
+
+.green-badge {
+    background: rgba(34, 197, 94, 0.08);
+    color: #16a34a;
+    border: 1px solid rgba(34, 197, 94, 0.15);
+}
+
+.red-badge {
+    background: rgba(239, 68, 68, 0.08);
+    color: #dc2626;
+    border: 1px solid rgba(239, 68, 68, 0.15);
+}
+
+.neutral-badge {
+    background: rgba(15, 23, 42, 0.03);
+    color: var(--text-dim);
+}
+
+.badge-sub {
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+/* Chart Container & Aesthetics */
+.chart-container {
+    background: #ffffff;
+    border: 1.5px solid rgba(15, 23, 42, 0.04);
+    border-radius: 20px;
+    padding: 1.25rem;
+    box-shadow: 0 4px 15px rgba(15, 23, 42, 0.01);
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.chart-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.average-marker-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #0284c7;
+    background: rgba(56, 189, 248, 0.08);
+    padding: 0.25rem 0.6rem;
+    border-radius: 50px;
+}
+
+.time-range-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #b09a00;
+    background: rgba(255, 252, 0, 0.12);
+    padding: 0.25rem 0.6rem;
+    border-radius: 50px;
+}
+
+.svg-chart-wrapper {
+    width: 100%;
+    height: 120px;
+    position: relative;
+    margin-bottom: 0.5rem;
+}
+
+.insight-bar-chart, .insight-line-chart {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.chart-bar {
+    transition: height 0.4s ease, y 0.4s ease, fill 0.3s ease;
+    cursor: pointer;
+}
+
+.chart-bar:hover {
+    fill: url(#barGradient);
+    filter: drop-shadow(0 0 4px rgba(255, 252, 0, 0.5));
+}
+
+.chart-x-axis {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.25rem 0.5rem 0 0.5rem;
+    border-top: 1.5px solid rgba(15, 23, 42, 0.04);
+}
+
+.chart-x-axis span {
+    font-size: 0.62rem;
+    font-weight: 600;
+    color: rgba(15, 23, 42, 0.3);
+}
+
+.chart-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    font-size: 0.62rem;
+    font-weight: 600;
+    color: var(--text-dim);
+}
+
+.chart-live-indicator {
+    color: #22c55e;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #22c55e;
+    box-shadow: 0 0 6px rgba(34, 197, 94, 0.8);
+    animation: chartDotPulse 1.5s infinite ease-in-out;
+}
+
+@keyframes chartDotPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.5; }
+}
+
+/* ============================================== */
+/* 17. ORIGINAL SNAPCHAT LENSES SHOWCASE SECTION */
+/* ============================================== */
+.lenses-showcase-section {
+    padding: 5rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-top: 1px solid rgba(15, 23, 42, 0.05);
+    width: 100%;
+}
+
+/* Bitmoji Creator Header */
+.creator-profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2.5rem;
+}
+
+.creator-avatar-wrapper {
+    position: relative;
+    width: 68px;
+    height: 68px;
+    margin-bottom: 0.6rem;
+}
+
+.bitmoji-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #ffffff;
+    border: 3px solid var(--purple);
+    box-shadow: 0 6px 15px rgba(147, 51, 247, 0.15);
+}
+
+.bitmoji-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    transform: scale(1.05);
+}
+
+.pulse-online {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #22c55e;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+}
+
+.creator-profile-name {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1.1;
+}
+
+.creator-username {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-dim);
+}
+
+/* Lenses Header */
+.lenses-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1100px;
+    margin-bottom: 1.5rem;
+    padding: 0 1rem;
+}
+
+.lenses-list-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    position: relative;
+}
+
+.lenses-list-title::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 30px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--snapchat-yellow), var(--purple));
+    border-radius: 50px;
+}
+
+.lenses-filter-pills {
+    display: flex;
+    gap: 0.5rem;
+    background: rgba(15, 23, 42, 0.03);
+    border: 1px solid rgba(15, 23, 42, 0.05);
+    padding: 0.25rem;
+    border-radius: 50px;
+}
+
+.filter-pill {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.35rem 0.85rem;
+    border-radius: 50px;
+    cursor: pointer;
+    color: var(--text-dim);
+    transition: var(--transition-fast);
+}
+
+.filter-pill.active {
+    background: #ffffff;
+    color: var(--text-main);
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+}
+
+/* Lenses Cards Grid */
+.lenses-showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1100px;
+    padding: 0 1rem;
+}
+
+@media (min-width: 480px) {
+    .lenses-showcase-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 992px) {
+    .lenses-showcase-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Individual Lens Cards */
+.lens-item-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: var(--transition-fast);
+}
+
+.lens-item-card:hover {
+    border-color: rgba(15, 23, 42, 0.12);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.05);
+}
+
+.lens-card-preview-area {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1.5px solid rgba(15, 23, 42, 0.04);
+}
+
+/* Custom CSS Art Previews (Premium fallbacks for high visual fidelity) */
+.sunset-preview {
+    background: linear-gradient(to top, #fdba74, #f97316, #ea580c, #7c2d12);
+}
+
+.cyberpunk-preview {
+    background: linear-gradient(135deg, #0f172a, #581c87, #db2777);
+}
+
+.portrait-preview {
+    background: linear-gradient(to bottom, #fecdd3, #fda4af, #f43f5e);
+}
+
+.traditional-preview {
+    background: linear-gradient(135deg, #fef08a, #eab308, #ca8a04, #854d0e);
+}
+
+/* Sunset Card Custom Drawing */
+.lens-graphic-sunset {
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+.sunset-sun {
+    position: absolute;
+    top: 30%;
+    left: 20%;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #ffedd5;
+    box-shadow: 0 0 20px #ffedd5;
+}
+
+.silhouette-lovers {
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    width: 80%;
+    height: 48px;
+    background: radial-gradient(circle at bottom, #0f172a 0%, #020617 80%);
+    clip-path: polygon(0 100%, 30% 60%, 40% 10%, 45% 0, 50% 10%, 55% 40%, 65% 10%, 72% 0, 77% 10%, 82% 50%, 100% 100%);
+}
+
+.sunset-birds span {
+    position: absolute;
+    display: inline-block;
+    width: 8px;
+    height: 4px;
+    border-top: 1.5px solid #0f172a;
+    border-left: 1.5px solid #0f172a;
+    transform: rotate(45deg);
+}
+.sunset-birds span:nth-child(1) { top: 15%; right: 25%; }
+.sunset-birds span:nth-child(2) { top: 22%; right: 12%; }
+.sunset-birds span:nth-child(3) { top: 35%; right: 35%; }
+
+/* Cyberpunk Card Custom Drawing */
+.lens-graphic-cyberpunk {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.neon-streak {
+    position: absolute;
+    transform: rotate(-35deg);
+    opacity: 0.75;
+}
+
+.pink-streak {
+    top: -20px;
+    left: 40px;
+    width: 15px;
+    height: 250px;
+    background: linear-gradient(to bottom, #f472b6, transparent);
+    box-shadow: 0 0 20px #db2777;
+}
+
+.blue-streak {
+    top: 10px;
+    left: 70px;
+    width: 8px;
+    height: 230px;
+    background: linear-gradient(to bottom, #38bdf8, transparent);
+    box-shadow: 0 0 15px #0284c7;
+}
+
+.neon-face-glow {
+    position: absolute;
+    bottom: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(219, 39, 119, 0.4);
+    box-shadow: 0 0 35px rgba(219, 39, 119, 0.85);
+}
+
+/* Portrait Card Custom Drawing */
+.lens-graphic-portrait {
+    position: relative;
+    width: 70px;
+    height: 70px;
+}
+
+.portrait-glow {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffe4e6 0%, transparent 70%);
+}
+
+.retouch-ring {
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 120%;
+    height: 120%;
+    border-radius: 50%;
+    border: 2px dashed rgba(255, 255, 255, 0.5);
+    animation: spinRing 20s linear infinite;
+}
+
+@keyframes spinRing {
+    to { transform: rotate(360deg); }
+}
+
+/* Traditional Card Custom Drawing */
+.lens-graphic-traditional {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.flower-garland {
+    position: absolute;
+    top: -10px;
+    width: 25px;
+    height: 220px;
+    background: repeating-linear-gradient(to bottom, #f97316 0px, #f97316 10px, #eab308 10px, #eab308 20px);
+    border-radius: 50px;
+    opacity: 0.85;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.left-garland { left: 15px; }
+.right-garland { right: 15px; }
+
+.traditional-sparkles {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle, #fef08a 0%, transparent 60%);
+    box-shadow: 0 0 30px #fef08a;
+    border-radius: 50%;
+}
+
+/* Overlay Snapcode Badge */
+.lens-snapcode-pill {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #fffc00;
+    border: 2px solid #000000;
+    padding: 0.15rem;
+    box-shadow: 0 4px 15px rgba(255, 252, 0, 0.4);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lens-snapcode-pill:hover {
+    transform: translateX(-50%) scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 252, 0, 0.6);
+}
+
+.mini-snapcode-img {
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+}
+
+/* Lens Info */
+.lens-item-info {
+    padding: 1.15rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+    text-align: center;
+}
+
+.lens-item-info h4 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+.lens-item-views {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-dim);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.btn-xs {
+    padding: 0.45rem 1rem;
+    font-size: 0.75rem;
+    border-radius: 50px;
+    margin-top: 0.25rem;
+    width: 100%;
+}
+
