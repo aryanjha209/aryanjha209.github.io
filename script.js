@@ -83,8 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 navMenu.style.top = '100%';
                 navMenu.style.left = '0';
                 navMenu.style.width = '100%';
-                navMenu.style.background = '#080721';
-                navMenu.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                navMenu.style.background = 'rgba(255, 255, 255, 0.98)';
+                navMenu.style.backdropFilter = 'blur(16px)';
+                navMenu.style.webkitBackdropFilter = 'blur(16px)';
+                navMenu.style.borderBottom = '1px solid rgba(15, 23, 42, 0.08)';
                 navMenu.style.padding = '1.5rem';
                 navMenu.style.gap = '1.25rem';
                 navMenu.style.zIndex = '99';
@@ -653,7 +655,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.downloadVCard = function() {
         const vcard = "BEGIN:VCARD\n" +
                       "VERSION:3.0\n" +
-                      "FN:Aryan Kumar\n" +
+                      "FN:Aryan Kumar Jha\n" +
                       "ORG:AI/ML & Web Developer\n" +
                       "TITLE:AI/ML Intern at BISAG\n" +
                       "TEL;TYPE=CELL,VOICE;TYPE=pref:+919835089300\n" +
