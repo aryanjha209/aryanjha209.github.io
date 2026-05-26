@@ -4,23 +4,23 @@
 /* 1. DESIGN SYSTEM SYSTEM VARIABLES & TOKENS */
 /* ============================================== */
 :root {
-    --bg-dark: #020215;            /* Premium deep navy-black space background */
-    --card-bg: rgba(8, 7, 33, 0.65); /* Semi-transparent glassmorphic card base */
-    --card-border: rgba(255, 255, 255, 0.05); /* Very thin elegant border */
-    --card-border-glow: rgba(168, 85, 247, 0.25);
+    --bg-dark: #ffffff;            /* Pure white premium background */
+    --card-bg: rgba(248, 250, 252, 0.8); /* Elegant slate-50 light glass base */
+    --card-border: rgba(15, 23, 42, 0.08); /* Sophisticated subtle slate border */
+    --card-border-glow: rgba(147, 51, 234, 0.15);
     
-    /* Harmonious tailwind-curated accents */
-    --cyan: #06b6d4;              /* Glowing electric cyan */
-    --cyan-glow: rgba(6, 182, 212, 0.4);
-    --purple: #a855f7;            /* Luminous deep purple */
-    --purple-glow: rgba(168, 85, 247, 0.4);
-    --pink: #ec4899;              /* Luminous neon pink */
-    --pink-glow: rgba(236, 72, 153, 0.4);
+    /* Vibrant premium light theme contrast accents */
+    --cyan: #0891b2;              /* Deep cyan */
+    --cyan-glow: rgba(8, 145, 178, 0.2);
+    --purple: #9333ea;            /* Rich purple */
+    --purple-glow: rgba(147, 51, 234, 0.2);
+    --pink: #db2777;              /* Deep pink */
+    --pink-glow: rgba(219, 39, 119, 0.2);
     --snapchat-yellow: #FFFC00;    /* Snapchat branding accent */
     
-    /* Text typography weights */
-    --text-main: #ffffff;
-    --text-dim: #94a3b8;
+    /* Slate contrast typography */
+    --text-main: #0f172a;         /* Deep slate-900 for absolute legibility */
+    --text-dim: #475569;          /* Medium slate-600 for secondary text */
     
     /* Timing standard transitions */
     --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -72,8 +72,8 @@ body {
     filter: blur(120px);
     pointer-events: none;
     z-index: 0;
-    opacity: 0.18;
-    mix-blend-mode: screen;
+    opacity: 0.07;
+    mix-blend-mode: multiply;
     animation: orbPulse 8s infinite alternate ease-in-out;
 }
 
@@ -163,8 +163,8 @@ body {
 }
 
 .glass-card:hover {
-    border-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+    border-color: rgba(15, 23, 42, 0.12);
+    box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.06);
 }
 
 /* Global Button Styles */
@@ -208,13 +208,13 @@ body {
 
 .btn-outline {
     background: transparent;
-    border: 1.5px solid rgba(255, 255, 255, 0.15);
-    color: #ffffff;
+    border: 1.5px solid rgba(15, 23, 42, 0.15);
+    color: var(--text-main);
 }
 
 .btn-outline:hover {
-    border-color: #ffffff;
-    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--text-main);
+    background: rgba(15, 23, 42, 0.05);
     transform: translateY(-2px);
 }
 
@@ -236,11 +236,11 @@ body {
 }
 
 .main-header.scrolled {
-    background: rgba(2, 2, 21, 0.75);
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
 }
 
 .header-content {
@@ -262,7 +262,7 @@ body {
     align-items: center;
     gap: 0.6rem;
     text-decoration: none;
-    color: #ffffff;
+    color: var(--text-main);
 }
 
 .logo-badge {
@@ -299,7 +299,7 @@ body {
 }
 
 .nav-link:hover, .nav-link.active {
-    color: #ffffff;
+    color: var(--text-main);
 }
 
 .nav-link.active::after {
@@ -312,7 +312,7 @@ body {
     height: 6px;
     border-radius: 50%;
     background: var(--purple);
-    box-shadow: 0 0 8px var(--purple);
+    box-shadow: 0 0 8px var(--purple-glow);
 }
 
 .header-right {
@@ -324,7 +324,7 @@ body {
 .mobile-toggle {
     background: none;
     border: none;
-    color: #ffffff;
+    color: var(--text-main);
     font-size: 1.25rem;
     cursor: pointer;
     display: block;
@@ -392,7 +392,7 @@ body {
     font-weight: 900;
     line-height: 1.12;
     letter-spacing: -1.5px;
-    color: #ffffff;
+    color: var(--text-main);
     margin-bottom: 1.25rem;
 }
 
@@ -434,8 +434,8 @@ body {
 .social-icon {
     width: 38px;
     height: 38px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(15, 23, 42, 0.03);
+    border: 1px solid rgba(15, 23, 42, 0.05);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -447,9 +447,9 @@ body {
 }
 
 .social-icon:hover {
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.15);
+    color: var(--text-main);
+    background: rgba(15, 23, 42, 0.08);
+    border-color: rgba(15, 23, 42, 0.15);
     transform: translateY(-2px);
 }
 
@@ -509,8 +509,8 @@ body {
     height: 80%;
     border-radius: 50%;
     overflow: hidden;
-    border: 3px solid rgba(255, 255, 255, 0.05);
-    background-color: #0b0b23;
+    border: 3px solid rgba(15, 23, 42, 0.08);
+    background-color: #f8fafc;
 }
 
 .portrait-image {
@@ -659,7 +659,7 @@ body {
     font-family: 'Space Grotesk', sans-serif;
     font-size: 1.5rem;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--text-main);
     line-height: 1.1;
 }
 
@@ -711,8 +711,8 @@ body {
 }
 
 .service-card:hover {
-    border-color: rgba(255, 255, 255, 0.08);
-    background: rgba(8, 7, 33, 0.85);
+    border-color: rgba(15, 23, 42, 0.08);
+    background: rgba(255, 255, 255, 0.95);
 }
 
 .service-main {
@@ -726,8 +726,8 @@ body {
     width: 44px;
     height: 44px;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1.5px solid rgba(255, 255, 255, 0.05);
+    background: rgba(15, 23, 42, 0.02);
+    border: 1.5px solid rgba(15, 23, 42, 0.05);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -748,7 +748,7 @@ body {
 .service-meta h3 {
     font-size: 1.05rem;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--text-main);
     margin-bottom: 0.15rem;
 }
 
@@ -866,7 +866,7 @@ body {
 }
 
 .view-all-link:hover {
-    color: #ffffff;
+    color: var(--text-main);
     transform: translateX(3px);
 }
 
@@ -907,9 +907,9 @@ body {
 }
 
 .project-card:hover {
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(15, 23, 42, 0.12);
     transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
 }
 
 .project-img-wrapper {
@@ -917,7 +917,7 @@ body {
     width: 100%;
     height: 140px;
     overflow: hidden;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(15, 23, 42, 0.05);
 }
 
 .project-img {
@@ -941,7 +941,7 @@ body {
 .project-info h3 {
     font-size: 1.05rem;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--text-main);
     margin-bottom: 0.5rem;
 }
 
@@ -963,8 +963,8 @@ body {
 .project-tags .tag {
     font-size: 0.65rem;
     font-weight: 700;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(15, 23, 42, 0.03);
+    border: 1px solid rgba(15, 23, 42, 0.05);
     padding: 0.2rem 0.5rem;
     border-radius: 6px;
     color: var(--text-dim);
@@ -978,9 +978,9 @@ body {
 }
 
 .btn-gradient-demo {
-    background: rgba(168, 85, 247, 0.08);
-    border: 1px solid rgba(168, 85, 247, 0.15);
-    color: #ffffff;
+    background: rgba(147, 51, 234, 0.08);
+    border: 1px solid rgba(147, 51, 234, 0.15);
+    color: var(--text-main);
 }
 
 .btn-gradient-demo:hover {
@@ -993,8 +993,8 @@ body {
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1.5px solid rgba(255, 255, 255, 0.05);
+    background: rgba(15, 23, 42, 0.03);
+    border: 1.5px solid rgba(15, 23, 42, 0.05);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1005,9 +1005,9 @@ body {
 }
 
 .github-action-link:hover {
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+    background: rgba(15, 23, 42, 0.08);
+    border-color: rgba(15, 23, 42, 0.1);
 }
 
 /* Try Snapchat button style */
@@ -1079,7 +1079,7 @@ body {
     border-radius: 20px;
     overflow: hidden;
     aspect-ratio: 1/1;
-    border: 1.5px solid rgba(255,255,255,0.03);
+    border: 1.5px solid rgba(15,23,42,0.03);
 }
 
 .lens-preview-img {
@@ -1128,8 +1128,8 @@ body {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.03);
+    background: rgba(15, 23, 42, 0.02);
+    border: 1px solid rgba(15, 23, 42, 0.03);
     border-radius: 16px;
     padding: 0.75rem;
     margin-bottom: 1.5rem;
@@ -1154,7 +1154,7 @@ body {
 .lens-stat-val {
     font-size: 0.85rem;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--text-main);
     line-height: 1.1;
 }
 
@@ -1243,9 +1243,9 @@ body {
 }
 
 .btn-dark-scan {
-    background: rgba(255,255,255,0.03);
-    border: 1.5px solid rgba(255,255,255,0.08);
-    color: #ffffff;
+    background: rgba(15,23,42,0.03);
+    border: 1.5px solid rgba(15,23,42,0.08);
+    color: var(--text-main);
 }
 
 .btn-dark-scan:hover {
@@ -1285,7 +1285,7 @@ body {
 
 .cta-subtitle {
     font-size: 1.15rem;
-    color: #ffffff;
+    color: var(--text-main);
     line-height: 1.5;
     font-weight: 500;
     margin-bottom: 2rem;
@@ -1325,8 +1325,8 @@ body {
 
 /* Newsletter Subscription card style */
 .subscribe-card {
-    background: rgba(255, 255, 255, 0.01);
-    border: 1px solid rgba(255, 255, 255, 0.03);
+    background: rgba(15, 23, 42, 0.01);
+    border: 1px solid rgba(15, 23, 42, 0.03);
     border-radius: 20px;
     padding: 1.25rem 1.5rem;
     display: flex;
@@ -1356,19 +1356,19 @@ body {
 
 .subscribe-form input {
     flex: 1;
-    background: rgba(255,255,255,0.03);
-    border: 1.5px solid rgba(255,255,255,0.05);
+    background: rgba(15, 23, 42, 0.03);
+    border: 1.5px solid rgba(15, 23, 42, 0.05);
     border-radius: 50px;
     padding: 0.5rem 1rem;
     font-size: 0.82rem;
-    color: #ffffff;
+    color: var(--text-main);
     outline: none;
     transition: var(--transition-fast);
 }
 
 .subscribe-form input:focus {
     border-color: var(--cyan);
-    background: rgba(255,255,255,0.06);
+    background: rgba(15, 23, 42, 0.06);
 }
 
 .btn-subscribe {
@@ -1441,7 +1441,7 @@ body {
 .client-meta h4 {
     font-size: 0.95rem;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--text-main);
 }
 
 .client-meta p {
@@ -1496,15 +1496,15 @@ body {
     height: 44px;
     border-radius: 50%;
     background: var(--card-bg);
-    border: 1.5px solid rgba(255, 255, 255, 0.08);
+    border: 1.5px solid rgba(15, 23, 42, 0.08);
     backdrop-filter: blur(16px);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ffffff;
+    color: var(--text-main);
     font-size: 1rem;
     cursor: pointer;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.1);
     z-index: 99;
     opacity: 0;
     visibility: hidden;
@@ -1531,7 +1531,7 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(2, 2, 21, 0.85);
+    background: rgba(15, 23, 42, 0.40);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     z-index: 1000;
@@ -1552,14 +1552,14 @@ body {
 }
 
 .modal-container {
-    background: #080721;
+    background: #ffffff;
     border: 1.5px solid var(--card-border-glow);
     border-radius: 28px;
     width: 100%;
     max-width: 480px;
     padding: 2.25rem;
     position: relative;
-    box-shadow: 0 30px 60px rgba(168, 85, 247, 0.15);
+    box-shadow: 0 30px 60px rgba(15, 23, 42, 0.1);
     animation: modalPopUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -1582,7 +1582,7 @@ body {
 }
 
 .modal-close:hover {
-    color: #ffffff;
+    color: var(--text-main);
 }
 
 .modal-header {
@@ -1621,12 +1621,12 @@ body {
 }
 
 .input-group input, .input-group select, .input-group textarea {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1.5px solid rgba(255, 255, 255, 0.08);
+    background: rgba(15, 23, 42, 0.02);
+    border: 1.5px solid rgba(15, 23, 42, 0.08);
     border-radius: 12px;
     padding: 0.75rem 1rem;
     font-size: 0.85rem;
-    color: #ffffff;
+    color: var(--text-main);
     outline: none;
     transition: var(--transition-fast);
 }
@@ -1638,8 +1638,8 @@ body {
 
 .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
     border-color: var(--purple);
-    background: rgba(255, 255, 255, 0.04);
-    box-shadow: 0 0 10px rgba(168, 85, 247, 0.2);
+    background: rgba(15, 23, 42, 0.04);
+    box-shadow: 0 0 10px rgba(147, 51, 234, 0.15);
 }
 
 .form-row {
@@ -1679,8 +1679,8 @@ body {
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.05);
-    border: 1.5px solid rgba(255,255,255,0.08);
+    background: rgba(15, 23, 42, 0.03);
+    border: 1.5px solid rgba(15, 23, 42, 0.08);
     color: var(--text-dim);
     font-size: 0.7rem;
     font-weight: 700;
@@ -1700,7 +1700,7 @@ body {
 .step-line {
     width: 40px;
     height: 2px;
-    background: rgba(255,255,255,0.05);
+    background: rgba(15,23,42,0.08);
 }
 
 .modal-footer-actions {
@@ -2035,8 +2035,8 @@ body {
     display: flex;
     align-items: center;
     gap: 1rem;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1.5px dashed rgba(255, 255, 255, 0.15);
+    background: rgba(15, 23, 42, 0.02);
+    border: 1.5px dashed rgba(15, 23, 42, 0.15);
     border-radius: 12px;
     padding: 0.75rem 1rem;
     cursor: pointer;
@@ -2046,8 +2046,8 @@ body {
 
 .custom-file-upload:hover {
     border-color: var(--purple);
-    background: rgba(255, 255, 255, 0.04);
-    box-shadow: 0 0 10px rgba(168, 85, 247, 0.15);
+    background: rgba(15, 23, 42, 0.04);
+    box-shadow: 0 0 10px rgba(147, 51, 234, 0.1);
 }
 
 .custom-file-upload input[type="file"] {
@@ -2080,9 +2080,9 @@ body {
 /* ============================================== */
 .card-scan-modal-container {
     max-width: 520px !important;
-    background: rgba(8, 7, 33, 0.96) !important;
-    border: 1.5px solid rgba(6, 182, 212, 0.35) !important; /* Electric cyan glow for scan theme */
-    box-shadow: 0 30px 60px rgba(6, 182, 212, 0.25) !important;
+    background: #ffffff !important;
+    border: 1.5px solid rgba(6, 182, 212, 0.2) !important; /* Soft cyan glow for light theme scan modal */
+    box-shadow: 0 30px 60px rgba(15, 23, 42, 0.15) !important;
 }
 
 .modal-scan-badge {
@@ -2276,7 +2276,7 @@ body {
     display: block;
     font-size: 0.82rem;
     font-weight: 600;
-    color: #ffffff;
+    color: var(--text-main);
     line-height: 1.3;
     text-align: left;
 }

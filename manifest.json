@@ -4,8 +4,8 @@
   "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#020215",
-  "theme_color": "#020215",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "description": "Aryan Jha - Building AI Solutions, Web Experiences & AR Magic.",
   "icons": [
     {
