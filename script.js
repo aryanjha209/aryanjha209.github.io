@@ -784,8 +784,6 @@ document.addEventListener('DOMContentLoaded', () => {
                       "FN:Aryan Jha\n" +
                       "ORG:AI/ML & Web Developer\n" +
                       "TITLE:AI/ML Intern at BISAG\n" +
-                      "TEL;TYPE=CELL,VOICE;TYPE=pref:+919835089300\n" +
-                      "TEL;TYPE=CELL,VOICE;TYPE=alt:+919572698575\n" +
                       "EMAIL;TYPE=PREF,INTERNET:aryankjhaa@gmail.com\n" +
                       "EMAIL;TYPE=INTERNET;TYPE=alt:aryankr2029@gmail.com\n" +
                       "URL:https://aryanjha.me\n" +
