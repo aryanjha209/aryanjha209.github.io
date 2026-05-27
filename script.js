@@ -2,6 +2,17 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     
+    // Determine API Base URL dynamically (handles Live Server port differences)
+    const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? (window.location.port === '5000' ? '' : 'http://localhost:5000')
+        : '';
+
+    // Auto-track visitor hit
+    fetch(`${API_BASE_URL}/api/visit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    }).catch(err => console.log('Visit tracking offline:', err));
+
     // ==============================================
     // 1. DYNAMIC NAVIGATION & SCROLL TRACKING
     // ==============================================
@@ -360,7 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function loadTestimonials() {
-        fetch('/api/testimonials')
+        fetch(`${API_BASE_URL}/api/testimonials`)
             .then(res => res.json())
             .then(data => {
                 if (data.success && data.testimonials && data.testimonials.length > 0) {
@@ -431,7 +442,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const email = emailInput.value.trim();
         showToast("Registering subscription... 📨");
 
-        fetch('/api/subscribe', {
+        fetch(`${API_BASE_URL}/api/subscribe`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email })
@@ -559,7 +570,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.disabled = true;
         submitBtn.innerHTML = 'AI Processing... <i class="fa-solid fa-spinner fa-spin"></i>';
 
-        fetch('/api/send-email', {
+        fetch(`${API_BASE_URL}/api/send-email`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, email, message })
@@ -605,7 +616,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.disabled = true;
         submitBtn.innerHTML = 'Scheduling... <i class="fa-solid fa-spinner fa-spin"></i>';
 
-        fetch('/api/book-call', {
+        fetch(`${API_BASE_URL}/api/book-call`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, email, date, time, topic, notes })
@@ -677,7 +688,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.disabled = true;
         submitBtn.innerHTML = 'Submitting Feedback... <i class="fa-solid fa-spinner fa-spin"></i>';
 
-        fetch('/api/testimonials', {
+        fetch(`${API_BASE_URL}/api/testimonials`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
