@@ -851,8 +851,7 @@ document.addEventListener('DOMContentLoaded', () => {
                       "FN:Aryan Jha\n" +
                       "ORG:AI/ML & Web Developer\n" +
                       "TITLE:AI/ML Intern at BISAG\n" +
-                      "EMAIL;TYPE=PREF,INTERNET:aryankjhaa@gmail.com\n" +
-                      "EMAIL;TYPE=INTERNET;TYPE=alt:aryankr2029@gmail.com\n" +
+                      "EMAIL;TYPE=PREF,INTERNET:aryankr2029@gmail.com\n" +
                       "URL:https://aryanjha.me\n" +
                       "ADR;TYPE=HOME:;;Vadodara;Gujarat;;India\n" +
                       "NOTE:AI/ML Intern at BISAG | B.Tech CSE (AI) Parul University\n" +
