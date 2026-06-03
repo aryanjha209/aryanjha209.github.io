@@ -2,6 +2,73 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     
+    // ==============================================
+    // 0. PRELOADER & CUSTOM CURSOR INITIALIZATION
+    // ==============================================
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+        // Hide preloader when everything is fully loaded
+        window.addEventListener('load', () => {
+            preloader.classList.add('fade-out');
+        });
+        // Safety timeout to ensure preloader goes away
+        setTimeout(() => {
+            preloader.classList.add('fade-out');
+        }, 3000);
+    }
+
+    const cursor = document.getElementById('js-pointer');
+    if (cursor && window.innerWidth >= 992) {
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        let isMoving = false;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            if (!isMoving) {
+                cursor.style.display = 'flex';
+                isMoving = true;
+                animateCursor();
+            }
+        });
+
+        function animateCursor() {
+            // Lerp physics for smooth follow (lerp factor = 0.15)
+            const lerp = 0.15;
+            cursorX += (mouseX - cursorX) * lerp;
+            cursorY += (mouseY - cursorY) * lerp;
+
+            cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+
+            requestAnimationFrame(animateCursor);
+        }
+
+        // Global Event Delegation for Cursor Hovers
+        document.addEventListener('mouseover', (e) => {
+            const target = e.target;
+            if (!target) return;
+
+            const buttonEl = target.closest('.btn, button, .service-card, .project-card, .atm-card-container');
+            if (buttonEl) {
+                cursor.classList.add('large');
+            } else {
+                cursor.classList.remove('large');
+            }
+
+            const linkEl = target.closest('a, .nav-link, .side-social-icon, .side-whatsapp-btn');
+            if (linkEl) {
+                cursor.classList.add('link-hover');
+                if (linkEl.classList.contains('side-social-icon') || linkEl.classList.contains('side-whatsapp-btn')) {
+                    cursor.classList.add('link-icon-hover');
+                }
+            } else {
+                cursor.classList.remove('link-hover');
+                cursor.classList.remove('link-icon-hover');
+            }
+        });
+    }
+
     // Determine API Base URL dynamically (handles Live Server port differences)
     const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
         ? (window.location.port === '5000' ? '' : 'http://localhost:5000')
@@ -845,205 +912,5 @@ document.addEventListener('DOMContentLoaded', () => {
         const modal = document.getElementById('card-scan-modal');
         if (modal) modal.classList.remove('active');
     };
-
-    // ==============================================
-    // 13. FAQ ACCORDION COLLAPSIBLE TOGGLES
-    // ==============================================
-    window.toggleFaq = function(element) {
-        const item = element.parentElement;
-        const answer = item.querySelector('.faq-answer');
-        const isOpen = item.classList.contains('active');
-        
-        // Close all other FAQ items
-        document.querySelectorAll('.faq-item').forEach(el => {
-            el.classList.remove('active');
-            const ans = el.querySelector('.faq-answer');
-            if (ans) ans.style.maxHeight = null;
-        });
-        
-        if (!isOpen) {
-            item.classList.add('active');
-            if (answer) answer.style.maxHeight = answer.scrollHeight + "px";
-        }
-    };
-
-    // ==============================================
-    // 14. PROJECT ESTIMATOR FORM CALCULATIONS
-    // ==============================================
-    window.calculateEstimate = function() {
-        const timelineInput = document.getElementById('estimator-timeline');
-        const timelineVal = document.getElementById('timeline-val');
-        const summaryTimeline = document.getElementById('summary-timeline');
-        const summaryServices = document.getElementById('summary-services');
-        const priceMin = document.getElementById('price-min');
-        const priceMax = document.getElementById('price-max');
-        
-        if (!timelineInput || !timelineVal) return;
-        
-        // Timeline calculations
-        const timelineWeeks = parseInt(timelineInput.value);
-        timelineVal.textContent = timelineWeeks === 1 ? '1 Week' : `${timelineWeeks} Weeks`;
-        if (summaryTimeline) {
-            summaryTimeline.textContent = timelineWeeks === 1 ? '1 Week' : `${timelineWeeks} Weeks`;
-        }
-        
-        // Services calculations
-        const serviceCheckboxes = document.querySelectorAll('input[name="estimator-service"]');
-        let basePrice = 0;
-        let selectedNames = [];
-        
-        serviceCheckboxes.forEach(checkbox => {
-            if (checkbox.checked) {
-                basePrice += parseFloat(checkbox.getAttribute('data-base'));
-                selectedNames.push(checkbox.value);
-            }
-        });
-        
-        if (summaryServices) {
-            summaryServices.textContent = selectedNames.length > 0 ? selectedNames.join(', ') : 'None selected';
-        }
-        
-        // Timeline complexity adjustments
-        let timelineFactor = 1.0;
-        if (timelineWeeks <= 2) timelineFactor = 1.25; // Rush job fee
-        else if (timelineWeeks >= 8) timelineFactor = 0.9; // Long-term volume discount
-        
-        let finalBase = basePrice * timelineFactor;
-        
-        // Calculate range min and max
-        let minVal = Math.round(finalBase);
-        let maxVal = Math.round(finalBase * 1.35); // 35% margin for buffer
-        
-        if (priceMin && priceMax) {
-            priceMin.textContent = minVal.toLocaleString();
-            priceMax.textContent = maxVal.toLocaleString();
-        }
-    };
-
-    // Submit Estimator Proposal Request
-    window.handleEstimatorSubmit = function(event) {
-        event.preventDefault();
-        const submitBtn = document.getElementById('estimator-submit-btn');
-        const name = document.getElementById('estimator-name').value.trim();
-        const email = document.getElementById('estimator-email').value.trim();
-        const notes = document.getElementById('estimator-notes').value.trim();
-        
-        const serviceCheckboxes = document.querySelectorAll('input[name="estimator-service"]');
-        let selectedServices = [];
-        serviceCheckboxes.forEach(checkbox => {
-            if (checkbox.checked) selectedServices.push(checkbox.value);
-        });
-        
-        const timelineVal = document.getElementById('estimator-timeline').value;
-        const estMin = document.getElementById('price-min').textContent;
-        const estMax = document.getElementById('price-max').textContent;
-        
-        if (!name || !email || !notes) {
-            showToast("Please fill in all form slots.");
-            return;
-        }
-        
-        if (selectedServices.length === 0) {
-            showToast("Please select at least one corporate division.");
-            return;
-        }
-        
-        const messageBody = `--- PROJECT PROPOSAL ESTIMATOR REQUEST ---
-Contact Representative: ${name}
-Business Email: ${email}
-
-Selected Divisions: ${selectedServices.join(', ')}
-Target Timeline: ${timelineVal} Weeks
-Automated Estimate Range: $${estMin} - $${estMax}
-
-Project Brief & Goals:
-${notes}`;
-
-        const originalText = submitBtn.innerHTML;
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = 'Analyzing Specs... <i class="fa-solid fa-spinner fa-spin"></i>';
-        
-        // API request base URL
-        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-            ? (window.location.port === '5000' ? '' : 'http://localhost:5000')
-            : '';
-            
-        fetch(`${API_BASE_URL}/api/send-email`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: `${name} (Nexus Estimator)`,
-                email: email,
-                message: messageBody
-            })
-        })
-        .then(res => res.json())
-        .then(data => {
-            setTimeout(() => {
-                showToast("Proposal Request Sent! We will contact you. ⚡");
-                document.getElementById('estimator-form').reset();
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalText;
-                calculateEstimate(); // reset display
-            }, 1500);
-        })
-        .catch(() => {
-            setTimeout(() => {
-                showToast("Proposal Request Logged successfully! 🤖");
-                document.getElementById('estimator-form').reset();
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalText;
-                calculateEstimate(); // reset display
-            }, 1500);
-        });
-    };
-
-    // Initialize proposal estimate values on DOM load
-    setTimeout(calculateEstimate, 100);
-
-    // ==============================================
-    // 15. PROCESS TIMELINE DYNAMIC SCROLL ACTIONS
-    // ==============================================
-    const processSection = document.getElementById('process');
-    const timelineSteps = document.querySelectorAll('.timeline-step');
-    const progressBar = document.getElementById('timeline-progress');
-    
-    if (processSection && timelineSteps.length > 0 && progressBar) {
-        window.addEventListener('scroll', () => {
-            const sectionRect = processSection.getBoundingClientRect();
-            const viewportHeight = window.innerHeight;
-            
-            const startPoint = viewportHeight * 0.7;
-            const sectionTop = sectionRect.top;
-            const sectionHeight = sectionRect.height;
-            
-            let percent = 0;
-            if (sectionTop < startPoint) {
-                const progressDistance = startPoint - sectionTop;
-                const totalDistance = sectionHeight - (viewportHeight * 0.3);
-                percent = Math.min(Math.max((progressDistance / totalDistance) * 100, 0), 100);
-            }
-            
-            progressBar.style.height = `${percent}%`;
-            if (window.innerWidth >= 992) {
-                progressBar.style.height = '3px';
-                progressBar.style.width = `${percent}%`;
-            }
-            
-            const stepCount = timelineSteps.length;
-            const activeStepIndex = Math.min(
-                Math.floor((percent / 100) * stepCount),
-                stepCount - 1
-            );
-            
-            timelineSteps.forEach((step, idx) => {
-                if (idx <= activeStepIndex) {
-                    step.classList.add('active');
-                } else {
-                    step.classList.remove('active');
-                }
-            });
-        });
-    }
 
 });
