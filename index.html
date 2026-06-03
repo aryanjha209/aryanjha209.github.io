@@ -120,22 +120,25 @@
         <header id="navbar" class="main-header">
             <div class="header-content">
                 <a href="#home" class="logo-area">
-                    <span class="logo-badge">AKJ</span>
-                    <span class="logo-text">Aryan Jha</span>
+                    <span class="logo-badge">NEXUS</span>
+                    <span class="logo-text">Aryan Jha &bull; Solutions</span>
                 </a>
                 
                 <nav class="nav-menu" id="nav-menu">
                     <a href="#home" class="nav-link active">Home</a>
-                    <a href="#projects" class="nav-link">Projects</a>
                     <a href="#services" class="nav-link">Services</a>
+                    <a href="#projects" class="nav-link">Projects</a>
+                    <a href="#process" class="nav-link">Process</a>
+                    <a href="#estimator" class="nav-link">Estimator</a>
                     <a href="#testimonials" class="nav-link">Testimonials</a>
+                    <a href="#faq" class="nav-link">FAQ</a>
                     <a href="#contact" class="nav-link">Contact</a>
                 </nav>
 
                 <div class="header-right">
-                    <button class="btn btn-primary hire-btn" onclick="openContactModal()">
-                        Let's Collaborate <i class="fa-solid fa-paper-plane"></i>
-                    </button>
+                    <a href="#estimator" class="btn btn-primary hire-btn" style="text-decoration: none;">
+                        Request Proposal <i class="fa-solid fa-calculator"></i>
+                    </a>
                     <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle navigation menu">
                         <i class="fa-solid fa-bars"></i>
                     </button>
@@ -149,27 +152,30 @@
         <section id="home" class="hero-section">
             <div class="hero-content">
                 <div class="hero-left">
+                    <div class="badge-capsule animate-slide-in" style="animation-delay: 0.01s; margin-bottom: 1.5rem;">
+                        <span class="badge-text">NEXUS FREELANCE SOLUTIONS</span>
+                    </div>
                     <h1 class="hero-headline animate-slide-in" style="animation-delay: 0.05s;">
-                        Building <span class="text-cyan">AI</span> Solutions,<br>
-                        Web Experiences &<br>
-                        <span class="text-purple-gradient">AR</span> Magic
+                        Your Vision.<br>
+                        Our Tech.<br>
+                        <span class="text-purple-gradient">Enterprise</span> Growth.
                     </h1>
                     
                     <p class="hero-desc animate-slide-in" style="animation-delay: 0.2s;">
-                        I build intelligent web apps, AI-powered solutions and Snapchat AR Lenses that create impact.
+                        We develop high-performance artificial intelligence systems, custom web architectures, stable backend integrations, and immersive AR spectacles that solve complex problems.
                     </p>
                     
                     <div class="hero-actions animate-slide-in" style="animation-delay: 0.3s;">
-                        <a href="#projects" class="btn btn-gradient">
-                            View My Work <i class="fa-solid fa-arrow-right"></i>
+                        <a href="#estimator" class="btn btn-gradient">
+                            Get Project Estimate <i class="fa-solid fa-calculator"></i>
                         </a>
-                        <button class="btn btn-outline" onclick="openContactModal()">
-                            Let's Collaborate <i class="fa-solid fa-rocket"></i>
+                        <button class="btn btn-outline" onclick="openBookingModal()">
+                            Book Strategy Call <i class="fa-solid fa-calendar-days"></i>
                         </button>
                     </div>
 
                     <div class="socials-area animate-slide-in" style="animation-delay: 0.4s;">
-                        <span class="socials-label">Connect With Me</span>
+                        <span class="socials-label">Direct Contact Lines</span>
                         <div class="socials-grid">
                             <a href="https://github.com/aryanjha209" target="_blank" class="social-icon" aria-label="GitHub">
                                 <i class="fa-brands fa-github"></i>
@@ -190,12 +196,16 @@
                     </div>
                 </div>
 
-                <div class="hero-right">
+                <div class="hero-right animate-slide-in" style="animation-delay: 0.25s;">
                     <div class="portrait-stage">
                         <div class="portrait-glowing-ring"></div>
                         <div class="portrait-wrapper">
                             <img src="aryan jha.png" alt="Aryan Jha" class="portrait-image">
                         </div>
+                        <div class="floating-icon icon-python"><i class="fa-brands fa-python"></i></div>
+                        <div class="floating-icon icon-ai"><i class="fa-solid fa-brain"></i></div>
+                        <div class="floating-icon icon-code"><i class="fa-solid fa-laptop-code"></i></div>
+                        <div class="floating-icon icon-ar"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
                     </div>
                 </div>
             </div>
@@ -250,24 +260,24 @@
         <section class="split-section">
             <!-- Left Side: Services -->
             <div id="services" class="split-left">
-                <h2 class="section-title">What I Do</h2>
+                <h2 class="section-title">Corporate Divisions</h2>
                 
                 <div class="services-list">
                     <div class="service-card" onclick="toggleServiceDrawer(this)">
                         <div class="service-main">
                             <div class="service-icon"><i class="fa-solid fa-brain"></i></div>
                             <div class="service-meta">
-                                <h3>AI & ML Solutions</h3>
-                                <p>Chatbots, NLP, Computer Vision & Predictive Models</p>
+                                <h3>Enterprise AI & Machine Learning</h3>
+                                <p>Custom Agentic Workflows, NLP Models & Computer Vision</p>
                             </div>
                             <div class="service-arrow"><i class="fa-solid fa-chevron-right"></i></div>
                         </div>
                         <div class="service-drawer">
-                            <p>Designing, fine-tuning, and implementing deep learning models. I specialize in building custom conversational AI chatbots, NLP parsing systems, semantic databases, object detection computer vision architectures, and robust statistical predictive systems.</p>
+                            <p>Designing, fine-tuning, and implementing deep learning systems. We specialize in building custom conversational AI chatbots, NLP data pipelines, vector search databases, computer vision tracking models, and automated agentic reasoning tools.</p>
                             <ul class="service-tags">
                                 <li>PyTorch</li>
                                 <li>Transformers</li>
-                                <li>OpenCV</li>
+                                <li>FastAPI</li>
                                 <li>LLMs</li>
                             </ul>
                         </div>
@@ -277,17 +287,17 @@
                         <div class="service-main">
                             <div class="service-icon"><i class="fa-solid fa-globe"></i></div>
                             <div class="service-meta">
-                                <h3>Web & PWA Development</h3>
-                                <p>Fast, responsive and engaging web applications</p>
+                                <h3>Full-Stack Web & PWA Engineering</h3>
+                                <p>Sleek, responsive, and performance-optimized solutions</p>
                             </div>
                             <div class="service-arrow"><i class="fa-solid fa-chevron-right"></i></div>
                         </div>
                         <div class="service-drawer">
-                            <p>Structuring responsive mobile-first Progressive Web Applications (PWA) that load instantly offline and provide standalone fullscreen viewports. Designed with rich glassmorphism layouts, subtle micro-animations, and fast page performance.</p>
+                            <p>Structuring responsive, mobile-first Progressive Web Applications (PWA) that load instantly, cache materials offline, and display standalone viewport interfaces. Designed with micro-animations and exceptional SEO optimization.</p>
                             <ul class="service-tags">
                                 <li>HTML5</li>
                                 <li>Vanilla CSS</li>
-                                <li>Service Workers</li>
+                                <li>PWA Offline</li>
                                 <li>Vite</li>
                             </ul>
                         </div>
@@ -297,8 +307,8 @@
                         <div class="service-main">
                             <div class="service-icon"><i class="fa-solid fa-server"></i></div>
                             <div class="service-meta">
-                                <h3>Backend Development</h3>
-                                <p>REST APIs, Databases, Flask, FastAPI & more</p>
+                                <h3>High-Performance Backend & APIs</h3>
+                                <p>Secure database setups, webhooks, and REST endpoints</p>
                             </div>
                             <div class="service-arrow"><i class="fa-solid fa-chevron-right"></i></div>
                         </div>
@@ -307,8 +317,8 @@
                             <ul class="service-tags">
                                 <li>Node.js</li>
                                 <li>Express</li>
-                                <li>FastAPI</li>
                                 <li>MongoDB</li>
+                                <li>SQL</li>
                             </ul>
                         </div>
                     </div>
@@ -317,25 +327,25 @@
                         <div class="service-main">
                             <div class="service-icon"><i class="fa-brands fa-snapchat"></i></div>
                             <div class="service-meta">
-                                <h3>Snapchat AR Lenses</h3>
-                                <p>Custom interactive lenses using Lens Studio</p>
+                                <h3>Immersive Augmented Reality (AR)</h3>
+                                <p>Custom viral interactive filters using Lens Studio</p>
                             </div>
                             <div class="service-arrow"><i class="fa-solid fa-chevron-right"></i></div>
                         </div>
                         <div class="service-drawer">
-                            <p>Creating highly engaging Snapchat augmented reality experiences. Custom face mapping, hand tracking, neon visual shader filters, interactive physics, custom scripting, and sound designs that captivate users.</p>
+                            <p>Creating highly engaging Snapchat augmented reality experiences. Custom face mapping, hand tracking, neon visual shader filters, interactive physics, custom scripting, and sound designs that have reached 3.6B+ views.</p>
                             <ul class="service-tags">
                                 <li>Lens Studio</li>
-                                <li>Augmented Reality</li>
+                                <li>AR Mapping</li>
                                 <li>JS Scripting</li>
-                                <li>3D Textures</li>
+                                <li>Shader Graph</li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
-                <a href="#contact" class="explore-services-link">
-                    Explore All Services <i class="fa-solid fa-plus icon-small"></i>
+                <a href="#estimator" class="explore-services-link">
+                    Calculate Service Cost <i class="fa-solid fa-calculator icon-small"></i>
                 </a>
             </div>
 
@@ -418,6 +428,250 @@
                                 </a>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- WHY CHOOSE US SECTION -->
+        <!-- ============================================== -->
+        <section id="why-choose-us" class="why-choose-section">
+            <h2 class="section-title centered">Why Partner With Us</h2>
+            <div class="why-choose-grid">
+                <div class="why-card glass-card">
+                    <div class="why-icon"><i class="fa-solid fa-layer-group"></i></div>
+                    <h3>Custom Architecture</h3>
+                    <p>No templates or cookie-cutter solutions. We build clean, tailor-made systems architected specifically to solve your unique business needs.</p>
+                </div>
+                <div class="why-card glass-card">
+                    <div class="why-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <h3>Research-Backed Tech</h3>
+                    <p>Leveraging deep technical intelligence drawn from elite AI/ML research internships at BISAG-N to implement cutting-edge models.</p>
+                </div>
+                <div class="why-card glass-card">
+                    <div class="why-icon"><i class="fa-solid fa-rotate"></i></div>
+                    <h3>Agile Iterations</h3>
+                    <p>Expect rapid, transparent development cycles. Weekly sprint demonstrations keep you actively informed and in full control of the project direction.</p>
+                </div>
+                <div class="why-card glass-card">
+                    <div class="why-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h3>Enterprise Stability</h3>
+                    <p>We deliver production-ready code complete with automated error logging, secure authorization layers, and post-launch SLA maintenance support.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- SOLUTION PROCESS SECTION -->
+        <!-- ============================================== -->
+        <section id="process" class="process-section">
+            <h2 class="section-title centered">Our Solution Process</h2>
+            
+            <div class="process-timeline">
+                <div class="timeline-line">
+                    <div class="timeline-progress" id="timeline-progress"></div>
+                </div>
+                
+                <div class="timeline-step glass-card active" data-step="1">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3>Discovery & Scope</h3>
+                        <p>We analyze your business bottlenecks, evaluate technical feasibility, and map out a detailed project roadmap.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-step glass-card" data-step="2">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3>UX/UI & Architecture</h3>
+                        <p>We mock up modern glassmorphic interfaces and outline database schemas, API specs, and service workers.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-step glass-card" data-step="3">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3>Sprint Development</h3>
+                        <p>Our engineering team builds features in interactive stages. You see progress on staging servers in real-time.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-step glass-card" data-step="4">
+                    <div class="step-number">04</div>
+                    <div class="step-content">
+                        <h3>QA & Deployment</h3>
+                        <p>We perform rigorous manual and automated unit testing, optimize assets for speed, and launch on secure servers.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-step glass-card" data-step="5">
+                    <div class="step-number">05</div>
+                    <div class="step-content">
+                        <h3>SLA Support</h3>
+                        <p>We provide continuous monitoring, security updates, and performance tuning to keep systems operating flawlessly.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- INTERACTIVE ESTIMATOR SECTION -->
+        <!-- ============================================== -->
+        <section id="estimator" class="estimator-section">
+            <h2 class="section-title centered">Project Proposal Estimator</h2>
+            
+            <div class="estimator-card glass-card">
+                <div class="estimator-grid">
+                    <!-- Calculator Panel -->
+                    <div class="estimator-calculator">
+                        <h3>Configure Your Solution</h3>
+                        <p class="estimator-intro">Select your required services and timeline parameters to generate a custom freelance service proposal estimate.</p>
+                        
+                        <form id="estimator-form" onsubmit="handleEstimatorSubmit(event)">
+                            <div class="estimator-group">
+                                <label class="estimator-label">Select Required Divisions</label>
+                                <div class="estimator-checkboxes">
+                                    <label class="check-pill">
+                                        <input type="checkbox" name="estimator-service" value="AI & Machine Learning" data-base="1500" checked onchange="calculateEstimate()">
+                                        <span>AI &amp; ML Systems</span>
+                                    </label>
+                                    <label class="check-pill">
+                                        <input type="checkbox" name="estimator-service" value="Web & PWA Engineering" data-base="1000" onchange="calculateEstimate()">
+                                        <span>Web &amp; PWA Apps</span>
+                                    </label>
+                                    <label class="check-pill">
+                                        <input type="checkbox" name="estimator-service" value="Backend & APIs" data-base="800" onchange="calculateEstimate()">
+                                        <span>Backend APIs</span>
+                                    </label>
+                                    <label class="check-pill">
+                                        <input type="checkbox" name="estimator-service" value="AR & Filters" data-base="600" onchange="calculateEstimate()">
+                                        <span>AR Lenses / Filters</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="estimator-group">
+                                <div class="label-row">
+                                    <label class="estimator-label" for="estimator-timeline">Estimated Timeline</label>
+                                    <span class="range-val" id="timeline-val">4 Weeks</span>
+                                </div>
+                                <input type="range" id="estimator-timeline" min="1" max="12" value="4" class="estimator-slider" oninput="calculateEstimate()">
+                                <div class="slider-labels">
+                                    <span>1 Week</span>
+                                    <span>6 Weeks</span>
+                                    <span>12 Weeks</span>
+                                </div>
+                            </div>
+
+                            <div class="estimator-group">
+                                <label class="estimator-label" for="estimator-name">Contact Representative Name</label>
+                                <input type="text" id="estimator-name" placeholder="John Doe" required autocomplete="off">
+                            </div>
+
+                            <div class="estimator-group">
+                                <label class="estimator-label" for="estimator-email">Business Email Address</label>
+                                <input type="email" id="estimator-email" placeholder="john@company.com" required autocomplete="off">
+                            </div>
+
+                            <div class="estimator-group">
+                                <label class="estimator-label" for="estimator-notes">Project Brief &amp; Integration Goals</label>
+                                <textarea id="estimator-notes" placeholder="Describe the technical requirements, key features, and specific problems you want us to solve..." required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-gradient btn-full" id="estimator-submit-btn">
+                                Submit Proposal Request <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Display Panel -->
+                    <div class="estimator-display">
+                        <div class="display-glow"></div>
+                        <div class="display-content">
+                            <span class="display-badge"><i class="fa-solid fa-calculator"></i> Real-time Proposal Estimate</span>
+                            <div class="price-box">
+                                <span class="price-currency">$</span>
+                                <span class="price-val" id="price-min">1,500</span>
+                                <span class="price-dash">-</span>
+                                <span class="price-currency">$</span>
+                                <span class="price-val" id="price-max">2,200</span>
+                            </div>
+                            <p class="price-disclaimer">*Note: This is an automated feasibility estimate based on selected parameters. Actual project rates may vary based on exact functional specifications.</p>
+                            
+                            <div class="estimate-summary-list">
+                                <div class="summary-item">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                    <div>
+                                        <strong>Selected Services:</strong>
+                                        <span id="summary-services">AI &amp; Machine Learning</span>
+                                    </div>
+                                </div>
+                                <div class="summary-item">
+                                    <i class="fa-solid fa-clock"></i>
+                                    <div>
+                                        <strong>Target Project Timeline:</strong>
+                                        <span id="summary-timeline">4 Weeks</span>
+                                    </div>
+                                </div>
+                                <div class="summary-item">
+                                    <i class="fa-solid fa-code-fork"></i>
+                                    <div>
+                                        <strong>IP Ownership:</strong>
+                                        <span>100% Client-Owned</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- FAQ SECTION -->
+        <!-- ============================================== -->
+        <section id="faq" class="faq-section">
+            <h2 class="section-title centered">Frequently Asked Questions</h2>
+            
+            <div class="faq-list">
+                <div class="faq-item glass-card">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>What technologies and frameworks do you build with?</h3>
+                        <div class="faq-icon"><i class="fa-solid fa-plus"></i></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We specialize in vanilla CSS, responsive HTML5, Node.js (Express), Python (for machine learning models, PyTorch, Transformers, OpenCV), and standard APIs. We use state-of-the-art deployment solutions like Render, Vercel, and custom cloud hosting platforms to ensure absolute stability and uptime.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item glass-card">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>Do you sign Non-Disclosure Agreements (NDAs)?</h3>
+                        <div class="faq-icon"><i class="fa-solid fa-plus"></i></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, absolutely. We work with corporate clients, startups, and agencies. Before discussing project specifics, we can execute standard NDAs to protect your proprietary ideas, intellectual property, and data security.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item glass-card">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>How does the project payment structure work?</h3>
+                        <div class="faq-icon"><i class="fa-solid fa-plus"></i></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We work on a milestone-based billing model. Typically, projects require a 30% mobilization deposit, 40% upon completing mid-sprint architecture validation, and the remaining 30% upon successful testing and production handover. All pricing ranges generated by our estimator can be structured into flexible project phases.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item glass-card">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h3>What post-launch support and SLA terms are offered?</h3>
+                        <div class="faq-icon"><i class="fa-solid fa-plus"></i></div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>All delivered projects include 30 days of complimentary hypercare support covering bug fixes, minor design refinements, and server performance checks. For long-term peace of mind, we offer SLA maintenance contracts for database backups, API updates, and security patch monitoring.</p>
                     </div>
                 </div>
             </div>
