@@ -177,7 +177,6 @@
                     </div>
 
                     <div class="socials-area animate-slide-in" style="animation-delay: 0.4s;">
-                        <span class="socials-label">Connect With Me</span>
                         <div class="socials-grid">
                             <a href="https://github.com/aryanjha209" target="_blank" class="social-icon" aria-label="GitHub">
                                 <i class="fa-brands fa-github"></i>
@@ -354,78 +353,11 @@
                     <a href="#contact" class="view-all-link">View All Projects <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
 
-                <div class="projects-grid">
-                    <!-- Project 1 -->
-                    <div class="project-card">
-                        <div class="project-img-wrapper">
-                            <img src="featured_project_1.png" alt="AR Card System" class="project-img">
-                        </div>
-                        <div class="project-info">
-                            <h3>AR Card System</h3>
-                            <p>An AI-ready, cloud-powered platform to create, manage, and share smart augmented reality business cards with integrated secure authentication and customized QR codes.</p>
-                            <div class="project-tags">
-                                <span class="tag">Python</span>
-                                <span class="tag">HTML/CSS</span>
-                                <span class="tag">JavaScript</span>
-                                <span class="tag">Cloud APIs</span>
-                            </div>
-                            <div class="project-actions">
-                                <a href="https://arcard-1.onrender.com" target="_blank" class="btn btn-small btn-gradient-demo" style="text-decoration: none;">
-                                    <i class="fa-solid fa-eye"></i> Live Demo
-                                </a>
-                                <a href="https://github.com/aryanjha209" target="_blank" class="github-action-link" aria-label="GitHub Repository">
-                                    <i class="fa-brands fa-github"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Project 2 -->
-                    <div class="project-card">
-                        <div class="project-img-wrapper">
-                            <img src="featured_project_2.png" alt="Editor Pro - AI Image Editor" class="project-img">
-                        </div>
-                        <div class="project-info">
-                            <h3>Editor Pro - AI Image Editor</h3>
-                            <p>A next-generation browser image editor with command-based AI transformations, vintage photo styles, and real-time contrast, saturation, and brightness controls.</p>
-                            <div class="project-tags">
-                                <span class="tag">HTML/CSS</span>
-                                <span class="tag">JavaScript</span>
-                                <span class="tag">Python AI</span>
-                                <span class="tag">Vercel</span>
-                            </div>
-                            <div class="project-actions">
-                                <a href="https://ai-gngh.vercel.app" target="_blank" class="btn btn-small btn-gradient-demo" style="text-decoration: none;">
-                                    <i class="fa-solid fa-eye"></i> Live Demo
-                                </a>
-                                <a href="https://github.com/aryanjha209" target="_blank" class="github-action-link" aria-label="GitHub Repository">
-                                    <i class="fa-brands fa-github"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Project 3 -->
-                    <div class="project-card">
-                        <div class="project-img-wrapper">
-                            <img src="featured_project_3.png" alt="Neon Face Filter" class="project-img">
-                        </div>
-                        <div class="project-info">
-                            <h3>Neon Face Filter</h3>
-                            <p>Interactive Snapchat Lens with neon effects and face tracking.</p>
-                            <div class="project-tags">
-                                <span class="tag">Lens Studio</span>
-                                <span class="tag">AR</span>
-                            </div>
-                            <div class="project-actions">
-                                <a href="https://snapchat.com" target="_blank" class="btn btn-small btn-snapchat-action">
-                                    <i class="fa-solid fa-wand-magic-sparkles"></i> Try Lens
-                                </a>
-                                <a href="https://snapchat.com" target="_blank" class="snapchat-ghost-btn" aria-label="Snapchat Link">
-                                    <i class="fa-brands fa-snapchat"></i>
-                                </a>
-                            </div>
-                        </div>
+                <div class="projects-grid" id="projects-container">
+                    <!-- Dynamic Projects loaded here -->
+                    <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-dim);">
+                        <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 2rem; color: var(--purple); margin-bottom: 0.75rem;"></i>
+                        <p style="font-size: 0.9rem; font-weight: 500;">Retrieving dynamic projects...</p>
                     </div>
                 </div>
             </div>
@@ -820,6 +752,31 @@
         </button>
         <a href="#contact" class="vp-scroll-btn to-down" id="scroll-down-nav" aria-label="Scroll to Contact">
             <span class="vp-scroll-arrow bottom"></span>
+        </a>
+    </div>
+
+    <!-- Snapchat Lens Floating Ad Bar Widget (Right-Side) -->
+    <div class="floating-lens-ad" id="lens-ad-widget">
+        <button class="lens-ad-close" onclick="dismissLensAd(event)" aria-label="Close Ad">&times;</button>
+        <div class="lens-ad-header">
+            <i class="fa-brands fa-snapchat"></i>
+            <span>Featured AR Lens</span>
+        </div>
+        <div class="lens-ad-body">
+            <div class="lens-ad-snapcode-wrapper">
+                <img src="snapcode_qr.png" alt="Snapcode" id="lens-ad-snapcode" class="lens-ad-snapcode">
+                <div class="lens-ad-scan-laser"></div>
+            </div>
+            <div class="lens-ad-info">
+                <h4 id="lens-ad-name">Neon Face Filter</h4>
+                <p id="lens-ad-desc">Custom interactive Snapchat Lens with neon effects.</p>
+                <div class="lens-ad-metrics">
+                    <span id="lens-ad-views">3.6B+ views</span>
+                </div>
+            </div>
+        </div>
+        <a href="https://snapchat.com" target="_blank" id="lens-ad-link" class="btn btn-small lens-ad-btn">
+            Try Lens <i class="fa-solid fa-wand-magic-sparkles"></i>
         </a>
     </div>
 

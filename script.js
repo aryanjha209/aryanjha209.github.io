@@ -80,6 +80,10 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: { 'Content-Type': 'application/json' }
     }).catch(err => console.log('Visit tracking offline:', err));
 
+    // Load Dynamic Projects and Lenses Ad Bar
+    loadDynamicProjects();
+    loadActiveAdLens();
+
     // ==============================================
     // 1. DYNAMIC NAVIGATION & SCROLL TRACKING
     // ==============================================
@@ -910,6 +914,157 @@ document.addEventListener('DOMContentLoaded', () => {
     window.closeCardScanModal = function() {
         const modal = document.getElementById('card-scan-modal');
         if (modal) modal.classList.remove('active');
+    };
+
+    // ==============================================
+    // DYNAMIC PROJECT LOADING & LENSES AD BAR LOGIC
+    // ==============================================
+    function loadDynamicProjects() {
+        const container = document.getElementById('projects-container');
+        if (!container) return;
+
+        fetch(`${API_BASE_URL}/api/projects`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.projects && data.projects.length > 0) {
+                    renderProjects(data.projects);
+                } else {
+                    loadFallbackProjects();
+                }
+            })
+            .catch(err => {
+                console.error("Projects API failed, using fallbacks:", err);
+                loadFallbackProjects();
+            });
+    }
+
+    function renderProjects(projects) {
+        const container = document.getElementById('projects-container');
+        if (!container) return;
+        container.innerHTML = '';
+
+        projects.forEach(p => {
+            const tagList = Array.isArray(p.tags) ? p.tags : [];
+            const tagsHtml = tagList.map(tag => `<span class="tag">${tag}</span>`).join('');
+            
+            // Check if this is a snapchat lens
+            const isSnapchat = tagList.some(tag => ['Lens Studio', 'AR'].includes(tag)) || 
+                               p.name.toLowerCase().includes('lens') || 
+                               p.name.toLowerCase().includes('filter');
+            
+            const actionBtnHtml = isSnapchat
+                ? `<a href="${p.demoUrl || 'https://snapchat.com'}" target="_blank" class="btn btn-small btn-snapchat-action">
+                      <i class="fa-solid fa-wand-magic-sparkles"></i> Try Lens
+                   </a>`
+                : `<a href="${p.demoUrl || '#'}" target="_blank" class="btn btn-small btn-gradient-demo" style="text-decoration: none;">
+                      <i class="fa-solid fa-eye"></i> Live Demo
+                   </a>`;
+
+            const altBtnHtml = isSnapchat
+                ? `<a href="${p.demoUrl || 'https://snapchat.com'}" target="_blank" class="snapchat-ghost-btn" aria-label="Snapchat Link">
+                      <i class="fa-brands fa-snapchat"></i>
+                   </a>`
+                : `<a href="${p.githubUrl || 'https://github.com/aryanjha209'}" target="_blank" class="github-action-link" aria-label="GitHub Repository">
+                      <i class="fa-brands fa-github"></i>
+                   </a>`;
+
+            const card = document.createElement('div');
+            card.className = 'project-card';
+            card.innerHTML = `
+                <div class="project-img-wrapper">
+                    <img src="${p.imageUrl || 'featured_project_1.png'}" alt="${p.name}" class="project-img">
+                </div>
+                <div class="project-info">
+                    <h3>${p.name}</h3>
+                    <p>${p.description}</p>
+                    <div class="project-tags">
+                        ${tagsHtml}
+                    </div>
+                    <div class="project-actions">
+                        ${actionBtnHtml}
+                        ${altBtnHtml}
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function loadFallbackProjects() {
+        const fallbacks = [
+            {
+                name: "AR Card System",
+                description: "An AI-ready, cloud-powered platform to create, manage, and share smart augmented reality business cards with integrated secure authentication and customized QR codes.",
+                imageUrl: "featured_project_1.png",
+                tags: ["Python", "HTML/CSS", "JavaScript", "Cloud APIs"],
+                demoUrl: "https://arcard-1.onrender.com",
+                githubUrl: "https://github.com/aryanjha209"
+            },
+            {
+                name: "Editor Pro - AI Image Editor",
+                description: "A next-generation browser image editor with command-based AI transformations, vintage photo styles, and real-time contrast, saturation, and brightness controls.",
+                imageUrl: "featured_project_2.png",
+                tags: ["HTML/CSS", "JavaScript", "Python AI", "Vercel"],
+                demoUrl: "https://ai-gngh.vercel.app",
+                githubUrl: "https://github.com/aryanjha209"
+            },
+            {
+                name: "Neon Face Filter",
+                description: "Interactive Snapchat Lens with neon effects and face tracking.",
+                imageUrl: "featured_project_3.png",
+                tags: ["Lens Studio", "AR"],
+                demoUrl: "https://snapchat.com",
+                githubUrl: "https://github.com/aryanjha209"
+            }
+        ];
+        renderProjects(fallbacks);
+    }
+
+    function loadActiveAdLens() {
+        const widget = document.getElementById('lens-ad-widget');
+        if (!widget) return;
+
+        // If dismissed in this session, don't show it again
+        if (sessionStorage.getItem('dismissedLensAd') === 'true') {
+            return;
+        }
+
+        fetch(`${API_BASE_URL}/api/lenses/active-ad`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.lens) {
+                    const lens = data.lens;
+                    document.getElementById('lens-ad-name').textContent = lens.name;
+                    document.getElementById('lens-ad-desc').textContent = lens.description;
+                    document.getElementById('lens-ad-views').textContent = `${lens.views} views`;
+                    document.getElementById('lens-ad-snapcode').src = lens.snapcodeUrl || 'snapcode_qr.png';
+                    document.getElementById('lens-ad-link').href = lens.lensUrl;
+                    
+                    // Show after 2 seconds
+                    setTimeout(() => {
+                        widget.classList.add('show');
+                    }, 2000);
+                }
+            })
+            .catch(err => {
+                console.error("Ad lens fetch failed, using default:", err);
+                // Default falls back to hardcoded Neon Face Filter (already in HTML)
+                setTimeout(() => {
+                    widget.classList.add('show');
+                }, 2000);
+            });
+    }
+
+    window.dismissLensAd = function(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        const widget = document.getElementById('lens-ad-widget');
+        if (widget) {
+            widget.classList.remove('show');
+            sessionStorage.setItem('dismissedLensAd', 'true');
+        }
     };
 
 });

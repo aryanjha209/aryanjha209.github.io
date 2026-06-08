@@ -568,6 +568,94 @@ app.get('/api/stats', async (req, res) => {
     }
 });
 
+// Projects API routes
+app.get('/api/projects', async (req, res) => {
+    try {
+        const projects = await dbHelper.getProjects();
+        res.status(200).json({ success: true, projects });
+    } catch (error) {
+        console.error('Get projects error:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.post('/api/projects', async (req, res) => {
+    try {
+        await dbHelper.saveProject(req.body);
+        res.status(200).json({ success: true, message: 'Project saved successfully!' });
+    } catch (error) {
+        console.error('Save project error:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.delete('/api/projects/:id', async (req, res) => {
+    try {
+        await dbHelper.deleteProject(req.params.id);
+        res.status(200).json({ success: true, message: 'Project deleted successfully!' });
+    } catch (error) {
+        console.error('Delete project error:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// Lenses API routes
+app.get('/api/lenses', async (req, res) => {
+    try {
+        const lenses = await dbHelper.getLenses();
+        res.status(200).json({ success: true, lenses });
+    } catch (error) {
+        console.error('Get lenses error:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.post('/api/lenses', async (req, res) => {
+    try {
+        await dbHelper.saveLens(req.body);
+        res.status(200).json({ success: true, message: 'Lens saved successfully!' });
+    } catch (error) {
+        console.error('Save lens error:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.delete('/api/lenses/:id', async (req, res) => {
+    try {
+        await dbHelper.deleteLens(req.params.id);
+        res.status(200).json({ success: true, message: 'Lens deleted successfully!' });
+    } catch (error) {
+        console.error('Delete lens error:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.get('/api/lenses/active-ad', async (req, res) => {
+    try {
+        const lens = await dbHelper.getActiveAdLens();
+        res.status(200).json({ success: true, lens });
+    } catch (error) {
+        console.error('Get active lens error:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// Admin Auth endpoint
+app.post('/api/admin/auth', (req, res) => {
+    const { password } = req.body;
+    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+    if (password === adminPassword) {
+        res.status(200).json({ success: true, message: 'Authenticated successfully!' });
+    } else {
+        res.status(401).json({ success: false, message: 'Incorrect Password!' });
+    }
+});
+
+// Admin Route
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, 'admin', 'index.html'));
+});
+
 // Helper validation & string escaping
 function escapeHtml(str) {
     if (typeof str !== 'string') return '';
