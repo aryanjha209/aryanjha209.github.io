@@ -10,7 +10,8 @@
     <meta name="keywords" content="Aryan Jha, Aryan Jha Parul University, AI Developer, Web Freelancer, Snapchat AR Lens Creator, augmented reality, Lens Studio developer, BISAG Intern, machine learning engineer, web architect, Vadodara developer, Gujarat AI developer">
     <meta name="author" content="Aryan Jha">
     <meta name="robots" content="index, follow">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#030712" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#030712">
     <link rel="canonical" href="https://aryanjha.me/">
     
     <!-- Geo-Targeting for Search Engines -->
@@ -38,8 +39,11 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Aryan Jha">
+    <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="app_icon.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="app_icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="app_icon.png">
     <link rel="icon" type="image/png" href="app_icon.png">
 
     <!-- JSON-LD Structured Data Schema for Google Rich Snippets -->
@@ -133,18 +137,18 @@
                 </a>
                 
                 <nav class="nav-menu" id="nav-menu">
-                    <a href="#home" class="nav-link active">Home</a>
-                    <a href="#projects" class="nav-link">Projects</a>
-                    <a href="#services" class="nav-link">Services</a>
-                    <a href="#testimonials" class="nav-link">Testimonials</a>
-                    <a href="#contact" class="nav-link">Contact</a>
+                    <button class="nav-close-btn" id="nav-close-btn" onclick="closeMobileMenu()" aria-label="Close menu">&times;</button>
+                    <a href="#home" class="nav-link active" onclick="closeMobileMenu()">Home</a>
+                    <a href="#projects" class="nav-link" onclick="closeMobileMenu()">Projects</a>
+                    <a href="#services" class="nav-link" onclick="closeMobileMenu()">Services</a>
+                    <a href="#contact" class="nav-link" onclick="closeMobileMenu()">Contact</a>
                 </nav>
 
                 <div class="header-right">
                     <button class="btn btn-primary hire-btn" onclick="openContactModal()">
                         Let's Collaborate <i class="fa-solid fa-paper-plane"></i>
                     </button>
-                    <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle navigation menu">
+                    <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle navigation menu" onclick="toggleMobileMenu()">
                         <i class="fa-solid fa-bars"></i>
                     </button>
                 </div>
@@ -444,54 +448,40 @@
                 </div>
             </div>
 
-            <!-- Subtle Newsletter Subscribe Area -->
-            <div class="subscribe-card">
-                <h3>Subscribe for Updates</h3>
-                <form id="subscribe-form" class="subscribe-form" onsubmit="handleSubscribe(event)">
-                    <input type="email" id="subscribe-email" placeholder="Enter your email" required autocomplete="off">
-                    <button type="submit" class="btn btn-subscribe">Subscribe</button>
-                </form>
-            </div>
         </section>
 
 
 
-        <!-- ============================================== -->
-        <!-- TESTIMONIALS SECTION -->
-        <!-- ============================================== -->
-        <!-- ============================================== -->
-        <section id="testimonials" class="testimonials-section">
-            <h2 class="section-title centered">Testimonials</h2>
-            <div class="testimonials-container">
-                <div class="testimonials-slider" id="testimonials-slider">
-                    <!-- Slides are handled dynamically, but keeping static placeholder for fast loading -->
-                    <div class="testimonial-slide active">
-                        <div class="client-avatar-row">
-                            <div class="client-avatar">S</div>
-                            <div class="client-meta">
-                                <h4>Sarah K.</h4>
-                                <p>Tech Operations Director</p>
-                            </div>
-                        </div>
-                        <p class="client-quote">"Aryan delivered a phenomenal AI chatbot for our student administration. The implementation was quick, clean, and the interface is incredibly responsive."</p>
-                    </div>
-                </div>
-            </div>
 
-            <div class="testimonial-actions" style="text-align: center; margin-top: 2.25rem;">
-                <button class="btn btn-gradient btn-small" onclick="openTestimonialModal()">
-                    Submit Testimonial <i class="fa-solid fa-star"></i>
-                </button>
-            </div>
-        </section>
 
         <!-- ============================================== -->
         <!-- FOOTER -->
         <!-- ============================================== -->
         <footer class="main-footer">
             <div class="footer-content">
-                <p class="copyright">© 2026 Aryan Jha. All rights reserved.</p>
-                <p class="built-by">Built with ❤️ using HTML & Vanilla CSS</p>
+                <!-- Subscribe for Updates -->
+                <div class="footer-subscribe">
+                    <h3 class="footer-subscribe-title">Subscribe for Updates</h3>
+                    <p class="footer-subscribe-sub">Get notified about new projects, AI tools & AR releases.</p>
+                    <form id="subscribe-form" class="subscribe-form" onsubmit="handleSubscribe(event)">
+                        <input type="email" id="subscribe-email" placeholder="Enter your email" required autocomplete="off">
+                        <button type="submit" class="btn btn-subscribe">Subscribe <i class="fa-solid fa-paper-plane"></i></button>
+                    </form>
+                </div>
+
+                <div class="footer-divider"></div>
+
+                <!-- Footer Bottom -->
+                <div class="footer-bottom">
+                    <p class="copyright">© 2026 Aryan Jha. All rights reserved.</p>
+                    <div class="footer-social-links">
+                        <a href="https://github.com/aryanjha209" target="_blank" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                        <a href="https://www.linkedin.com/in/aryan-jha-71173822a/" target="_blank" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://snapchat.com" target="_blank" aria-label="Snapchat"><i class="fa-brands fa-snapchat"></i></a>
+                    </div>
+                    <p class="built-by">Built with ❤️ using HTML &amp; Vanilla CSS</p>
+                </div>
             </div>
         </footer>
 
@@ -787,6 +777,43 @@
         <i class="pointer__inner fas fa-link"></i>
     </div>
 
+    <!-- Mobile Bottom Navigation Bar (PWA App-Like) -->
+    <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile navigation">
+        <a href="#home" class="mob-nav-item active" id="mobnav-home">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="#projects" class="mob-nav-item" id="mobnav-projects">
+            <i class="fa-solid fa-folder-open"></i>
+            <span>Projects</span>
+        </a>
+        <button class="mob-nav-item mob-nav-collaborate" onclick="openContactModal()">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span>Hire</span>
+        </button>
+        <a href="#services" class="mob-nav-item" id="mobnav-services">
+            <i class="fa-solid fa-brain"></i>
+            <span>Services</span>
+        </a>
+        <a href="#contact" class="mob-nav-item" id="mobnav-contact">
+            <i class="fa-solid fa-envelope"></i>
+            <span>Contact</span>
+        </a>
+    </nav>
+
+    <!-- PWA Install Banner -->
+    <div class="pwa-install-banner" id="pwa-install-banner">
+        <div class="pwa-install-icon">⚡</div>
+        <div class="pwa-install-text">
+            <h4>Install App</h4>
+            <p>Add to home screen for the full app experience</p>
+        </div>
+        <div class="pwa-install-actions">
+            <button class="pwa-install-btn" id="pwa-install-btn">Install</button>
+            <button class="pwa-dismiss-btn" id="pwa-dismiss-btn">Not now</button>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="script.js"></script>
     <script>
@@ -804,6 +831,69 @@
                 .catch(err => console.log('Service Worker failed:', err));
             }
         });
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('nav-menu');
+            menu.classList.toggle('mobile-open');
+            document.body.style.overflow = menu.classList.contains('mobile-open') ? 'hidden' : '';
+        }
+
+        function closeMobileMenu() {
+            const menu = document.getElementById('nav-menu');
+            menu.classList.remove('mobile-open');
+            document.body.style.overflow = '';
+        }
+
+        // PWA Install prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // Show banner after 3 seconds
+            setTimeout(() => {
+                const banner = document.getElementById('pwa-install-banner');
+                if (banner && !sessionStorage.getItem('pwa-dismissed')) {
+                    banner.classList.add('show');
+                }
+            }, 3000);
+        });
+
+        document.getElementById('pwa-install-btn').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                deferredPrompt = null;
+            }
+            document.getElementById('pwa-install-banner').classList.remove('show');
+        });
+
+        document.getElementById('pwa-dismiss-btn').addEventListener('click', () => {
+            document.getElementById('pwa-install-banner').classList.remove('show');
+            sessionStorage.setItem('pwa-dismissed', '1');
+        });
+
+        // Mobile bottom nav active state
+        const mobNavItems = document.querySelectorAll('.mob-nav-item[id]');
+        const sections = ['home', 'projects', 'services', 'contact'];
+        const navMap = {
+            'home': 'mobnav-home',
+            'projects': 'mobnav-projects',
+            'services': 'mobnav-services',
+            'contact': 'mobnav-contact'
+        };
+        
+        function updateMobNav() {
+            let current = 'home';
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && window.scrollY >= el.offsetTop - 200) current = id;
+            });
+            mobNavItems.forEach(item => item.classList.remove('active'));
+            const activeItem = document.getElementById(navMap[current]);
+            if (activeItem) activeItem.classList.add('active');
+        }
+        window.addEventListener('scroll', updateMobNav, { passive: true });
     </script>
 </body>
 </html>
