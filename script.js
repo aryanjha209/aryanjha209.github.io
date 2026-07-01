@@ -83,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load Dynamic Projects and Lenses Ad Bar
     loadDynamicProjects();
     loadActiveAdLens();
+    loadHeroLenses();
 
     // ==============================================
     // 1. DYNAMIC NAVIGATION & SCROLL TRACKING
@@ -1066,5 +1067,68 @@ document.addEventListener('DOMContentLoaded', () => {
             sessionStorage.setItem('dismissedLensAd', 'true');
         }
     };
+
+    // ==============================================
+    // HERO LENS STRIP — Dynamic small circle previews
+    // ==============================================
+    function loadHeroLenses() {
+        const avatarsEl = document.getElementById('hero-lens-avatars');
+        if (!avatarsEl) return;
+
+        fetch(`${API_BASE_URL}/api/lenses`)
+            .then(res => res.json())
+            .then(data => {
+                if (!data.success || !data.lenses || data.lenses.length === 0) return;
+                const lenses = data.lenses;
+                const maxShow = 5;
+                const shown = lenses.slice(0, maxShow);
+                const rest = lenses.length - maxShow;
+
+                avatarsEl.innerHTML = '';
+                shown.forEach(lens => {
+                    const el = document.createElement('div');
+                    el.className = 'hero-lens-avatar';
+                    el.title = lens.name || 'AR Lens';
+                    if (lens.imageUrl || lens.snapcodeUrl) {
+                        const img = document.createElement('img');
+                        img.src = lens.imageUrl || lens.snapcodeUrl;
+                        img.alt = lens.name || 'Lens';
+                        img.className = 'hero-lens-avatar';
+                        img.title = lens.name || 'AR Lens';
+                        img.onerror = function() {
+                            // Fallback to icon on load error
+                            this.outerHTML = `<div class="hero-lens-avatar" style="display:flex;align-items:center;justify-content:center;color:#fff;font-size:1rem;" title="${lens.name || 'AR Lens'}"><i class="fa-brands fa-snapchat"></i></div>`;
+                        };
+                        avatarsEl.appendChild(img);
+                    } else {
+                        el.style.cssText = 'display:flex;align-items:center;justify-content:center;color:#fff;font-size:1rem;';
+                        el.innerHTML = '<i class="fa-brands fa-snapchat"></i>';
+                        avatarsEl.appendChild(el);
+                    }
+                });
+
+                if (rest > 0) {
+                    const countEl = document.createElement('div');
+                    countEl.className = 'hero-lens-count';
+                    countEl.textContent = `+${rest}`;
+                    avatarsEl.appendChild(countEl);
+                } else if (lenses.length >= 20) {
+                    const countEl = document.createElement('div');
+                    countEl.className = 'hero-lens-count';
+                    countEl.textContent = '20+';
+                    avatarsEl.appendChild(countEl);
+                }
+
+                // Update the "Published lenses" count label next to strip
+                const strip = document.getElementById('hero-lens-strip');
+                if (strip) {
+                    const label = strip.querySelector('span:last-child');
+                    if (label) label.textContent = `${lenses.length}+ Published lenses`;
+                }
+            })
+            .catch(() => {
+                // Silently keep the fallback placeholders
+            });
+    }
 
 });
