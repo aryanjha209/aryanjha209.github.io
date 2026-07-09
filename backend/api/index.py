@@ -16,7 +16,13 @@ load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file_
 import db_helper
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=[
+    "https://aryanjha209.github.io",   # GitHub Pages
+    "https://aryanjha.me",             # Vercel custom domain
+    "https://www.aryanjha.me",         # Vercel www
+    "http://localhost:5000",           # Local dev
+    "http://127.0.0.1:5000",          # Local dev
+])
 
 FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "frontend")
 
