@@ -2,7 +2,7 @@
   "version": 2,
   "functions": {
     "backend/api/index.py": {
-      "runtime": "python3.12"
+      "maxDuration": 30
     }
   },
   "redirects": [
