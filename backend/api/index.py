@@ -100,6 +100,21 @@ def send_smtp_email(to_email, subject, html_content):
         print(f"Error sending email: {e}")
         return False
 
+# ──────────────────────────────────────────────────────────────
+# HEALTH CHECK — visit /api/health to verify Vercel deployment
+# ──────────────────────────────────────────────────────────────
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    import sys as _sys
+    mongo_status = "connected" if db_helper.db is not None else "fallback (JSON)"
+    return jsonify({
+        "status": "ok",
+        "python": _sys.version,
+        "database": mongo_status,
+        "mongodb_uri_set": bool(os.environ.get("MONGODB_URI")),
+        "email_configured": bool(os.environ.get("EMAIL_USER")),
+    }), 200
+
 # Route definitions
 @app.route('/api/visit', methods=['POST'])
 def track_visit_api():
@@ -812,4 +827,6 @@ def serve_static(path):
     return send_from_directory(FRONTEND_DIR, 'index.html')
 
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    # use_reloader=False prevents the Werkzeug threading crash on Windows
+    # threaded=True allows concurrent API requests
+    app.run(port=5000, debug=True, use_reloader=False, threaded=True)

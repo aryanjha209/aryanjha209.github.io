@@ -16,7 +16,12 @@ mongo_client = None
 
 if MONGODB_URI:
     try:
-        mongo_client = MongoClient(MONGODB_URI)
+        mongo_client = MongoClient(
+            MONGODB_URI,
+            serverSelectionTimeoutMS=5000,  # fail fast if DNS/network issue
+            connectTimeoutMS=5000,
+            socketTimeoutMS=10000,
+        )
         mongo_client.admin.command('ping')
         try:
             db = mongo_client.get_database()
@@ -25,6 +30,12 @@ if MONGODB_URI:
         print("Connected to MongoDB successfully.")
     except Exception as e:
         print(f"MongoDB connection failed: {e}. Falling back to local JSON database.")
+        if mongo_client:
+            try:
+                mongo_client.close()
+            except Exception:
+                pass
+        mongo_client = None
         db = None
 else:
     print("MONGODB_URI not found. Using local JSON database (database.json).")
