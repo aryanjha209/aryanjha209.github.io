@@ -1,0 +1,38 @@
+{
+  "version": 2,
+  "functions": {
+    "backend/api/index.py": {
+      "runtime": "@vercel/python"
+    }
+  },
+  "redirects": [
+    { "source": "/about", "destination": "/#about", "permanent": true },
+    { "source": "/contact", "destination": "/#contact", "permanent": true },
+    { "source": "/book", "destination": "/#book", "permanent": true },
+    { "source": "/call", "destination": "/#call", "permanent": true },
+    { "source": "/services", "destination": "/#services", "permanent": true },
+    { "source": "/projects", "destination": "/#projects", "permanent": true },
+    { "source": "/skills", "destination": "/#skills", "permanent": true },
+    { "source": "/testimonials", "destination": "/#testimonials", "permanent": true },
+    { "source": "/faq", "destination": "/#faq", "permanent": true },
+    { "source": "/hire", "destination": "/#hire", "permanent": true },
+    { "source": "/portfolio", "destination": "/#portfolio", "permanent": true },
+    { "source": "/process", "destination": "/#process", "permanent": true },
+    { "source": "/estimator", "destination": "/#estimator", "permanent": true },
+    { "source": "/snap-lenses", "destination": "/#snap-lenses", "permanent": true }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/backend/api/index.py"
+    },
+    {
+      "source": "/stats",
+      "destination": "/backend/api/index.py"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/frontend/$1"
+    }
+  ]
+}
