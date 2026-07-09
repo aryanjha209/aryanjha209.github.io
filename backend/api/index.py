@@ -24,7 +24,8 @@ CORS(app, origins=[
     "http://127.0.0.1:5000",          # Local dev
 ])
 
-FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "frontend")
+# Frontend files are now at the project root (moved from frontend/)
+FRONTEND_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 REDIRECTS = {
     'about': '/#about',
