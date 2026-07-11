@@ -67,6 +67,37 @@ def format_date(date_str):
     except Exception:
         return str(date_str)
 
+def build_stats_payload():
+    stats = db_helper.get_stats_data()
+    visits = stats.get("visits") or []
+    subscribers = stats.get("subscribers") or []
+    messages = stats.get("messages") or []
+    bookings = stats.get("bookings") or []
+    testimonials = stats.get("testimonials") or []
+
+    total_visits = sum(int(v.get("count", 1) or 0) for v in visits)
+    unique_ips = sorted({v.get("ip") for v in visits if v.get("ip")})
+
+    stats.update({
+        "success": True,
+        "visits": visits,
+        "subscribers": subscribers,
+        "messages": messages,
+        "bookings": bookings,
+        "testimonials": testimonials,
+        "totalVisits": total_visits,
+        "uniqueIPs": unique_ips,
+        "counts": {
+            "totalHits": total_visits,
+            "uniqueGuests": len(unique_ips),
+            "subscribers": len(subscribers),
+            "messages": len(messages),
+            "bookedCalls": len(bookings),
+            "testimonials": len(testimonials),
+        }
+    })
+    return stats
+
 def is_http_url(value):
     if not value or not isinstance(value, str):
         return False
@@ -467,30 +498,22 @@ def admin_auth():
 @app.route('/api/stats', methods=['GET'])
 def stats_json_api():
     try:
-        stats = db_helper.get_stats_data()
-        
-        visits = stats.get("visits", [])
-        total_visits = sum(v.get("count", 1) for v in visits)
-        unique_ips = list(set(v.get("ip") for v in visits if v.get("ip")))
-        
-        stats["totalVisits"] = total_visits
-        stats["uniqueIPs"] = unique_ips
-        return jsonify(stats), 200
+        return jsonify(build_stats_payload()), 200
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
 
 # HTML Visual Analytics Dashboard
 @app.route('/stats')
 def stats_html_dashboard():
-    stats = db_helper.get_stats_data()
+    stats = build_stats_payload()
     visits = stats.get("visits", [])
     subscribers = stats.get("subscribers", [])
     messages = stats.get("messages", [])
     bookings = stats.get("bookings", [])
     testimonials = stats.get("testimonials", [])
-    
-    total_visits = sum(v.get("count", 1) for v in visits)
-    unique_ips = list(set(v.get("ip") for v in visits if v.get("ip")))
+    counts = stats.get("counts", {})
+    total_visits = counts.get("totalHits", 0)
+    unique_guest_count = counts.get("uniqueGuests", 0)
     
     sorted_visits = sorted(visits, key=lambda x: x.get("lastVisit", ""), reverse=True)
     sorted_subscribers = sorted(subscribers, key=lambda x: x.get("date", ""), reverse=True)
@@ -667,7 +690,7 @@ def stats_html_dashboard():
             <div class="card">
                 <div class="card-icon icon-cyan"><i class="fas fa-users"></i></div>
                 <div class="card-info">
-                    <h3>{len(unique_ips)}</h3>
+                    <h3>{unique_guest_count}</h3>
                     <p>Unique Guests</p>
                 </div>
             </div>

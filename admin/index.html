@@ -1729,13 +1729,14 @@
                 .then(res => res.json())
                 .then(data => {
                     systemStatsPayload = data; // Cache values locally
+                    const counts = data.counts || {};
                     
                     // Metrics updates
-                    document.getElementById('stat-hits').textContent = data.totalVisits || 0;
-                    document.getElementById('stat-unique').textContent = data.uniqueIPs ? data.uniqueIPs.length : 0;
-                    document.getElementById('stat-subs').textContent = data.subscribers ? data.subscribers.length : 0;
-                    document.getElementById('stat-msgs').textContent = data.messages ? data.messages.length : 0;
-                    document.getElementById('stat-calls').textContent = data.bookings ? data.bookings.length : 0;
+                    document.getElementById('stat-hits').textContent = counts.totalHits ?? data.totalVisits ?? 0;
+                    document.getElementById('stat-unique').textContent = counts.uniqueGuests ?? (data.uniqueIPs ? data.uniqueIPs.length : 0);
+                    document.getElementById('stat-subs').textContent = counts.subscribers ?? (data.subscribers ? data.subscribers.length : 0);
+                    document.getElementById('stat-msgs').textContent = counts.messages ?? (data.messages ? data.messages.length : 0);
+                    document.getElementById('stat-calls').textContent = counts.bookedCalls ?? (data.bookings ? data.bookings.length : 0);
                     
                     // Count Badges
                     document.getElementById('inquiries-count').textContent = `${data.messages ? data.messages.length : 0} Messages`;

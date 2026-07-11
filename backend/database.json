@@ -2,14 +2,14 @@
   "visits": [
     {
       "ip": "::1",
-      "count": 1,
+      "count": 4,
       "lastVisit": "2026-07-09T08:04:19.598Z",
       "userAgent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.8737"
     },
     {
       "ip": "127.0.0.1",
-      "count": 7,
-      "lastVisit": "2026-07-11T15:57:33.823697",
+      "count": 4,
+      "lastVisit": "2026-07-11T16:41:46.179561",
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36"
     }
   ],
@@ -17,6 +17,17 @@
   "messages": [],
   "bookings": [],
   "testimonials": [],
-  "projects": [],
+  "projects": [
+    {
+      "name": "My Test Project",
+      "description": "A test project to verify the system works",
+      "imageUrl": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800",
+      "tags": "Python, AI, Flask",
+      "demoUrl": "https://example.com/demo",
+      "githubUrl": "https://github.com/aryanjha209",
+      "_id": "1783768278154",
+      "date": "2026-07-11T16:41:18.155847"
+    }
+  ],
   "lenses": []
 }
