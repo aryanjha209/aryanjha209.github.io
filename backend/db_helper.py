@@ -61,7 +61,8 @@ def read_json_db():
     if not os.path.exists(JSON_DB_PATH):
         return {
             "visits": [], "subscribers": [], "messages": [], 
-            "bookings": [], "testimonials": [], "projects": [], "lenses": []
+            "bookings": [], "testimonials": [], "projects": [], "lenses": [],
+            "posters": []
         }
     try:
         with open(JSON_DB_PATH, "r", encoding="utf-8") as f:
@@ -70,7 +71,8 @@ def read_json_db():
         print(f"Error reading JSON database: {e}")
         return {
             "visits": [], "subscribers": [], "messages": [], 
-            "bookings": [], "testimonials": [], "projects": [], "lenses": []
+            "bookings": [], "testimonials": [], "projects": [], "lenses": [],
+            "posters": []
         }
 
 def write_json_db(data):
@@ -84,7 +86,8 @@ def write_json_db(data):
 if not os.path.exists(JSON_DB_PATH):
     write_json_db({
         "visits": [], "subscribers": [], "messages": [], 
-        "bookings": [], "testimonials": [], "projects": [], "lenses": []
+        "bookings": [], "testimonials": [], "projects": [], "lenses": [],
+        "posters": []
     })
 
 def serialize_doc(doc):
@@ -185,6 +188,15 @@ def init_db():
                     snapcode_url TEXT,
                     views VARCHAR(100),
                     active_ad_bar BOOLEAN DEFAULT FALSE,
+                    date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+            # Create posters
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS posters (
+                    id SERIAL PRIMARY KEY,
+                    image_url TEXT,
+                    redirect_url TEXT,
                     date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
                 )
             """)
@@ -668,3 +680,59 @@ def delete_subscriber(sub_id_or_email):
         data["subscribers"] = [s for s in data.get("subscribers", []) if s.get("_id") != sub_id_or_email and s.get("email") != sub_id_or_email]
         write_json_db(data)
         return True
+
+def get_posters():
+    conn = get_pg_connection()
+    if conn is not None:
+        try:
+            rows = execute_query("SELECT id, image_url as \"imageUrl\", redirect_url as \"redirectUrl\", date FROM posters ORDER BY id DESC", fetch="all")
+            return serialize_docs(rows)
+        except Exception as e:
+            print(f"PostgreSQL get_posters error: {e}")
+            return []
+    else:
+        data = read_json_db()
+        return data.get("posters", [])
+
+def save_poster(img_url, redirect_url, poster_id=None):
+    conn = get_pg_connection()
+    if conn is not None:
+        try:
+            if poster_id:
+                execute_query("UPDATE posters SET image_url=%s, redirect_url=%s WHERE id=%s", (img_url, redirect_url, int(poster_id)))
+            else:
+                execute_query("INSERT INTO posters (image_url, redirect_url, date) VALUES (%s, %s, %s)", (img_url, redirect_url, get_utc_now()))
+        except Exception as e:
+            print(f"PostgreSQL save_poster error: {e}")
+    else:
+        data = read_json_db()
+        if "posters" not in data:
+            data["posters"] = []
+            
+        mapped_data = {
+            "imageUrl": img_url,
+            "redirectUrl": redirect_url
+        }
+        
+        if poster_id:
+            for p in data["posters"]:
+                if p.get("_id") == poster_id:
+                    p.update(mapped_data)
+                    break
+        else:
+            mapped_data["_id"] = str(int(get_utc_now().timestamp() * 1000))
+            mapped_data["date"] = get_utc_now().isoformat()
+            data["posters"].append(mapped_data)
+        write_json_db(data)
+
+def delete_poster(poster_id):
+    conn = get_pg_connection()
+    if conn is not None:
+        try:
+            execute_query("DELETE FROM posters WHERE id=%s", (int(poster_id),))
+        except Exception as e:
+            print(f"PostgreSQL delete_poster error: {e}")
+    else:
+        data = read_json_db()
+        data["posters"] = [p for p in data.get("posters", []) if p.get("_id") != poster_id]
+        write_json_db(data)

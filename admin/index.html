@@ -1065,6 +1065,7 @@
             <button class="nav-item" onclick="switchPanel('inquiries-panel', this)"><i class="fa-solid fa-envelope"></i> Client Messages</button>
             <button class="nav-item" onclick="switchPanel('bookings-panel', this)"><i class="fa-solid fa-calendar-days"></i> Call Bookings</button>
             <button class="nav-item" onclick="switchPanel('subscribers-panel', this)"><i class="fa-solid fa-bell"></i> Subscribers</button>
+            <button class="nav-item" onclick="switchPanel('posters-panel', this)"><i class="fa-solid fa-images"></i> Showcase Posters</button>
         </nav>
         <div class="sidebar-footer">
             <div class="creator-badge">
@@ -1331,6 +1332,34 @@
                 </div>
             </div>
         </section>
+
+        <!-- H. SHOWCASE POSTERS PANEL -->
+        <section class="panel" id="posters-panel">
+            <div class="split-grid">
+                <div class="glass-card">
+                    <h3 style="margin-bottom:1.25rem; font-size:1.1rem; font-family:'Space Grotesk'; font-weight:700; border-bottom:1px solid var(--border); padding-bottom:0.75rem;"><i class="fa-solid fa-list" style="color:var(--purple); margin-right:0.5rem;"></i> Active Showcase Posters</h3>
+                    <div class="list-container" id="posters-list">
+                        <!-- Dynamic load -->
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <h3 id="poster-form-title" style="margin-bottom:1.25rem; font-size:1.1rem; font-family:'Space Grotesk'; font-weight:700; border-bottom:1px solid var(--border); padding-bottom:0.75rem;"><i class="fa-solid fa-image" style="color:var(--purple); margin-right:0.5rem;"></i> Add Showcase Poster</h3>
+                    <form id="poster-form" onsubmit="submitPoster(event)">
+                        <input type="hidden" id="poster-id">
+                        <div class="form-group">
+                            <label for="poster-img-url">Poster Image URL</label>
+                            <input type="url" id="poster-img-url" class="form-input" placeholder="https://example.com/poster.png" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="poster-redirect-url">Redirect Link (Invisible to User)</label>
+                            <input type="url" id="poster-redirect-url" class="form-input" placeholder="https://external-link.com/target" required>
+                        </div>
+                        <button type="submit" class="btn" id="poster-submit-btn" style="width:100%;">Publish Poster <i class="fa-solid fa-paper-plane"></i></button>
+                        <button type="button" class="btn-secondary" id="poster-cancel-btn" onclick="resetPosterForm()" style="width:100%; margin-top:0.5rem; display:none;">Cancel Edit</button>
+                    </form>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Core Scripts -->
@@ -1359,7 +1388,8 @@
             'testimonials-panel': { title: 'Client Reviews', desc: 'Manage quotes and recommendation cards.' },
             'inquiries-panel': { title: 'Client Messages', desc: 'Inquiries sent from the web contact form.' },
             'bookings-panel': { title: 'Call Appointments', desc: 'Client scheduled slots on the calendar widget.' },
-            'subscribers-panel': { title: 'Newsletter Subscribers', desc: 'Email subscriber database. Supports search and CSV export.' }
+            'subscribers-panel': { title: 'Newsletter Subscribers', desc: 'Email subscriber database. Supports search and CSV export.' },
+            'posters-panel': { title: 'Showcase Posters', desc: 'Manage rotating showcase posters displayed in the hero section.' }
         };
 
         // Authentication checks on load
@@ -1458,6 +1488,7 @@
             loadProjects();
             loadLenses();
             loadStats(); // Fetches stats and populates overview, messages, bookings, testimonials, subscribers.
+            loadDashboardPosters();
         }
 
         // PROJECTS CRUD
@@ -2068,6 +2099,109 @@
             link.click();
             document.body.removeChild(link);
             triggerToast("Subscribers list exported as CSV!");
+        }
+
+        // SHOWCASE POSTERS CRUD
+        function loadDashboardPosters() {
+            fetch(`${API}/api/posters`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        const list = document.getElementById('posters-list');
+                        list.innerHTML = '';
+                        if (!data.posters || data.posters.length === 0) {
+                            list.innerHTML = '<div style="color:var(--text-muted); text-align:center; padding:3rem;">No showcase posters added yet.</div>';
+                            return;
+                        }
+                        data.posters.forEach(p => {
+                            const item = document.createElement('div');
+                            item.className = 'admin-item';
+                            item.innerHTML = `
+                                <div class="admin-item-info" style="gap:1rem;">
+                                    <img src="${p.imageUrl}" class="admin-item-img" style="width:50px; height:70px; object-fit:cover; border-radius:4px;" onerror="this.src='/featured_project_1.png'">
+                                    <div class="admin-item-text" style="overflow:hidden;">
+                                        <h4 style="text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">Poster #${p.id || p._id}</h4>
+                                        <p style="font-size:0.75rem; color:var(--text-muted); text-overflow:ellipsis; overflow:hidden; white-space:nowrap; margin-top:0.2rem;">Target: ${p.redirectUrl}</p>
+                                    </div>
+                                </div>
+                                <div class="item-actions">
+                                    <button class="icon-btn edit" title="Edit" onclick="editPoster('${p.id || p._id}', '${p.imageUrl}', '${p.redirectUrl}')"><i class="fa-solid fa-pen-to-square"></i></button>
+                                    <button class="icon-btn delete" title="Delete" onclick="deletePoster('${p.id || p._id}')"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            `;
+                            list.appendChild(item);
+                        });
+                    }
+                })
+                .catch(err => console.error('Error loading dashboard posters:', err));
+        }
+
+        function submitPoster(event) {
+            event.preventDefault();
+            const posterId = document.getElementById('poster-id').value;
+            const imageUrl = document.getElementById('poster-img-url').value.trim();
+            const redirectUrl = document.getElementById('poster-redirect-url').value.trim();
+
+            fetch(`${API}/api/posters`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ posterId, imageUrl, redirectUrl })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    triggerToast(posterId ? 'Showcase poster updated!' : 'Showcase poster published!');
+                    resetPosterForm();
+                    loadDashboardPosters();
+                } else {
+                    triggerToast(data.message || 'Error publishing poster.', false);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                triggerToast('Network error, action failed.', false);
+            });
+        }
+
+        function editPoster(id, imageUrl, redirectUrl) {
+            document.getElementById('poster-id').value = id;
+            document.getElementById('poster-img-url').value = imageUrl;
+            document.getElementById('poster-redirect-url').value = redirectUrl;
+            
+            document.getElementById('poster-form-title').innerHTML = `<i class="fa-solid fa-pen" style="color:var(--purple); margin-right:0.5rem;"></i> Edit Showcase Poster`;
+            document.getElementById('poster-submit-btn').textContent = 'Update Poster';
+            document.getElementById('poster-cancel-btn').style.display = 'block';
+            
+            // Auto scroll to form
+            document.getElementById('poster-form').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function deletePoster(id) {
+            if (!confirm('Are you sure you want to remove this showcase poster?')) return;
+            
+            fetch(`${API}/api/posters/${id}`, { method: 'DELETE' })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        triggerToast('Showcase poster removed.');
+                        loadDashboardPosters();
+                    } else {
+                        triggerToast(data.message || 'Delete failed.', false);
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    triggerToast('Network error, delete failed.', false);
+                });
+        }
+
+        function resetPosterForm() {
+            document.getElementById('poster-id').value = '';
+            document.getElementById('poster-form').reset();
+            
+            document.getElementById('poster-form-title').innerHTML = `<i class="fa-solid fa-image" style="color:var(--purple); margin-right:0.5rem;"></i> Add Showcase Poster`;
+            document.getElementById('poster-submit-btn').textContent = 'Publish Poster';
+            document.getElementById('poster-cancel-btn').style.display = 'none';
         }
 
         // Register Service Worker for PWA installability

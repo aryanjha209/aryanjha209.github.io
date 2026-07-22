@@ -591,6 +591,43 @@ Answer all other technical, work, and background questions about Aryan Jha accur
         print(f"Chat API error: {e}")
         return jsonify({"success": False, "reply": "I am experiencing high latency. Please try again in a moment, or contact Aryan directly via email!"}), 500
 
+@app.route('/api/posters', methods=['GET', 'POST'])
+def posters_api():
+    if request.method == 'GET':
+        try:
+            posters = db_helper.get_posters()
+            return jsonify({"success": True, "posters": posters}), 200
+        except Exception as e:
+            print(f"Get posters error: {e}")
+            return jsonify({"success": False, "message": str(e)}), 500
+    else:
+        try:
+            req_data = request.get_json() or {}
+            image_url = req_data.get("imageUrl")
+            redirect_url = req_data.get("redirectUrl")
+            poster_id = req_data.get("posterId")
+            
+            if not image_url or not redirect_url:
+                return jsonify({"success": False, "message": "Image URL and Redirect Link are required."}), 400
+                
+            if not is_http_url(image_url):
+                return jsonify({"success": False, "message": "Poster image must be a valid URL."}), 400
+                
+            db_helper.save_poster(image_url, redirect_url, poster_id)
+            return jsonify({"success": True, "message": "Poster saved successfully!"}), 200
+        except Exception as e:
+            print(f"Save poster error: {e}")
+            return jsonify({"success": False, "message": str(e)}), 500
+
+@app.route('/api/posters/<poster_id>', methods=['DELETE'])
+def delete_poster_api(poster_id):
+    try:
+        db_helper.delete_poster(poster_id)
+        return jsonify({"success": True, "message": "Poster deleted successfully!"}), 200
+    except Exception as e:
+        print(f"Delete poster error: {e}")
+        return jsonify({"success": False, "message": str(e)}), 500
+
 # HTML Visual Analytics Dashboard
 @app.route('/stats')
 def stats_html_dashboard():

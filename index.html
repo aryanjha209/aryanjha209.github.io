@@ -1831,6 +1831,61 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-4px); }
         }
+
+        /* Showcase Box Styles */
+        .showcase-box {
+            position: relative;
+            width: 320px;
+            height: 450px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1.5px solid var(--border);
+            box-shadow: var(--shadow-lg), 0 0 20px rgba(168,85,247,0.1);
+            cursor: pointer;
+            background: rgba(255,255,255,0.02);
+            transition: var(--transition-slow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .showcase-box:hover {
+            transform: translateY(-6px) scale(1.02);
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-lg), 0 0 30px rgba(6, 182, 212, 0.25);
+        }
+        .showcase-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.5s ease-in-out;
+            opacity: 0;
+            display: block;
+        }
+        .showcase-img.fade-in {
+            opacity: 1;
+        }
+        .showcase-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(15, 12, 30, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 0.35rem 0.75rem;
+            border-radius: 99px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            z-index: 5;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+        }
     </style>
 </head>
 <body>
@@ -1930,7 +1985,11 @@
                 </div>
             </div>
             <div class="hero-right">
-                <!-- Blank (Image removed) -->
+                <!-- Showcase Box (Rotates posters) -->
+                <div class="showcase-box" id="showcase-box" style="display:none;" onclick="handleShowcaseClick()">
+                    <img src="" alt="Showcase Poster" class="showcase-img" id="showcase-img">
+                    <div class="showcase-badge"><i class="fa-solid fa-sparkles"></i> Featured</div>
+                </div>
             </div>
         </div>
     </div>
@@ -2572,6 +2631,7 @@ document.addEventListener('DOMContentLoaded', () => {
     handleUrlQueryRouting();
     loadDynamicProjects();
     loadDynamicLenses();
+    loadShowcasePosters();
     if (sessionStorage.getItem('adbarDismissed') !== 'true') {
         loadActiveAdLens();
     }
@@ -2755,6 +2815,65 @@ async function sendBotMessage(e) {
     } catch (err) {
         console.error('Chat error:', err);
         appendBotMessage("Sorry, I experienced a network error. Please try again or reach out directly!", 'ai');
+    }
+}
+
+// ===========================
+// SHOWCASE POSTERS ROTATION
+// ===========================
+let showcasePosters = [];
+let currentPosterIndex = 0;
+let posterRotationTimer = null;
+
+async function loadShowcasePosters() {
+    try {
+        const response = await fetch(`${API}/api/posters`);
+        const data = await response.json();
+        if (data.success && data.posters && data.posters.length > 0) {
+            showcasePosters = data.posters;
+            const box = document.getElementById('showcase-box');
+            const img = document.getElementById('showcase-img');
+            
+            // Set first poster
+            img.src = showcasePosters[0].imageUrl;
+            box.style.display = 'flex';
+            
+            // Fade in image
+            setTimeout(() => {
+                img.classList.add('fade-in');
+            }, 100);
+            
+            // Setup 3-second cycle rotation if there is more than 1 poster
+            if (showcasePosters.length > 1) {
+                if (posterRotationTimer) clearInterval(posterRotationTimer);
+                posterRotationTimer = setInterval(() => {
+                    img.classList.remove('fade-in');
+                    setTimeout(() => {
+                        currentPosterIndex = (currentPosterIndex + 1) % showcasePosters.length;
+                        img.src = showcasePosters[currentPosterIndex].imageUrl;
+                        img.classList.add('fade-in');
+                    }, 500); // 500ms match transition fade duration
+                }, 3500); // Rotate every 3.5s (3s visual + 0.5s fade transition)
+            }
+        }
+    } catch (err) {
+        console.error('Error fetching showcase posters:', err);
+    }
+}
+
+function handleShowcaseClick() {
+    if (showcasePosters.length > 0 && showcasePosters[currentPosterIndex]) {
+        const redirectUrl = showcasePosters[currentPosterIndex].redirectUrl;
+        if (redirectUrl) {
+            // Programmatic redirect that keeps the link invisible
+            const newTab = window.open();
+            if (newTab) {
+                newTab.opener = null;
+                newTab.location = redirectUrl;
+            } else {
+                window.location.href = redirectUrl;
+            }
+        }
     }
 }
 </script>
