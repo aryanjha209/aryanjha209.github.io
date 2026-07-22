@@ -31,6 +31,32 @@ if MONGODB_URI:
         except Exception:
             db = mongo_client[MONGODB_DB_NAME]
         print("Connected to MongoDB successfully.")
+        # Auto-seed from database.json if MongoDB collections are empty
+        try:
+            for col_name in ["projects", "lenses", "visits", "subscribers", "messages", "bookings", "testimonials"]:
+                if db[col_name].count_documents({}) == 0:
+                    local_data = read_json_db()
+                    items = local_data.get(col_name, [])
+                    if items:
+                        print(f"Seeding MongoDB collection '{col_name}' with {len(items)} items from database.json")
+                        formatted_items = []
+                        for item in items:
+                            item_copy = dict(item)
+                            if "_id" in item_copy:
+                                try:
+                                    item_copy["_id"] = ObjectId(item_copy["_id"])
+                                except Exception:
+                                    pass
+                            for k, v in item_copy.items():
+                                if isinstance(v, str) and k in ["date", "lastVisit", "dateBooked"]:
+                                    try:
+                                        item_copy[k] = datetime.fromisoformat(v.replace("Z", "+00:00"))
+                                    except Exception:
+                                        pass
+                            formatted_items.append(item_copy)
+                        db[col_name].insert_many(formatted_items)
+        except Exception as seed_err:
+            print(f"Failed to auto-seed MongoDB from database.json: {seed_err}")
     except Exception as e:
         print(f"MongoDB connection failed: {e}. Falling back to local JSON database.")
         if mongo_client:
