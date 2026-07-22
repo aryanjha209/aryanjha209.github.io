@@ -1,8 +1,8 @@
 import os
 import json
+import psycopg2
+from psycopg2.extras import RealDictCursor
 from datetime import datetime, timezone
-from bson import ObjectId
-from pymongo import MongoClient
 from dotenv import load_dotenv
 
 def get_utc_now():
@@ -10,64 +10,52 @@ def get_utc_now():
 
 load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 
-MONGODB_URI = os.environ.get("MONGODB_URI")
-MONGODB_DB_NAME = os.environ.get("MONGODB_DB_NAME", "portfolio")
+DATABASE_URL = os.environ.get("DATABASE_URL")
 JSON_DB_PATH = os.path.join(os.path.dirname(__file__), "database.json")
 
-db = None
-mongo_client = None
+pg_conn = None
 
-if MONGODB_URI:
+def get_pg_connection():
+    global pg_conn
+    if not DATABASE_URL:
+        return None
     try:
-        mongo_client = MongoClient(
-            MONGODB_URI,
-            serverSelectionTimeoutMS=5000,  # fail fast if DNS/network issue
-            connectTimeoutMS=5000,
-            socketTimeoutMS=10000,
-        )
-        mongo_client.admin.command('ping')
-        try:
-            db = mongo_client.get_database()
-        except Exception:
-            db = mongo_client[MONGODB_DB_NAME]
-        print("Connected to MongoDB successfully.")
-        # Auto-seed from database.json if MongoDB collections are empty
-        try:
-            for col_name in ["projects", "lenses", "visits", "subscribers", "messages", "bookings", "testimonials"]:
-                if db[col_name].count_documents({}) == 0:
-                    local_data = read_json_db()
-                    items = local_data.get(col_name, [])
-                    if items:
-                        print(f"Seeding MongoDB collection '{col_name}' with {len(items)} items from database.json")
-                        formatted_items = []
-                        for item in items:
-                            item_copy = dict(item)
-                            if "_id" in item_copy:
-                                try:
-                                    item_copy["_id"] = ObjectId(item_copy["_id"])
-                                except Exception:
-                                    pass
-                            for k, v in item_copy.items():
-                                if isinstance(v, str) and k in ["date", "lastVisit", "dateBooked"]:
-                                    try:
-                                        item_copy[k] = datetime.fromisoformat(v.replace("Z", "+00:00"))
-                                    except Exception:
-                                        pass
-                            formatted_items.append(item_copy)
-                        db[col_name].insert_many(formatted_items)
-        except Exception as seed_err:
-            print(f"Failed to auto-seed MongoDB from database.json: {seed_err}")
-    except Exception as e:
-        print(f"MongoDB connection failed: {e}. Falling back to local JSON database.")
-        if mongo_client:
+        if pg_conn is not None:
             try:
-                mongo_client.close()
+                if pg_conn.closed == 0:
+                    return pg_conn
             except Exception:
                 pass
-        mongo_client = None
-        db = None
-else:
-    print("MONGODB_URI not found. Using local JSON database (database.json).")
+            pg_conn = None
+        pg_conn = psycopg2.connect(DATABASE_URL)
+        return pg_conn
+    except Exception as e:
+        print(f"PostgreSQL connection failed: {e}")
+        pg_conn = None
+        return None
+
+def execute_query(query, params=None, fetch=None, commit=True):
+    conn = get_pg_connection()
+    if conn is None:
+        return None
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute(query, params or ())
+            result = None
+            if fetch == "all":
+                result = cur.fetchall()
+            elif fetch == "one":
+                result = cur.fetchone()
+            if commit:
+                conn.commit()
+            return result
+    except Exception as e:
+        print(f"PostgreSQL query execution error: {e}")
+        try:
+            conn.rollback()
+        except Exception:
+            pass
+        return None
 
 def read_json_db():
     if not os.path.exists(JSON_DB_PATH):
@@ -102,43 +90,206 @@ if not os.path.exists(JSON_DB_PATH):
 def serialize_doc(doc):
     if not doc:
         return None
-    doc["_id"] = str(doc["_id"])
+    # Duplicate 'id' to '_id' for frontend/dashboard backward compatibility
+    if "id" in doc:
+        doc["_id"] = str(doc["id"])
+        doc["id"] = str(doc["id"])
     for k, v in doc.items():
         if isinstance(v, datetime):
             doc[k] = v.isoformat()
     return doc
 
 def serialize_docs(docs):
-    return [serialize_doc(doc) for doc in docs]
+    return [serialize_doc(dict(doc)) for doc in docs]
 
-def to_object_id(id_str):
-    if not id_str:
-        return None
+# database table initialization and auto-seeding
+def init_db():
+    conn = get_pg_connection()
+    if conn is None:
+        print("PostgreSQL connection not available. Skipping table initialization.")
+        return
     try:
-        return ObjectId(id_str)
-    except Exception:
-        return id_str
+        with conn.cursor() as cur:
+            # Create visits
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS visits (
+                    id SERIAL PRIMARY KEY,
+                    ip VARCHAR(45) UNIQUE,
+                    count INTEGER DEFAULT 1,
+                    last_visit TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+                    user_agent TEXT
+                )
+            """)
+            # Create subscribers
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS subscribers (
+                    id SERIAL PRIMARY KEY,
+                    email VARCHAR(255) UNIQUE,
+                    date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+            # Create messages
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS messages (
+                    id SERIAL PRIMARY KEY,
+                    name VARCHAR(255),
+                    email VARCHAR(255),
+                    message TEXT,
+                    date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+            # Create bookings
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS bookings (
+                    id SERIAL PRIMARY KEY,
+                    name VARCHAR(255),
+                    email VARCHAR(255),
+                    date VARCHAR(50),
+                    time VARCHAR(50),
+                    topic VARCHAR(255),
+                    notes TEXT,
+                    date_booked TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+            # Create testimonials
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS testimonials (
+                    id SERIAL PRIMARY KEY,
+                    name VARCHAR(255),
+                    role VARCHAR(255),
+                    quote TEXT,
+                    avatar TEXT,
+                    date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+            # Create projects
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS projects (
+                    id SERIAL PRIMARY KEY,
+                    name VARCHAR(255),
+                    description TEXT,
+                    image_url TEXT,
+                    tags TEXT,
+                    demo_url TEXT,
+                    github_url TEXT,
+                    date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+            # Create lenses
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS lenses (
+                    id SERIAL PRIMARY KEY,
+                    name VARCHAR(255),
+                    description TEXT,
+                    lens_url TEXT,
+                    snapcode_url TEXT,
+                    views VARCHAR(100),
+                    active_ad_bar BOOLEAN DEFAULT FALSE,
+                    date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+            conn.commit()
+            print("PostgreSQL tables checked/created successfully.")
+            
+            # Auto-seed tables from database.json if empty
+            auto_seed_db(cur, conn)
+    except Exception as e:
+        print(f"Error initializing PostgreSQL database: {e}")
 
-# Exported helper methods
+def auto_seed_db(cur, conn):
+    local_data = read_json_db()
+    
+    # 1. Projects
+    cur.execute("SELECT COUNT(*) FROM projects")
+    if cur.fetchone()[0] == 0:
+        items = local_data.get("projects") or []
+        for p in items:
+            cur.execute("""
+                INSERT INTO projects (name, description, image_url, tags, demo_url, github_url, date)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """, (p.get("name"), p.get("description"), p.get("imageUrl"), p.get("tags"), p.get("demoUrl"), p.get("githubUrl"), get_utc_now()))
+        print(f"Seeded {len(items)} projects to PostgreSQL.")
+        
+    # 2. Lenses
+    cur.execute("SELECT COUNT(*) FROM lenses")
+    if cur.fetchone()[0] == 0:
+        items = local_data.get("lenses") or []
+        for l in items:
+            cur.execute("""
+                INSERT INTO lenses (name, description, lens_url, snapcode_url, views, active_ad_bar, date)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """, (l.get("name"), l.get("description"), l.get("lensUrl"), l.get("snapcodeUrl"), l.get("views"), l.get("activeAdBar", False), get_utc_now()))
+        print(f"Seeded {len(items)} lenses to PostgreSQL.")
+        
+    # 3. Testimonials
+    cur.execute("SELECT COUNT(*) FROM testimonials")
+    if cur.fetchone()[0] == 0:
+        items = local_data.get("testimonials") or []
+        for t in items:
+            cur.execute("""
+                INSERT INTO testimonials (name, role, quote, avatar, date)
+                VALUES (%s, %s, %s, %s, %s)
+            """, (t.get("name"), t.get("role") or t.get("org"), t.get("quote") or t.get("comment"), t.get("avatar"), get_utc_now()))
+        print(f"Seeded {len(items)} testimonials to PostgreSQL.")
+
+    # 4. Subscribers
+    cur.execute("SELECT COUNT(*) FROM subscribers")
+    if cur.fetchone()[0] == 0:
+        items = local_data.get("subscribers") or []
+        for s in items:
+            cur.execute("""
+                INSERT INTO subscribers (email, date)
+                VALUES (%s, %s)
+                ON CONFLICT (email) DO NOTHING
+            """, (s.get("email"), get_utc_now()))
+        print(f"Seeded {len(items)} subscribers to PostgreSQL.")
+
+    # 5. Messages
+    cur.execute("SELECT COUNT(*) FROM messages")
+    if cur.fetchone()[0] == 0:
+        items = local_data.get("messages") or []
+        for m in items:
+            cur.execute("""
+                INSERT INTO messages (name, email, message, date)
+                VALUES (%s, %s, %s, %s)
+            """, (m.get("name"), m.get("email"), m.get("message"), get_utc_now()))
+        print(f"Seeded {len(items)} messages to PostgreSQL.")
+
+    # 6. Bookings
+    cur.execute("SELECT COUNT(*) FROM bookings")
+    if cur.fetchone()[0] == 0:
+        items = local_data.get("bookings") or []
+        for b in items:
+            cur.execute("""
+                INSERT INTO bookings (name, email, date, time, topic, notes, date_booked)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """, (b.get("name"), b.get("email"), b.get("date"), b.get("time"), b.get("topic"), b.get("notes"), get_utc_now()))
+        print(f"Seeded {len(items)} bookings to PostgreSQL.")
+        
+    conn.commit()
+
+# Trigger schema initialization on load if possible
+init_db()
+
+# DB operations
 def track_visit(ip, user_agent):
-    if db is not None:
+    conn = get_pg_connection()
+    if conn is not None:
         try:
-            db.visits.update_one(
-                {"ip": ip},
-                {
-                    "$inc": {"count": 1},
-                    "$set": {"lastVisit": get_utc_now(), "userAgent": user_agent}
-                },
-                upsert=True
-            )
+            execute_query("""
+                INSERT INTO visits (ip, count, last_visit, user_agent)
+                VALUES (%s, 1, %s, %s)
+                ON CONFLICT (ip)
+                DO UPDATE SET count = visits.count + 1, last_visit = EXCLUDED.last_visit, user_agent = EXCLUDED.user_agent
+            """, (ip, get_utc_now(), user_agent))
         except Exception as e:
-            print(f"MongoDB track_visit error: {e}")
+            print(f"PostgreSQL track_visit error: {e}")
     else:
         data = read_json_db()
         found = False
         for v in data["visits"]:
             if v["ip"] == ip:
-                v["count"] = v.get("count", 0) + 1
+                v["count"] = v.get("count", 1) + 1
                 v["lastVisit"] = get_utc_now().isoformat()
                 v["userAgent"] = user_agent
                 found = True
@@ -153,18 +304,16 @@ def track_visit(ip, user_agent):
         write_json_db(data)
 
 def add_subscriber(email):
-    if db is not None:
+    conn = get_pg_connection()
+    if conn is not None:
         try:
-            sub = db.subscribers.find_one({"email": email})
-            if sub:
+            row = execute_query("SELECT email FROM subscribers WHERE email = %s", (email,), fetch="one")
+            if row:
                 return {"success": True, "message": "Already subscribed!"}
-            db.subscribers.insert_one({
-                "email": email,
-                "date": get_utc_now()
-            })
+            execute_query("INSERT INTO subscribers (email, date) VALUES (%s, %s)", (email, get_utc_now()))
             return {"success": True, "message": "Subscribed successfully!"}
         except Exception as e:
-            print(f"MongoDB add_subscriber error: {e}")
+            print(f"PostgreSQL add_subscriber error: {e}")
             return {"success": False, "message": str(e)}
     else:
         data = read_json_db()
@@ -180,16 +329,13 @@ def add_subscriber(email):
         return {"success": True, "message": "Subscribed successfully!"}
 
 def save_message(name, email, message):
-    if db is not None:
+    conn = get_pg_connection()
+    if conn is not None:
         try:
-            db.messages.insert_one({
-                "name": name,
-                "email": email,
-                "message": message,
-                "date": get_utc_now()
-            })
+            execute_query("INSERT INTO messages (name, email, message, date) VALUES (%s, %s, %s, %s)",
+                          (name, email, message, get_utc_now()))
         except Exception as e:
-            print(f"MongoDB save_message error: {e}")
+            print(f"PostgreSQL save_message error: {e}")
     else:
         data = read_json_db()
         data["messages"].append({
@@ -202,74 +348,80 @@ def save_message(name, email, message):
         write_json_db(data)
 
 def book_call(booking_data):
-    # Map incoming properties
-    mapped_data = {
-        "name": booking_data.get("name"),
-        "email": booking_data.get("email"),
-        "date": booking_data.get("date"),
-        "time": booking_data.get("time"),
-        "topic": booking_data.get("topic"),
-        "notes": booking_data.get("notes"),
-    }
-    if db is not None:
+    conn = get_pg_connection()
+    if conn is not None:
         try:
-            mapped_data["dateBooked"] = get_utc_now()
-            db.bookings.insert_one(mapped_data)
+            execute_query("""
+                INSERT INTO bookings (name, email, date, time, topic, notes, date_booked)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """, (booking_data.get("name"), booking_data.get("email"), booking_data.get("date"),
+                  booking_data.get("time"), booking_data.get("topic"), booking_data.get("notes"), get_utc_now()))
         except Exception as e:
-            print(f"MongoDB book_call error: {e}")
+            print(f"PostgreSQL book_call error: {e}")
     else:
         data = read_json_db()
-        mapped_data["_id"] = str(int(get_utc_now().timestamp() * 1000))
-        mapped_data["dateBooked"] = get_utc_now().isoformat()
-        data["bookings"].append(mapped_data)
+        mapped = {
+            "_id": str(int(get_utc_now().timestamp() * 1000)),
+            "name": booking_data.get("name"),
+            "email": booking_data.get("email"),
+            "date": booking_data.get("date"),
+            "time": booking_data.get("time"),
+            "topic": booking_data.get("topic"),
+            "notes": booking_data.get("notes"),
+            "dateBooked": get_utc_now().isoformat()
+        }
+        data["bookings"].append(mapped)
         write_json_db(data)
 
 def get_testimonials():
-    if db is not None:
+    conn = get_pg_connection()
+    if conn is not None:
         try:
-            docs = list(db.testimonials.find({}).sort("date", -1))
-            return serialize_docs(docs)
+            rows = execute_query("SELECT id, name, role, quote, avatar, date FROM testimonials ORDER BY date DESC", fetch="all")
+            return serialize_docs(rows or [])
         except Exception as e:
-            print(f"MongoDB get_testimonials error: {e}")
+            print(f"PostgreSQL get_testimonials error: {e}")
             return []
     else:
         data = read_json_db()
-        testimonials = data.get("testimonials", [])
-        return sorted(testimonials, key=lambda x: x.get("date", ""), reverse=True)
+        return sorted(data.get("testimonials", []), key=lambda x: x.get("date", ""), reverse=True)
 
 def add_testimonial(name, org, comment, avatar):
-    # Node version mapped comment to quote, org to role, and testimonial to quote
-    testimonial_doc = {
-        "name": name,
-        "role": org, # frontend maps org to role
-        "quote": comment, # frontend maps comment to quote
-        "avatar": avatar,
-    }
-    if db is not None:
+    conn = get_pg_connection()
+    if conn is not None:
         try:
-            testimonial_doc["date"] = get_utc_now()
-            result = db.testimonials.insert_one(testimonial_doc)
-            testimonial_doc["_id"] = result.inserted_id
-            return serialize_doc(testimonial_doc)
+            row = execute_query("""
+                INSERT INTO testimonials (name, role, quote, avatar, date)
+                VALUES (%s, %s, %s, %s, %s)
+                RETURNING id, name, role, quote, avatar, date
+            """, (name, org, comment, avatar, get_utc_now()), fetch="one")
+            return serialize_doc(row)
         except Exception as e:
-            print(f"MongoDB add_testimonial error: {e}")
+            print(f"PostgreSQL add_testimonial error: {e}")
             raise e
     else:
         data = read_json_db()
-        testimonial_doc["_id"] = str(int(get_utc_now().timestamp() * 1000))
-        testimonial_doc["date"] = get_utc_now().isoformat()
-        data["testimonials"].append(testimonial_doc)
+        doc = {
+            "_id": str(int(get_utc_now().timestamp() * 1000)),
+            "name": name,
+            "role": org,
+            "quote": comment,
+            "avatar": avatar,
+            "date": get_utc_now().isoformat()
+        }
+        data["testimonials"].append(doc)
         write_json_db(data)
-        return testimonial_doc
+        return doc
 
 def get_stats_data():
-    if db is not None:
+    conn = get_pg_connection()
+    if conn is not None:
         try:
-            visits = list(db.visits.find({}))
-            subscribers = list(db.subscribers.find({}))
-            messages = list(db.messages.find({}))
-            bookings = list(db.bookings.find({}))
-            testimonials = list(db.testimonials.find({}))
+            visits = execute_query("SELECT id, ip, count, last_visit as \"lastVisit\", user_agent as \"userAgent\" FROM visits", fetch="all") or []
+            subscribers = execute_query("SELECT id, email, date FROM subscribers", fetch="all") or []
+            messages = execute_query("SELECT id, name, email, message, date FROM messages", fetch="all") or []
+            bookings = execute_query("SELECT id, name, email, date, time, topic, notes, date_booked as \"dateBooked\" FROM bookings", fetch="all") or []
+            testimonials = execute_query("SELECT id, name, role, quote, avatar, date FROM testimonials", fetch="all") or []
             return {
                 "visits": serialize_docs(visits),
                 "subscribers": serialize_docs(subscribers),
@@ -278,7 +430,7 @@ def get_stats_data():
                 "testimonials": serialize_docs(testimonials)
             }
         except Exception as e:
-            print(f"MongoDB get_stats_data error: {e}")
+            print(f"PostgreSQL get_stats_data error: {e}")
             return {"visits": [], "subscribers": [], "messages": [], "bookings": [], "testimonials": []}
     else:
         data = read_json_db()
@@ -291,12 +443,13 @@ def get_stats_data():
         }
 
 def get_projects():
-    if db is not None:
+    conn = get_pg_connection()
+    if conn is not None:
         try:
-            docs = list(db.projects.find({}).sort("date", -1))
-            return serialize_docs(docs)
+            rows = execute_query("SELECT id, name, description, image_url as \"imageUrl\", tags, demo_url as \"demoUrl\", github_url as \"githubUrl\", date FROM projects ORDER BY date DESC", fetch="all")
+            return serialize_docs(rows or [])
         except Exception as e:
-            print(f"MongoDB get_projects error: {e}")
+            print(f"PostgreSQL get_projects error: {e}")
             return []
     else:
         data = read_json_db()
@@ -304,54 +457,70 @@ def get_projects():
 
 def save_project(project_data):
     proj_id = project_data.get("id")
-    mapped_data = {
-        "name": project_data.get("name"),
-        "description": project_data.get("description"),
-        "imageUrl": project_data.get("imageUrl"),
-        "tags": project_data.get("tags"),
-        "demoUrl": project_data.get("demoUrl"),
-        "githubUrl": project_data.get("githubUrl")
-    }
-    if db is not None:
+    name = project_data.get("name")
+    desc = project_data.get("description")
+    img = project_data.get("imageUrl")
+    tags = project_data.get("tags")
+    demo = project_data.get("demoUrl")
+    github = project_data.get("githubUrl")
+    
+    conn = get_pg_connection()
+    if conn is not None:
         try:
             if proj_id:
-                db.projects.update_one({"_id": to_object_id(proj_id)}, {"$set": mapped_data})
+                execute_query("""
+                    UPDATE projects
+                    SET name=%s, description=%s, image_url=%s, tags=%s, demo_url=%s, github_url=%s
+                    WHERE id=%s
+                """, (name, desc, img, tags, demo, github, int(proj_id)))
             else:
-                mapped_data["date"] = datetime.utcnow()
-                db.projects.insert_one(mapped_data)
+                execute_query("""
+                    INSERT INTO projects (name, description, image_url, tags, demo_url, github_url, date)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                """, (name, desc, img, tags, demo, github, get_utc_now()))
         except Exception as e:
-            print(f"MongoDB save_project error: {e}")
+            print(f"PostgreSQL save_project error: {e}")
     else:
         data = read_json_db()
+        mapped_data = {
+            "name": name,
+            "description": desc,
+            "imageUrl": img,
+            "tags": tags,
+            "demoUrl": demo,
+            "githubUrl": github
+        }
         if proj_id:
             for p in data["projects"]:
                 if p["_id"] == proj_id:
                     p.update(mapped_data)
                     break
         else:
-            mapped_data["_id"] = str(int(datetime.utcnow().timestamp() * 1000))
-            mapped_data["date"] = datetime.utcnow().isoformat()
+            mapped_data["_id"] = str(int(get_utc_now().timestamp() * 1000))
+            mapped_data["date"] = get_utc_now().isoformat()
             data["projects"].append(mapped_data)
         write_json_db(data)
 
 def delete_project(project_id):
-    if db is not None:
+    conn = get_pg_connection()
+    if conn is not None:
         try:
-            db.projects.delete_one({"_id": to_object_id(project_id)})
+            execute_query("DELETE FROM projects WHERE id=%s", (int(project_id),))
         except Exception as e:
-            print(f"MongoDB delete_project error: {e}")
+            print(f"PostgreSQL delete_project error: {e}")
     else:
         data = read_json_db()
         data["projects"] = [p for p in data["projects"] if p["_id"] != project_id]
         write_json_db(data)
 
 def get_lenses():
-    if db is not None:
+    conn = get_pg_connection()
+    if conn is not None:
         try:
-            docs = list(db.lenses.find({}).sort("date", -1))
-            return serialize_docs(docs)
+            rows = execute_query("SELECT id, name, description, lens_url as \"lensUrl\", snapcode_url as \"snapcodeUrl\", views, active_ad_bar as \"activeAdBar\", date FROM lenses ORDER BY date DESC", fetch="all")
+            return serialize_docs(rows or [])
         except Exception as e:
-            print(f"MongoDB get_lenses error: {e}")
+            print(f"PostgreSQL get_lenses error: {e}")
             return []
     else:
         data = read_json_db()
@@ -359,28 +528,41 @@ def get_lenses():
 
 def save_lens(lens_data):
     lens_id = lens_data.get("id")
-    active_ad = lens_data.get("activeAdBar", False)
-    mapped_data = {
-        "name": lens_data.get("name"),
-        "description": lens_data.get("description"),
-        "lensUrl": lens_data.get("lensUrl"),
-        "snapcodeUrl": lens_data.get("snapcodeUrl"),
-        "views": lens_data.get("views"),
-        "activeAdBar": active_ad
-    }
-    if db is not None:
+    name = lens_data.get("name")
+    desc = lens_data.get("description")
+    url = lens_data.get("lensUrl")
+    snapcode = lens_data.get("snapcodeUrl")
+    views = lens_data.get("views")
+    active_ad = lens_data.get("activeAdBar") == True or lens_data.get("activeAdBar") == 'true'
+    
+    conn = get_pg_connection()
+    if conn is not None:
         try:
             if active_ad:
-                db.lenses.update_many({}, {"$set": {"activeAdBar": False}})
+                execute_query("UPDATE lenses SET active_ad_bar = FALSE")
             if lens_id:
-                db.lenses.update_one({"_id": to_object_id(lens_id)}, {"$set": mapped_data})
+                execute_query("""
+                    UPDATE lenses
+                    SET name=%s, description=%s, lens_url=%s, snapcode_url=%s, views=%s, active_ad_bar=%s
+                    WHERE id=%s
+                """, (name, desc, url, snapcode, views, active_ad, int(lens_id)))
             else:
-                mapped_data["date"] = datetime.utcnow()
-                db.lenses.insert_one(mapped_data)
+                execute_query("""
+                    INSERT INTO lenses (name, description, lens_url, snapcode_url, views, active_ad_bar, date)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                """, (name, desc, url, snapcode, views, active_ad, get_utc_now()))
         except Exception as e:
-            print(f"MongoDB save_lens error: {e}")
+            print(f"PostgreSQL save_lens error: {e}")
     else:
         data = read_json_db()
+        mapped_data = {
+            "name": name,
+            "description": desc,
+            "lensUrl": url,
+            "snapcodeUrl": snapcode,
+            "views": views,
+            "activeAdBar": active_ad
+        }
         if active_ad:
             for l in data["lenses"]:
                 l["activeAdBar"] = False
@@ -390,29 +572,31 @@ def save_lens(lens_data):
                     l.update(mapped_data)
                     break
         else:
-            mapped_data["_id"] = str(int(datetime.utcnow().timestamp() * 1000))
-            mapped_data["date"] = datetime.utcnow().isoformat()
+            mapped_data["_id"] = str(int(get_utc_now().timestamp() * 1000))
+            mapped_data["date"] = get_utc_now().isoformat()
             data["lenses"].append(mapped_data)
         write_json_db(data)
 
 def delete_lens(lens_id):
-    if db is not None:
+    conn = get_pg_connection()
+    if conn is not None:
         try:
-            db.lenses.delete_one({"_id": to_object_id(lens_id)})
+            execute_query("DELETE FROM lenses WHERE id=%s", (int(lens_id),))
         except Exception as e:
-            print(f"MongoDB delete_lens error: {e}")
+            print(f"PostgreSQL delete_lens error: {e}")
     else:
         data = read_json_db()
         data["lenses"] = [l for l in data["lenses"] if l["_id"] != lens_id]
         write_json_db(data)
 
 def get_active_ad_lens():
-    if db is not None:
+    conn = get_pg_connection()
+    if conn is not None:
         try:
-            doc = db.lenses.find_one({"activeAdBar": True})
-            return serialize_doc(doc)
+            row = execute_query("SELECT id, name, description, lens_url as \"lensUrl\", snapcode_url as \"snapcodeUrl\", views, active_ad_bar as \"activeAdBar\", date FROM lenses WHERE active_ad_bar = TRUE LIMIT 1", fetch="one")
+            return serialize_doc(row)
         except Exception as e:
-            print(f"MongoDB get_active_ad_lens error: {e}")
+            print(f"PostgreSQL get_active_ad_lens error: {e}")
             return None
     else:
         data = read_json_db()
@@ -422,12 +606,13 @@ def get_active_ad_lens():
         return None
 
 def delete_testimonial(testimonial_id):
-    if db is not None:
+    conn = get_pg_connection()
+    if conn is not None:
         try:
-            db.testimonials.delete_one({"_id": to_object_id(testimonial_id)})
+            execute_query("DELETE FROM testimonials WHERE id=%s", (int(testimonial_id),))
             return True
         except Exception as e:
-            print(f"MongoDB delete_testimonial error: {e}")
+            print(f"PostgreSQL delete_testimonial error: {e}")
             return False
     else:
         data = read_json_db()
@@ -436,12 +621,13 @@ def delete_testimonial(testimonial_id):
         return True
 
 def delete_message(message_id):
-    if db is not None:
+    conn = get_pg_connection()
+    if conn is not None:
         try:
-            db.messages.delete_one({"_id": to_object_id(message_id)})
+            execute_query("DELETE FROM messages WHERE id=%s", (int(message_id),))
             return True
         except Exception as e:
-            print(f"MongoDB delete_message error: {e}")
+            print(f"PostgreSQL delete_message error: {e}")
             return False
     else:
         data = read_json_db()
@@ -450,12 +636,13 @@ def delete_message(message_id):
         return True
 
 def delete_booking(booking_id):
-    if db is not None:
+    conn = get_pg_connection()
+    if conn is not None:
         try:
-            db.bookings.delete_one({"_id": to_object_id(booking_id)})
+            execute_query("DELETE FROM bookings WHERE id=%s", (int(booking_id),))
             return True
         except Exception as e:
-            print(f"MongoDB delete_booking error: {e}")
+            print(f"PostgreSQL delete_booking error: {e}")
             return False
     else:
         data = read_json_db()
@@ -464,16 +651,17 @@ def delete_booking(booking_id):
         return True
 
 def delete_subscriber(sub_id_or_email):
-    if db is not None:
+    conn = get_pg_connection()
+    if conn is not None:
         try:
             try:
-                oid = ObjectId(sub_id_or_email)
-                db.subscribers.delete_one({"_id": oid})
-            except Exception:
-                db.subscribers.delete_one({"email": sub_id_or_email})
+                sid = int(sub_id_or_email)
+                execute_query("DELETE FROM subscribers WHERE id=%s", (sid,))
+            except ValueError:
+                execute_query("DELETE FROM subscribers WHERE email=%s", (sub_id_or_email,))
             return True
         except Exception as e:
-            print(f"MongoDB delete_subscriber error: {e}")
+            print(f"PostgreSQL delete_subscriber error: {e}")
             return False
     else:
         data = read_json_db()

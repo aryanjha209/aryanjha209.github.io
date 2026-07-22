@@ -134,12 +134,12 @@ def send_smtp_email(to_email, subject, html_content):
 @app.route('/api/health', methods=['GET'])
 def health_check():
     import sys as _sys
-    mongo_status = "connected" if db_helper.db is not None else "fallback (JSON)"
+    db_status = "connected" if db_helper.get_pg_connection() is not None else "fallback (JSON)"
     return jsonify({
         "status": "ok",
         "python": _sys.version,
-        "database": mongo_status,
-        "mongodb_uri_set": bool(os.environ.get("MONGODB_URI")),
+        "database": db_status,
+        "database_url_set": bool(os.environ.get("DATABASE_URL")),
         "email_configured": bool(os.environ.get("EMAIL_USER")),
     }), 200
 
