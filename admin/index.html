@@ -1333,7 +1333,7 @@
     <!-- Core Scripts -->
     <script src="../config.js"></script>
     <script>
-        const API = CONFIG.API_BASE_URL;
+        const API = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE_URL) ? CONFIG.API_BASE_URL : '';
         let systemStatsPayload = {}; // Holds latest cached database payload (visits, messages, bookings, testimonials)
 
         // Title and descriptions matching map
@@ -1549,18 +1549,22 @@
         }
 
         // SNAPCHAT LENSES CRUD
+        let cachedLenses = [];
+
         function loadLenses() {
             fetch(`${API}/api/lenses`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
+                        cachedLenses = data.lenses || [];
                         const list = document.getElementById('lenses-list');
                         list.innerHTML = '';
-                        if (data.lenses.length === 0) {
+                        if (cachedLenses.length === 0) {
                             list.innerHTML = '<div style="color:var(--text-muted); text-align:center; padding:3rem;">No lenses published yet.</div>';
                             return;
                         }
-                        data.lenses.forEach(l => {
+                        cachedLenses.forEach(l => {
+                            const id = l.id || l._id;
                             const isAd = l.activeAdBar === true || l.activeAdBar === 'true';
                             const activeAdBadge = isAd ? `<span class="item-tag" style="background:rgba(255,252,0,0.1); color:var(--yellow); border-color:rgba(255,252,0,0.25);">Featured Ad-Bar</span>` : '';
                             const item = document.createElement('div');
@@ -1569,13 +1573,13 @@
                                 <div class="admin-item-info">
                                     <img src="${l.snapcodeUrl || '/snapcode_qr.png'}" class="admin-item-img" onerror="this.src='/snapcode_qr.png'">
                                     <div class="admin-item-text">
-                                        <h4>${l.name}</h4>
-                                        <p><i class="fa-solid fa-eye"></i> ${l.views} Views ${activeAdBadge ? '<br>' + activeAdBadge : ''}</p>
+                                        <h4>${escapeText(l.name || 'Untitled Lens')}</h4>
+                                        <p><i class="fa-solid fa-eye"></i> ${escapeText(l.views || '0')} Views ${activeAdBadge ? '<br>' + activeAdBadge : ''}</p>
                                     </div>
                                 </div>
                                 <div class="item-actions">
-                                    <button class="icon-btn edit" title="Edit" onclick="editLens('${l.id || l._id}', '${encodeURIComponent(JSON.stringify(l))}')"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    <button class="icon-btn delete" title="Delete" onclick="deleteLens('${l.id || l._id}')"><i class="fa-solid fa-trash"></i></button>
+                                    <button class="icon-btn edit" title="Edit Lens" onclick="editLens('${id}')"><i class="fa-solid fa-pen-to-square"></i></button>
+                                    <button class="icon-btn delete" title="Delete Lens" onclick="deleteLens('${id}')"><i class="fa-solid fa-trash"></i></button>
                                 </div>
                             `;
                             list.appendChild(item);
@@ -1612,12 +1616,17 @@
         }
 
         function editLens(id, lString) {
-            const l = JSON.parse(decodeURIComponent(lString));
+            let l = cachedLenses.find(x => (x.id || x._id) === id);
+            if (!l && lString) {
+                try { l = JSON.parse(decodeURIComponent(lString)); } catch(e) {}
+            }
+            if (!l) return;
+
             document.getElementById('lens-id').value = id;
-            document.getElementById('lens-name').value = l.name;
-            document.getElementById('lens-desc').value = l.description;
-            document.getElementById('lens-url').value = l.lensUrl;
-            document.getElementById('lens-views').value = l.views;
+            document.getElementById('lens-name').value = l.name || '';
+            document.getElementById('lens-desc').value = l.description || '';
+            document.getElementById('lens-url').value = l.lensUrl || '';
+            document.getElementById('lens-views').value = l.views || '';
             document.getElementById('lens-active-ad').checked = l.activeAdBar === true || l.activeAdBar === 'true';
             document.getElementById('lens-img-url').value = l.snapcodeUrl || '';
 
@@ -1626,6 +1635,8 @@
             document.getElementById('lens-cancel-btn').style.display = 'block';
             
             switchPanel('lenses-panel', document.querySelector('.nav-menu button:nth-child(3)'));
+            const lensForm = document.getElementById('lens-form');
+            if (lensForm) lensForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
         // reset lens inputs

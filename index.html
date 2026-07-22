@@ -1741,9 +1741,6 @@
                 <a href="mailto:aryankr2029@gmail.com" class="cta-contact-item">
                     <i class="fa-solid fa-envelope"></i> aryankr2029@gmail.com
                 </a>
-                <a href="https://wa.me/919835089300" target="_blank" class="cta-contact-item">
-                    <i class="fa-brands fa-whatsapp"></i> +91 98350 89300
-                </a>
                 <span class="cta-contact-item">
                     <i class="fa-solid fa-location-dot"></i> Vadodara, Gujarat, India
                 </span>
@@ -1914,7 +1911,7 @@
 // ===========================
 // API BASE
 // ===========================
-const API = CONFIG.API_BASE_URL;
+const API = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE_URL) ? CONFIG.API_BASE_URL : '';
 
 function escapeText(value) {
     return String(value ?? '').replace(/[&<>"']/g, char => ({

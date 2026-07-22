@@ -15,7 +15,7 @@ const CONFIG = {
             // Local Flask dev server
             return 'http://localhost:5000';
         }
-        if (h === GITHUB_PAGES_HOSTNAME) {
+        if (h === GITHUB_PAGES_HOSTNAME || h.endsWith('.github.io')) {
             // GitHub Pages — route to Vercel backend
             return VERCEL_BACKEND_URL;
         }

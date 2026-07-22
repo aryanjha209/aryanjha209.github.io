@@ -8,14 +8,56 @@
     },
     {
       "ip": "127.0.0.1",
-      "count": 6,
-      "lastVisit": "2026-07-22T13:37:16.792589+00:00",
+      "count": 8,
+      "lastVisit": "2026-07-22T13:49:15.848298+00:00",
       "userAgent": "Werkzeug/3.1.8"
     }
   ],
-  "subscribers": [],
-  "messages": [],
-  "bookings": [],
+  "subscribers": [
+    {
+      "_id": "1784727958849",
+      "email": "test_subscriber_123@example.com",
+      "date": "2026-07-22T13:45:58.849501+00:00"
+    }
+  ],
+  "messages": [
+    {
+      "_id": "1784727954322",
+      "name": "Test Client",
+      "email": "test_client@example.com",
+      "message": "[Service: AI/ML]\n\nI want to build a custom AI chatbot.",
+      "date": "2026-07-22T13:45:54.322075+00:00"
+    },
+    {
+      "_id": "1784728097874",
+      "name": "Test Client",
+      "email": "test_client@example.com",
+      "message": "[Service: AI/ML]\n\nI want to build a custom AI chatbot.",
+      "date": "2026-07-22T13:48:17.874135+00:00"
+    }
+  ],
+  "bookings": [
+    {
+      "name": "Test Booking Client",
+      "email": "test_booking@example.com",
+      "date": "2026-08-01",
+      "time": "10:00 AM IST",
+      "topic": "Discuss Work & Start a Project",
+      "notes": "Looking for web app & AR lens development",
+      "_id": "1784727949483",
+      "dateBooked": "2026-07-22T13:45:49.483034+00:00"
+    },
+    {
+      "name": "Test Booking Client",
+      "email": "test_booking@example.com",
+      "date": "2026-08-01",
+      "time": "10:00 AM IST",
+      "topic": "Discuss Work & Start a Project",
+      "notes": "Looking for web app & AR lens development",
+      "_id": "1784728093419",
+      "dateBooked": "2026-07-22T13:48:13.419425+00:00"
+    }
+  ],
   "testimonials": [],
   "projects": [
     {

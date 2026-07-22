@@ -16,13 +16,7 @@ load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file_
 import db_helper
 
 app = Flask(__name__)
-CORS(app, origins=[
-    "https://aryanjha209.github.io",   # GitHub Pages
-    "https://aryanjha.me",             # Vercel custom domain
-    "https://www.aryanjha.me",         # Vercel www
-    "http://localhost:5000",           # Local dev
-    "http://127.0.0.1:5000",          # Local dev
-])
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # Frontend files are now at the project root (moved from frontend/)
 FRONTEND_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -101,7 +95,10 @@ def build_stats_payload():
 def is_http_url(value):
     if not value or not isinstance(value, str):
         return False
-    parsed = urlparse(value.strip())
+    val = value.strip()
+    if val.startswith("http://") or val.startswith("https://") or val.startswith("/") or val.startswith("data:image/") or any(val.lower().endswith(ext) for ext in [".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg"]):
+        return True
+    parsed = urlparse(val)
     return parsed.scheme in ("http", "https") and bool(parsed.netloc)
 
 def send_smtp_email(to_email, subject, html_content):
@@ -170,7 +167,7 @@ def subscribe_api():
         result = db_helper.add_subscriber(email)
         
         # Send "Thanks" Mail
-        admin_email = os.environ.get("ADMIN_EMAIL") or "aryankjhaa@gmail.com"
+        admin_email = os.environ.get("ADMIN_EMAIL") or os.environ.get("EMAIL_USER") or "aryankjhaa@gmail.com"
         email_user = os.environ.get("EMAIL_USER")
         if email_user:
             mail_subject = "Thanks for subscribing! ⚡ Aryan Jha"
@@ -226,7 +223,7 @@ def send_email_api():
             
         db_helper.save_message(name, email, message)
         
-        admin_email = os.environ.get("ADMIN_EMAIL") or "aryankjhaa@gmail.com"
+        admin_email = os.environ.get("ADMIN_EMAIL") or os.environ.get("EMAIL_USER") or "aryankjhaa@gmail.com"
         email_user = os.environ.get("EMAIL_USER")
         if email_user:
             mail_subject = f"New Portfolio Message from {name}"
@@ -288,7 +285,7 @@ def book_call_api():
             "time": time, "topic": topic, "notes": notes
         })
         
-        admin_email = os.environ.get("ADMIN_EMAIL") or "aryankjhaa@gmail.com"
+        admin_email = os.environ.get("ADMIN_EMAIL") or os.environ.get("EMAIL_USER") or "aryankjhaa@gmail.com"
         email_user = os.environ.get("EMAIL_USER")
         if email_user:
             # Send email to admin
