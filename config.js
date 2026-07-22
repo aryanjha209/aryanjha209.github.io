@@ -20,11 +20,11 @@ const CONFIG = {
             // Opened directly as local file — route to Vercel backend
             return VERCEL_BACKEND_URL;
         }
-        if (h === GITHUB_PAGES_HOSTNAME || h.endsWith('.github.io')) {
-            // GitHub Pages — route to Vercel backend
+        if (h === GITHUB_PAGES_HOSTNAME || h.endsWith('.github.io') || h === 'aryanjha.me' || h === 'www.aryanjha.me') {
+            // Static hosts (GitHub Pages/custom domains) — route to Vercel backend
             return VERCEL_BACKEND_URL;
         }
-        // Vercel or any custom domain (aryanjha.me) — same-origin, use relative URLs
+        // Vercel deployment (same origin) — same-origin, use relative URLs
         return '';
     })()
 };
