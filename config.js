@@ -11,9 +11,14 @@ const VERCEL_BACKEND_URL    = "https://aryanjha209-github-io.vercel.app";
 const CONFIG = {
     API_BASE_URL: (() => {
         const h = window.location.hostname;
+        const p = window.location.protocol;
         if (h === 'localhost' || h === '127.0.0.1') {
             // Local Flask dev server
             return 'http://localhost:5000';
+        }
+        if (p === 'file:') {
+            // Opened directly as local file — route to Vercel backend
+            return VERCEL_BACKEND_URL;
         }
         if (h === GITHUB_PAGES_HOSTNAME || h.endsWith('.github.io')) {
             // GitHub Pages — route to Vercel backend
