@@ -1,0 +1,28 @@
+{
+  "name": "Aryan Jha — Admin Console",
+  "short_name": "Aryan Admin",
+  "description": "Aryan Jha - Real-time Portfolio Administration and Snapchat Lens Studio Console.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "fullscreen"],
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#18a63d",
+  "categories": ["admin", "productivity"],
+  "lang": "en-US",
+  "icons": [
+    {
+      "src": "app_icon.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "app_icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

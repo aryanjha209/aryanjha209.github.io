@@ -112,7 +112,7 @@ def send_smtp_email(to_email, subject, html_content):
     try:
         msg = MIMEMultipart('alternative')
         msg['Subject'] = subject
-        msg['From'] = f"Aryan Kumar Portfolio <{email_user}>"
+        msg['From'] = f"Aryan Jha Portfolio <{email_user}>"
         msg['To'] = to_email
         
         part = MIMEText(html_content, 'html')
@@ -170,12 +170,12 @@ def subscribe_api():
         admin_email = os.environ.get("ADMIN_EMAIL") or os.environ.get("EMAIL_USER") or "aryankjhaa@gmail.com"
         email_user = os.environ.get("EMAIL_USER")
         if email_user:
-            mail_subject = "Thanks for subscribing! ⚡ Aryan Kumar"
+            mail_subject = "Thanks for subscribing! ⚡ Aryan Jha"
             mail_body = f"""
             <div style="font-family: 'Outfit', -apple-system, BlinkMacSystemFont, Arial, sans-serif; max-width: 550px; margin: 20px auto; background-color: #020215; border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 24px; overflow: hidden; box-shadow: 0 10px 30px rgba(168, 85, 247, 0.05); color: #ffffff;">
                 <div style="background: linear-gradient(135deg, #6b21a8 0%, #a855f7 100%); padding: 35px 20px; text-align: center;">
                     <span style="font-size: 40px; display: inline-block; filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));">⚡</span>
-                    <h1 style="color: #ffffff; margin: 10px 0 0 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">Aryan Kumar</h1>
+                    <h1 style="color: #ffffff; margin: 10px 0 0 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">Aryan Jha</h1>
                 </div>
                 <div style="padding: 40px 30px; text-align: center;">
                     <h2 style="font-size: 22px; font-weight: 800; margin-top: 0; margin-bottom: 15px; color: #ffffff;">You're on the list!</h2>
@@ -187,8 +187,8 @@ def subscribe_api():
                     </div>
                 </div>
                 <div style="background-color: #080721; padding: 20px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); font-size: 12px; color: #64748b;">
-                    <p style="margin: 0 0 8px 0;">This email was sent from Aryan Kumar's digital system.</p>
-                    <p style="margin: 0;">© 2026 Aryan Kumar. All rights reserved.</p>
+                    <p style="margin: 0 0 8px 0;">This email was sent from Aryan Jha's digital system.</p>
+                    <p style="margin: 0;">© 2026 Aryan Jha. All rights reserved.</p>
                 </div>
             </div>
             """
@@ -243,7 +243,7 @@ def send_email_api():
             """
             send_smtp_email(admin_email, mail_subject, mail_body)
 
-            client_subject = "Thanks for reaching out to Aryan Kumar"
+            client_subject = "Thanks for reaching out to Aryan Jha"
             client_body = f"""
             <div style="font-family: 'Outfit', Arial, sans-serif; max-width: 600px; margin: 20px auto; background-color: #ffffff; border: 1px solid #d1fae5; border-radius: 16px; overflow: hidden; color: #111827;">
                 <div style="background: linear-gradient(135deg, #18a63d 0%, #39ff14 100%); padding: 28px 20px; text-align: center;">
@@ -255,7 +255,7 @@ def send_email_api():
                     <div style="white-space: pre-wrap; line-height: 1.6; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px;">{escape_html(message)}</div>
                 </div>
                 <div style="background-color: #f9fafb; padding: 16px 24px; font-size: 12px; color: #6b7280;">
-                    Aryan Kumar Portfolio
+                    Aryan Jha Portfolio
                 </div>
             </div>
             """
@@ -306,7 +306,7 @@ def book_call_api():
             """
             
             # Send email to client
-            client_subject = "Confirmed: Call with Aryan Kumar"
+            client_subject = "Confirmed: Call with Aryan Jha"
             client_body = f"""
             <div style="font-family: 'Outfit', sans-serif; max-width: 600px; margin: 20px auto; background-color: #020215; border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 20px; overflow: hidden; color: #ffffff; text-align: center;">
                 <div style="background: linear-gradient(135deg, #6b21a8 0%, #a855f7 100%); padding: 35px 20px;">
@@ -324,7 +324,7 @@ def book_call_api():
                     </div>
                 </div>
                 <div style="background-color: #080721; padding: 20px; font-size: 12px; color: #64748b; border-top: 1px solid rgba(255,255,255,0.05);">
-                    <p style="margin: 0;">© 2026 Aryan Kumar. All rights reserved.</p>
+                    <p style="margin: 0;">© 2026 Aryan Jha. All rights reserved.</p>
                 </div>
             </div>
             """
@@ -672,7 +672,7 @@ def stats_html_dashboard():
 <body>
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-chart-line"></i> Aryan Kumar &bull; Visual Analytics</h1>
+            <h1><i class="fas fa-chart-line"></i> Aryan Jha &bull; Visual Analytics</h1>
             <button class="refresh-btn" onclick="window.location.reload()"><i class="fas fa-sync-alt"></i> Refresh Stats</button>
         </div>
 

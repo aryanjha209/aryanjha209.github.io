@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aryan Kumar — Admin Console</title>
+    <title>Aryan Jha — Admin Console</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="app_icon.png">
+    <meta name="theme-color" content="#18a63d">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -1052,7 +1055,7 @@
     <aside class="sidebar" id="sidebar">
         <div class="brand-container">
             <i class="fa-solid fa-cubes"></i>
-            <h1>Aryan Kumar</h1>
+            <h1>Aryan Jha</h1>
         </div>
         <nav class="nav-menu">
             <button class="nav-item active" onclick="switchPanel('overview-panel', this)"><i class="fa-solid fa-chart-line"></i> Dashboard</button>
@@ -1334,6 +1337,18 @@
     <script src="../config.js"></script>
     <script>
         const API = (typeof CONFIG !== 'undefined' && CONFIG.API_BASE_URL) ? CONFIG.API_BASE_URL : '';
+        
+        // Escape HTML to prevent XSS and rendering breakages
+        function escapeText(text) {
+            if (text === null || text === undefined) return '';
+            return String(text)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
         let systemStatsPayload = {}; // Holds latest cached database payload (visits, messages, bookings, testimonials)
 
         // Title and descriptions matching map
@@ -2053,6 +2068,15 @@
             link.click();
             document.body.removeChild(link);
             triggerToast("Subscribers list exported as CSV!");
+        }
+
+        // Register Service Worker for PWA installability
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Admin Service Worker registered:', reg.scope))
+                    .catch(err => console.log('Admin Service Worker registration failed:', err));
+            });
         }
     </script>
 </body>
