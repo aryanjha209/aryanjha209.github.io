@@ -563,7 +563,7 @@ Answer all other technical, work, and background questions about Aryan Jha accur
         messages_payload.append({"role": "user", "content": message})
         
         data = {
-            "model": "google/gemini-2.5-flash:free",
+            "model": "google/gemma-4-31b-it:free",
             "messages": messages_payload
         }
         
@@ -581,15 +581,18 @@ Answer all other technical, work, and background questions about Aryan Jha accur
             method="POST"
         )
         
-        with urllib.request.urlopen(req, timeout=12) as response:
+        with urllib.request.urlopen(req, timeout=30) as response:
             res_body = response.read().decode('utf-8')
             res_data = json.loads(res_body)
             ai_reply = res_data['choices'][0]['message']['content']
             return jsonify({"success": True, "reply": ai_reply}), 200
             
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         print(f"Chat API error: {e}")
-        return jsonify({"success": False, "reply": "I am experiencing high latency. Please try again in a moment, or contact Aryan directly via email!"}), 500
+        error_detail = str(e)
+        return jsonify({"success": False, "reply": f"I am experiencing a temporary issue ({error_detail}). Please try again in a moment, or contact Aryan directly via email!"}), 500
 
 @app.route('/api/posters', methods=['GET', 'POST'])
 def posters_api():

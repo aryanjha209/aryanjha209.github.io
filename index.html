@@ -1439,7 +1439,8 @@
             .hero-desc { margin-left: auto; margin-right: auto; }
             .hero-actions { justify-content: center; }
             .hero-stats { justify-content: center; }
-            .hero-right { order: -1; }
+            .hero-right { order: 2; }
+            .showcase-box { width: 100%; height: auto; aspect-ratio: 16/9; }
             .portrait-wrap { width: 260px; height: 260px; }
             .badge-float.top-left { display: none; }
             .badge-float.top-right { display: none; }
@@ -1835,8 +1836,9 @@
         /* Showcase Box Styles */
         .showcase-box {
             position: relative;
-            width: 320px;
-            height: 450px;
+            width: 480px;
+            height: 300px;
+            max-width: 100%;
             border-radius: var(--radius-lg);
             overflow: hidden;
             border: 1.5px solid var(--border);
