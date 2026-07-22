@@ -6,7 +6,7 @@
 // ⚠️  If you serve the frontend from GitHub Pages, set GITHUB_PAGES_HOSTNAME
 //     to your GH Pages domain so API calls are routed to Vercel.
 const GITHUB_PAGES_HOSTNAME = "aryanjha209.github.io";
-const VERCEL_BACKEND_URL    = "https://aryanjha209-github-io-main.vercel.app";
+const VERCEL_BACKEND_URL    = "https://aryanjha209-github-io.vercel.app";
 
 const CONFIG = {
     API_BASE_URL: (() => {

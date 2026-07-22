@@ -1,9 +1,12 @@
 import os
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from bson import ObjectId
 from pymongo import MongoClient
 from dotenv import load_dotenv
+
+def get_utc_now():
+    return datetime.now(timezone.utc)
 
 load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 
@@ -98,7 +101,7 @@ def track_visit(ip, user_agent):
                 {"ip": ip},
                 {
                     "$inc": {"count": 1},
-                    "$set": {"lastVisit": datetime.utcnow(), "userAgent": user_agent}
+                    "$set": {"lastVisit": get_utc_now(), "userAgent": user_agent}
                 },
                 upsert=True
             )
@@ -110,7 +113,7 @@ def track_visit(ip, user_agent):
         for v in data["visits"]:
             if v["ip"] == ip:
                 v["count"] = v.get("count", 0) + 1
-                v["lastVisit"] = datetime.utcnow().isoformat()
+                v["lastVisit"] = get_utc_now().isoformat()
                 v["userAgent"] = user_agent
                 found = True
                 break
@@ -118,7 +121,7 @@ def track_visit(ip, user_agent):
             data["visits"].append({
                 "ip": ip,
                 "count": 1,
-                "lastVisit": datetime.utcnow().isoformat(),
+                "lastVisit": get_utc_now().isoformat(),
                 "userAgent": user_agent
             })
         write_json_db(data)
@@ -131,7 +134,7 @@ def add_subscriber(email):
                 return {"success": True, "message": "Already subscribed!"}
             db.subscribers.insert_one({
                 "email": email,
-                "date": datetime.utcnow()
+                "date": get_utc_now()
             })
             return {"success": True, "message": "Subscribed successfully!"}
         except Exception as e:
@@ -143,9 +146,9 @@ def add_subscriber(email):
             if s["email"] == email:
                 return {"success": True, "message": "Already subscribed!"}
         data["subscribers"].append({
-            "_id": str(int(datetime.utcnow().timestamp() * 1000)),
+            "_id": str(int(get_utc_now().timestamp() * 1000)),
             "email": email,
-            "date": datetime.utcnow().isoformat()
+            "date": get_utc_now().isoformat()
         })
         write_json_db(data)
         return {"success": True, "message": "Subscribed successfully!"}
@@ -157,18 +160,18 @@ def save_message(name, email, message):
                 "name": name,
                 "email": email,
                 "message": message,
-                "date": datetime.utcnow()
+                "date": get_utc_now()
             })
         except Exception as e:
             print(f"MongoDB save_message error: {e}")
     else:
         data = read_json_db()
         data["messages"].append({
-            "_id": str(int(datetime.utcnow().timestamp() * 1000)),
+            "_id": str(int(get_utc_now().timestamp() * 1000)),
             "name": name,
             "email": email,
             "message": message,
-            "date": datetime.utcnow().isoformat()
+            "date": get_utc_now().isoformat()
         })
         write_json_db(data)
 
@@ -184,14 +187,14 @@ def book_call(booking_data):
     }
     if db is not None:
         try:
-            mapped_data["dateBooked"] = datetime.utcnow()
+            mapped_data["dateBooked"] = get_utc_now()
             db.bookings.insert_one(mapped_data)
         except Exception as e:
             print(f"MongoDB book_call error: {e}")
     else:
         data = read_json_db()
-        mapped_data["_id"] = str(int(datetime.utcnow().timestamp() * 1000))
-        mapped_data["dateBooked"] = datetime.utcnow().isoformat()
+        mapped_data["_id"] = str(int(get_utc_now().timestamp() * 1000))
+        mapped_data["dateBooked"] = get_utc_now().isoformat()
         data["bookings"].append(mapped_data)
         write_json_db(data)
 
@@ -218,7 +221,7 @@ def add_testimonial(name, org, comment, avatar):
     }
     if db is not None:
         try:
-            testimonial_doc["date"] = datetime.utcnow()
+            testimonial_doc["date"] = get_utc_now()
             result = db.testimonials.insert_one(testimonial_doc)
             testimonial_doc["_id"] = result.inserted_id
             return serialize_doc(testimonial_doc)
@@ -227,8 +230,8 @@ def add_testimonial(name, org, comment, avatar):
             raise e
     else:
         data = read_json_db()
-        testimonial_doc["_id"] = str(int(datetime.utcnow().timestamp() * 1000))
-        testimonial_doc["date"] = datetime.utcnow().isoformat()
+        testimonial_doc["_id"] = str(int(get_utc_now().timestamp() * 1000))
+        testimonial_doc["date"] = get_utc_now().isoformat()
         data["testimonials"].append(testimonial_doc)
         write_json_db(data)
         return testimonial_doc

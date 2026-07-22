@@ -710,6 +710,48 @@
             flex-wrap: wrap;
             gap: 1rem;
         }
+        .portfolio-note {
+            max-width: 620px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.75rem;
+            line-height: 1.7;
+        }
+        .portfolio-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        .portfolio-summary {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .portfolio-summary-item {
+            background: rgba(255,255,255,0.72);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem;
+            box-shadow: var(--shadow-sm);
+        }
+        .portfolio-summary-item strong {
+            display: block;
+            font-size: 1.35rem;
+            line-height: 1;
+            color: var(--text);
+            margin-bottom: 0.35rem;
+        }
+        .portfolio-summary-item span {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+        }
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -731,6 +773,13 @@
             transform: translateY(-6px);
             box-shadow: var(--shadow-lg), 0 0 25px rgba(6,182,212,0.15);
         }
+        .project-card.featured-project {
+            border-color: rgba(6, 182, 212, 0.22);
+        }
+        .project-media {
+            position: relative;
+            overflow: hidden;
+        }
         .project-img {
             width: 100%;
             height: 200px;
@@ -740,6 +789,24 @@
         }
         .project-card:hover .project-img {
             transform: scale(1.03);
+        }
+        .project-type {
+            position: absolute;
+            left: 1rem;
+            bottom: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(15, 10, 30, 0.84);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 999px;
+            padding: 0.35rem 0.75rem;
+            font-size: 0.68rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(8px);
         }
         .project-body {
             padding: 1.5rem;
@@ -775,6 +842,98 @@
             display: flex;
             align-items: center;
             gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+        .project-actions .btn {
+            min-height: 34px;
+        }
+
+        /* ===========================
+           LENS GALLERY
+        =========================== */
+        .lenses-section {
+            background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+        }
+        .lens-showcase {
+            margin-top: 2rem;
+            display: grid;
+            grid-template-columns: 0.95fr 1.35fr;
+            gap: 2rem;
+            align-items: center;
+        }
+        .lens-feature {
+            background: var(--bg-card);
+            border: 1px solid rgba(6, 182, 212, 0.22);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+        .lens-feature-img {
+            width: 132px;
+            height: 132px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            border: 6px solid #fff;
+            box-shadow: 0 14px 34px rgba(6, 182, 212, 0.2);
+            background: #fff;
+        }
+        .lens-feature h3 {
+            font-size: 1.15rem;
+            margin-bottom: 0.4rem;
+            color: var(--text);
+        }
+        .lens-feature p {
+            color: var(--text-muted);
+            font-size: 0.86rem;
+            line-height: 1.65;
+            margin-bottom: 1rem;
+        }
+        .lens-bubbles {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
+            gap: 1rem;
+        }
+        .lens-bubble {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.55rem;
+            text-align: center;
+            color: var(--text);
+            transition: var(--transition);
+        }
+        .lens-bubble:hover {
+            transform: translateY(-5px);
+        }
+        .lens-bubble-img-wrap {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            padding: 5px;
+            background: linear-gradient(135deg, rgba(255, 213, 79, 0.95), rgba(6, 182, 212, 0.9), rgba(168, 85, 247, 0.9));
+            box-shadow: 0 12px 26px rgba(15, 10, 30, 0.12);
+        }
+        .lens-bubble-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #fff;
+            background: #fff;
+        }
+        .lens-bubble-name {
+            width: 100%;
+            font-size: 0.75rem;
+            font-weight: 800;
+            line-height: 1.25;
+            overflow-wrap: anywhere;
+        }
+        .lens-bubble-views {
+            color: var(--text-muted);
+            font-size: 0.68rem;
+            font-weight: 700;
         }
 
 
@@ -1193,33 +1352,7 @@
 
 
 
-        /* ===========================
-           FLOATING SIDE SOCIALS
-        =========================== */
-        .side-socials {
-            position: fixed; left: 1.5rem; top: 50%; transform: translateY(-50%);
-            display: flex; flex-direction: column; gap: 0.6rem;
-            z-index: 100;
-        }
-        .side-social {
-            width: 38px; height: 38px;
-            border-radius: 50%;
-            background: rgba(168, 85, 247, 0.07);
-            border: 1px solid var(--border);
-            display: flex; align-items: center; justify-content: center;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            box-shadow: var(--shadow-sm);
-            transition: var(--transition);
-            backdrop-filter: blur(8px);
-        }
-        .side-social:hover {
-            background: var(--purple);
-            color: #fff;
-            border-color: var(--purple);
-            transform: scale(1.1);
-            box-shadow: 0 0 10px rgba(168,85,247,0.4);
-        }
+
 
         /* ===========================
            STICKY FORM TOGGLER
@@ -1290,7 +1423,7 @@
         =========================== */
         @media (max-width: 1024px) {
             .footer-top { grid-template-columns: 1fr 1fr; }
-            .side-socials { display: none; }
+            .lens-showcase { grid-template-columns: 1fr; }
         }
         @media (max-width: 768px) {
             .hero-grid { grid-template-columns: 1fr; gap: 3rem; text-align: center; }
@@ -1307,10 +1440,16 @@
             .nav-ham { display: flex; align-items: center; }
             .footer-top { grid-template-columns: 1fr; gap: 2rem; }
             .cta-section { padding: 2.5rem 1.5rem; }
+            .portfolio-actions { justify-content: flex-start; width: 100%; }
+            .portfolio-summary { grid-template-columns: 1fr; }
+            .lens-bubbles { grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); }
         }
         @media (max-width: 576px) {
             .section { padding: 4rem 0; }
             .hero-stats { gap: 1rem; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .lens-feature { text-align: center; }
+            .lens-feature-img { margin-left: auto; margin-right: auto; }
         }
     </style>
 </head>
@@ -1331,6 +1470,7 @@
             <a href="#hero" class="active">Home</a>
             <a href="#services">Services</a>
             <a href="#projects">Projects</a>
+            <a href="#lenses">Lenses</a>
             <a href="#contact">Contact</a>
         </nav>
         <div class="nav-cta">
@@ -1347,6 +1487,7 @@
     <a href="#hero" onclick="toggleMobile()" style="font-size:1.6rem;font-weight:800;color:var(--text)">Home</a>
     <a href="#services" onclick="toggleMobile()" style="font-size:1.6rem;font-weight:800;color:var(--text)">Services</a>
     <a href="#projects" onclick="toggleMobile()" style="font-size:1.6rem;font-weight:800;color:var(--text)">Projects</a>
+    <a href="#lenses" onclick="toggleMobile()" style="font-size:1.6rem;font-weight:800;color:var(--text)">Lenses</a>
     <a href="#contact" onclick="toggleMobile()" style="font-size:1.6rem;font-weight:800;color:var(--text)">Contact</a>
     <button class="btn btn-primary btn-lg" onclick="openModal('hire');toggleMobile()">Hire Me <i class="fa-solid fa-paper-plane"></i></button>
 </div>
@@ -1478,50 +1619,100 @@
     <div class="container">
         <div class="projects-header">
             <div class="section-header fade-up">
-                <div class="label"><i class="fa-solid fa-folder-open"></i> Portfolio</div>
-                <h2 class="heading">Featured <span>Projects</span></h2>
+                <div class="label"><i class="fa-solid fa-briefcase"></i> Client Portfolio</div>
+                <h2 class="heading">Project Work Built for <span>Real Businesses</span></h2>
+                <p class="portfolio-note">Browse web apps, AI tools, backend systems, and creative builds directly on this site. Each card is shaped like a case study preview for clients, founders, and hiring teams.</p>
             </div>
-            <a href="https://github.com/aryanjha209" target="_blank" class="btn btn-ghost fade-up">
-                All Projects <i class="fa-brands fa-github"></i>
-            </a>
+            <div class="portfolio-actions fade-up">
+                <button class="btn btn-ghost" onclick="openModal('book')">Discuss Work <i class="fa-solid fa-calendar-days"></i></button>
+                <button class="btn btn-primary" onclick="openModal('hire')">Start a Project <i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+        <div class="portfolio-summary fade-up">
+            <div class="portfolio-summary-item"><strong>10+</strong><span>Delivered Builds</span></div>
+            <div class="portfolio-summary-item"><strong>4</strong><span>Core Services</span></div>
+            <div class="portfolio-summary-item"><strong>Global</strong><span>Remote Friendly</span></div>
         </div>
         <div class="projects-grid" id="projects-grid">
             <!-- Loaded dynamically, fallbacks below -->
-            <div class="project-card fade-up">
-                <img src="featured_project_1.png" alt="AR Card System" class="project-img" onerror="this.style.display='none'">
+            <div class="project-card featured-project fade-up">
+                <div class="project-media">
+                    <img src="featured_project_1.png" alt="AR Card System" class="project-img" onerror="this.style.display='none'">
+                    <span class="project-type"><i class="fa-solid fa-layer-group"></i> Web Platform</span>
+                </div>
                 <div class="project-body">
                     <div class="project-tags"><span class="tag">Python</span><span class="tag">Cloud</span><span class="tag">JS</span></div>
                     <div class="project-title">AR Card System</div>
                     <p class="project-desc">AI-ready cloud platform for smart augmented reality business cards with integrated QR codes and secure auth.</p>
                     <div class="project-actions">
-                        <a href="https://arcard-1.onrender.com" target="_blank" class="btn btn-primary" style="font-size:0.75rem;padding:0.4rem 0.9rem">Live Demo <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                        <a href="https://github.com/aryanjha209" target="_blank" class="btn btn-ghost" style="font-size:0.75rem;padding:0.4rem 0.9rem"><i class="fa-brands fa-github"></i></a>
+                        <a href="https://arcard-1.onrender.com" target="_blank" class="btn btn-primary" style="font-size:0.75rem;padding:0.4rem 0.9rem">View Project <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        <button class="btn btn-ghost" onclick="openModal('hire')" style="font-size:0.75rem;padding:0.4rem 0.9rem">Hire Similar</button>
                     </div>
                 </div>
             </div>
-            <div class="project-card fade-up">
-                <img src="featured_project_2.png" alt="AI Image Editor" class="project-img" onerror="this.style.display='none'">
+            <div class="project-card featured-project fade-up">
+                <div class="project-media">
+                    <img src="featured_project_2.png" alt="AI Image Editor" class="project-img" onerror="this.style.display='none'">
+                    <span class="project-type"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Product</span>
+                </div>
                 <div class="project-body">
                     <div class="project-tags"><span class="tag">Python AI</span><span class="tag">JS</span><span class="tag">Vercel</span></div>
                     <div class="project-title">Editor Pro — AI Image Editor</div>
                     <p class="project-desc">Browser-based AI image editor with command-driven transformations, vintage filters &amp; real-time controls.</p>
                     <div class="project-actions">
-                        <a href="https://ai-gngh.vercel.app" target="_blank" class="btn btn-primary" style="font-size:0.75rem;padding:0.4rem 0.9rem">Live Demo <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                        <a href="https://github.com/aryanjha209" target="_blank" class="btn btn-ghost" style="font-size:0.75rem;padding:0.4rem 0.9rem"><i class="fa-brands fa-github"></i></a>
+                        <a href="https://ai-gngh.vercel.app" target="_blank" class="btn btn-primary" style="font-size:0.75rem;padding:0.4rem 0.9rem">View Project <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        <button class="btn btn-ghost" onclick="openModal('hire')" style="font-size:0.75rem;padding:0.4rem 0.9rem">Hire Similar</button>
                     </div>
                 </div>
             </div>
-            <div class="project-card fade-up">
-                <img src="featured_project_3.png" alt="Neon Face Filter" class="project-img" onerror="this.style.display='none'">
+            <div class="project-card featured-project fade-up">
+                <div class="project-media">
+                    <img src="featured_project_3.png" alt="Neon Face Filter" class="project-img" onerror="this.style.display='none'">
+                    <span class="project-type"><i class="fa-brands fa-snapchat"></i> AR Experience</span>
+                </div>
                 <div class="project-body">
                     <div class="project-tags"><span class="tag">Lens Studio</span><span class="tag">AR</span><span class="tag">Snapchat</span></div>
                     <div class="project-title">Neon Face Filter AR Lens</div>
                     <p class="project-desc">Interactive Snapchat AR lens with neon face tracking effects, real-time visual shaders and 3D transformations.</p>
                     <div class="project-actions">
                         <a href="https://snapchat.com" target="_blank" class="btn btn-primary" style="font-size:0.75rem;padding:0.4rem 0.9rem">Try Lens <i class="fa-solid fa-wand-magic-sparkles"></i></a>
-                        <a href="https://snapchat.com" target="_blank" class="btn btn-ghost" style="font-size:0.75rem;padding:0.4rem 0.9rem"><i class="fa-brands fa-snapchat"></i></a>
+                        <button class="btn btn-ghost" onclick="openModal('hire')" style="font-size:0.75rem;padding:0.4rem 0.9rem">Build Lens</button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ===========================
+     SNAPCHAT LENSES
+=========================== -->
+<section class="section lenses-section" id="lenses">
+    <div class="container">
+        <div class="section-header centered fade-up">
+            <div class="label"><i class="fa-brands fa-snapchat"></i> Lens Gallery</div>
+            <h2 class="heading">Snapchat Lenses in <span>Small Circles</span></h2>
+            <p class="subtext" style="margin-top:0.75rem">A playful gallery for AR work, brand filters, snapcodes, and interactive effects. New lenses from the admin panel appear here automatically.</p>
+        </div>
+        <div class="lens-showcase">
+            <div class="lens-feature fade-up" id="lens-feature">
+                <img src="snapcode_qr.png" alt="Featured Snapchat lens snapcode" class="lens-feature-img" id="lens-feature-img">
+                <h3 id="lens-feature-title">Featured AR Lens</h3>
+                <p id="lens-feature-desc">Cute, fast-scanning circular lens cards make it easy for visitors to explore your Snapchat AR work without leaving the portfolio.</p>
+                <a href="https://snapchat.com" target="_blank" class="btn btn-primary" id="lens-feature-link">Open Lens <i class="fa-brands fa-snapchat"></i></a>
+            </div>
+            <div class="lens-bubbles fade-up" id="lens-bubbles">
+                <a href="https://snapchat.com" target="_blank" class="lens-bubble">
+                    <span class="lens-bubble-img-wrap"><img src="snapcode_qr.png" alt="Snapcode" class="lens-bubble-img"></span>
+                    <span class="lens-bubble-name">Neon Face AR</span>
+                    <span class="lens-bubble-views"><i class="fa-solid fa-eye"></i> 3.6B views</span>
+                </a>
+                <a href="https://snapchat.com" target="_blank" class="lens-bubble">
+                    <span class="lens-bubble-img-wrap"><img src="latest_snapchat_lens.png" alt="Snap lens preview" class="lens-bubble-img"></span>
+                    <span class="lens-bubble-name">Latest Lens</span>
+                    <span class="lens-bubble-views"><i class="fa-solid fa-eye"></i> Live</span>
+                </a>
             </div>
         </div>
     </div>
@@ -1593,7 +1784,7 @@
                     <a href="#hero">Home</a>
                     <a href="#projects">Projects</a>
                     <a href="aryan.pdf" target="_blank">Download Resume</a>
-                    <a href="/snap-lenses">AR Lenses Gallery</a>
+                    <a href="#lenses">AR Lenses Gallery</a>
                 </div>
             </div>
             <div>
@@ -1725,6 +1916,25 @@
 // ===========================
 const API = CONFIG.API_BASE_URL;
 
+function escapeText(value) {
+    return String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }[char]));
+}
+
+function safeUrl(value, fallback = '#') {
+    try {
+        const url = new URL(value, window.location.href);
+        return ['http:', 'https:'].includes(url.protocol) ? url.href : fallback;
+    } catch {
+        return fallback;
+    }
+}
+
 // ===========================
 // NAVBAR
 // ===========================
@@ -1739,7 +1949,7 @@ window.addEventListener('scroll', () => {
     }
 
     // Active nav link
-    const sections = ['hero','services','projects','contact'];
+    const sections = ['hero','services','projects','lenses','contact'];
     let current = 'hero';
     sections.forEach(id => {
         const el = document.getElementById(id);
@@ -1952,19 +2162,23 @@ async function loadDynamicProjects() {
             grid.innerHTML = ''; // Clear fallback cards
             data.projects.forEach(p => {
                 const tagsArray = Array.isArray(p.tags) ? p.tags : (p.tags ? p.tags.split(',').map(t => t.trim()) : []);
-                const tagsHtml = tagsArray.map(t => `<span class="tag">${t}</span>`).join('');
+                const tagsHtml = tagsArray.map(t => `<span class="tag">${escapeText(t)}</span>`).join('');
+                const demoUrl = safeUrl(p.demoUrl, '');
                 
                 const card = document.createElement('div');
-                card.className = 'project-card fade-up';
+                card.className = 'project-card featured-project fade-up';
                 card.innerHTML = `
-                    <img src="${p.imageUrl || 'featured_project_1.png'}" alt="${p.name}" class="project-img" onerror="this.style.display='none'">
+                    <div class="project-media">
+                        <img src="${safeUrl(p.imageUrl, 'featured_project_1.png')}" alt="${escapeText(p.name || 'Portfolio project')}" class="project-img" onerror="this.style.display='none'">
+                        <span class="project-type"><i class="fa-solid fa-briefcase"></i> Portfolio Work</span>
+                    </div>
                     <div class="project-body">
                         <div class="project-tags">${tagsHtml}</div>
-                        <div class="project-title">${p.name}</div>
-                        <p class="project-desc">${p.description}</p>
+                        <div class="project-title">${escapeText(p.name || 'Untitled Project')}</div>
+                        <p class="project-desc">${escapeText(p.description || 'A selected project from Aryan Jha portfolio.')}</p>
                         <div class="project-actions">
-                            ${p.demoUrl ? `<a href="${p.demoUrl}" target="_blank" class="btn btn-primary" style="font-size:0.75rem;padding:0.4rem 0.9rem">Live Demo <i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}
-                            ${p.githubUrl ? `<a href="${p.githubUrl}" target="_blank" class="btn btn-ghost" style="font-size:0.75rem;padding:0.4rem 0.9rem"><i class="fa-brands fa-github"></i></a>` : ''}
+                            ${demoUrl ? `<a href="${demoUrl}" target="_blank" class="btn btn-primary" style="font-size:0.75rem;padding:0.4rem 0.9rem">View Project <i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}
+                            <button class="btn btn-ghost" onclick="openModal('hire')" style="font-size:0.75rem;padding:0.4rem 0.9rem">Hire Similar</button>
                         </div>
                     </div>
                 `;
@@ -1974,6 +2188,49 @@ async function loadDynamicProjects() {
         }
     } catch (err) {
         console.error('Error fetching dynamic projects:', err);
+    }
+}
+
+// ===========================
+// DYNAMIC LENS GALLERY LOADER
+// ===========================
+async function loadDynamicLenses() {
+    try {
+        const response = await fetch(`${API}/api/lenses`);
+        const data = await response.json();
+        if (!data.success || !data.lenses || data.lenses.length === 0) return;
+
+        const lenses = data.lenses;
+        const featured = lenses.find(l => l.activeAdBar) || lenses[0];
+        const featureImg = document.getElementById('lens-feature-img');
+        const featureTitle = document.getElementById('lens-feature-title');
+        const featureDesc = document.getElementById('lens-feature-desc');
+        const featureLink = document.getElementById('lens-feature-link');
+        const bubbles = document.getElementById('lens-bubbles');
+
+        featureImg.src = safeUrl(featured.snapcodeUrl, 'snapcode_qr.png');
+        featureTitle.textContent = featured.name || 'Featured AR Lens';
+        featureDesc.textContent = featured.description || 'A custom Snapchat AR lens with fast scan access and a polished brand-ready experience.';
+        featureLink.href = safeUrl(featured.lensUrl, 'https://snapchat.com');
+
+        bubbles.innerHTML = '';
+        lenses.forEach(lens => {
+            const item = document.createElement('a');
+            item.className = 'lens-bubble';
+            item.href = safeUrl(lens.lensUrl, 'https://snapchat.com');
+            item.target = '_blank';
+            item.rel = 'noopener';
+            item.innerHTML = `
+                <span class="lens-bubble-img-wrap">
+                    <img src="${safeUrl(lens.snapcodeUrl, 'snapcode_qr.png')}" alt="${escapeText(lens.name || 'Snapchat lens')}" class="lens-bubble-img">
+                </span>
+                <span class="lens-bubble-name">${escapeText(lens.name || 'Snap Lens')}</span>
+                <span class="lens-bubble-views"><i class="fa-solid fa-eye"></i> ${escapeText(lens.views || 'View')}</span>
+            `;
+            bubbles.appendChild(item);
+        });
+    } catch (err) {
+        console.error('Error fetching dynamic lenses:', err);
     }
 }
 
@@ -2014,6 +2271,7 @@ document.addEventListener('DOMContentLoaded', () => {
     animateStats();
     handleUrlQueryRouting();
     loadDynamicProjects();
+    loadDynamicLenses();
     if (sessionStorage.getItem('adbarDismissed') !== 'true') {
         loadActiveAdLens();
     }
