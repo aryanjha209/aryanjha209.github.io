@@ -499,6 +499,98 @@ def stats_json_api():
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
 
+@app.route('/api/chat', methods=['POST'])
+def chat_api():
+    try:
+        req_data = request.get_json() or {}
+        name = req_data.get("name")
+        email = req_data.get("email")
+        message = req_data.get("message")
+        history = req_data.get("history") or []
+        
+        if not message:
+            return jsonify({"success": False, "reply": "Message is required."}), 400
+            
+        # Log this lead first if it's the first message
+        if name and email and len(history) <= 1:
+            try:
+                db_helper.save_message(
+                    name, 
+                    email, 
+                    f"[AI CHATBOT LEAD]\nInitial query: {message}"
+                )
+            except Exception as db_err:
+                print(f"Failed to save chatbot lead: {db_err}")
+                
+        # Send query to OpenRouter using python's built-in urllib
+        import urllib.request
+        import json
+        
+        api_key = os.environ.get("OPENROUTER_API_KEY")
+        if not api_key:
+            return jsonify({"success": False, "reply": "OpenRouter API Key not configured on the server."}), 500
+            
+        url = "https://openrouter.ai/api/v1/chat/completions"
+        
+        system_instruction = """You are the AI portfolio assistant for Aryan Jha, a freelance AI/ML developer, Full-Stack Web Architect, and Snapchat AR Creator.
+You represent Aryan Jha to potential clients and visitors. Be professional, friendly, helpful, and concise.
+
+Key details about Aryan Jha:
+- Name: Aryan Jha
+- Location: Vadodara, Gujarat, India.
+- Email: aryankr2029@gmail.com
+- Services:
+  1. AI & Machine Learning: Custom chat agents, NLP, computer vision pipelines, LLM integration, OpenCV, PyTorch.
+  2. Full-Stack Web Development: Responsive Progressive Web Apps (PWAs), HTML/CSS/Javascript, Vite.
+  3. Backend & API: Scalable REST APIs, databases (FastAPI, Flask, Node.js, MongoDB, PostgreSQL, Express).
+  4. Spatial Computing & AR Lenses: Custom Snapchat AR brand lenses, neon shaders, face tracking (Lens Studio).
+- Stack: Python, PyTorch, OpenCV, HTML/CSS/Javascript, Node.js, FastAPI, Flask, PostgreSQL, Express, MongoDB.
+
+If the user wants to hire Aryan Jha, book a call, schedule a meeting, start a project, or get a price quote:
+Tell them: "I would be happy to help! I've opened the form on your screen. Please fill out your project details there."
+Ensure your response contains the keywords 'book a call' or 'start a project' (or both) so that the user's browser client can automatically open the correct form.
+
+Answer all other technical, work, and background questions about Aryan Jha accurately based on this context. Keep answers short and professional (1-3 paragraphs max)."""
+
+        messages_payload = [{"role": "system", "content": system_instruction}]
+        
+        for msg in history:
+            role = msg.get("role")
+            content = msg.get("content")
+            if role in ("user", "assistant"):
+                messages_payload.append({"role": role, "content": content})
+                
+        messages_payload.append({"role": "user", "content": message})
+        
+        data = {
+            "model": "google/gemini-2.5-flash:free",
+            "messages": messages_payload
+        }
+        
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://aryanjha.me",
+            "X-Title": "Aryan Jha Portfolio"
+        }
+        
+        req = urllib.request.Request(
+            url,
+            data=json.dumps(data).encode('utf-8'),
+            headers=headers,
+            method="POST"
+        )
+        
+        with urllib.request.urlopen(req, timeout=12) as response:
+            res_body = response.read().decode('utf-8')
+            res_data = json.loads(res_body)
+            ai_reply = res_data['choices'][0]['message']['content']
+            return jsonify({"success": True, "reply": ai_reply}), 200
+            
+    except Exception as e:
+        print(f"Chat API error: {e}")
+        return jsonify({"success": False, "reply": "I am experiencing high latency. Please try again in a moment, or contact Aryan directly via email!"}), 500
+
 # HTML Visual Analytics Dashboard
 @app.route('/stats')
 def stats_html_dashboard():

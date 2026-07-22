@@ -1476,6 +1476,361 @@
             .lens-feature { text-align: center; }
             .lens-feature-img { margin-left: auto; margin-right: auto; }
         }
+
+        /* ===========================
+           FLOATING AI CHATBOT
+        =========================== */
+        .ai-bot-trigger {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--purple) 0%, var(--cyan) 100%);
+            color: #ffffff;
+            border: none;
+            box-shadow: 0 8px 32px rgba(168, 85, 247, 0.35), 0 0 15px rgba(168, 85, 247, 0.2) inset;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 9999;
+            transition: var(--transition);
+        }
+        .ai-bot-trigger:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 12px 40px rgba(168, 85, 247, 0.5), 0 0 20px rgba(168, 85, 247, 0.3) inset;
+        }
+        .ai-bot-trigger .pulse {
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid var(--purple);
+            opacity: 0;
+            animation: bot-pulse 2s infinite;
+        }
+        @keyframes bot-pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+
+        .ai-bot-window {
+            position: fixed;
+            bottom: 6.5rem;
+            right: 2rem;
+            width: 380px;
+            height: 520px;
+            border-radius: var(--radius-lg);
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-lg), 0 10px 40px rgba(168, 85, 247, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 9998;
+            transform: translateY(30px);
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition-slow);
+        }
+        .ai-bot-window.open {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Bot Onboarding screen */
+        .ai-bot-onboarding {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            background: radial-gradient(circle at top right, rgba(168, 85, 247, 0.08) 0%, transparent 60%);
+        }
+        .ai-bot-avatar-large {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--purple-light), var(--cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 8px 24px rgba(168, 85, 247, 0.25);
+        }
+        .ai-bot-onboarding h3 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+        .ai-bot-onboarding p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            padding: 0 0.5rem;
+        }
+        .ai-bot-onboarding form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .ai-bot-onboarding input {
+            width: 100%;
+            background: #ffffff;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 0.7rem 1rem;
+            font-size: 0.85rem;
+            color: var(--text);
+            outline: none;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+        .ai-bot-onboarding input:focus {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.12);
+        }
+        .ai-bot-onboarding button {
+            width: 100%;
+            justify-content: center;
+            padding: 0.8rem;
+            font-size: 0.88rem;
+        }
+
+        /* Bot Active Chat view */
+        .ai-bot-chat {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .ai-bot-header {
+            padding: 1rem 1.25rem;
+            background: rgba(245, 243, 255, 0.95);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .ai-bot-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .ai-bot-avatar-small {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--purple), var(--cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(168, 85, 247, 0.15);
+        }
+        .ai-bot-name {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+        .ai-bot-status {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.68rem;
+            color: var(--green);
+            font-weight: 600;
+        }
+        .ai-bot-status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 6px var(--green);
+        }
+        .ai-bot-close-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .ai-bot-close-btn:hover {
+            color: var(--text);
+            transform: scale(1.1);
+        }
+
+        .ai-bot-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            background: #faf9ff;
+        }
+        .ai-bot-msg {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 18px;
+            font-size: 0.82rem;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+        .ai-bot-msg.ai {
+            align-self: flex-start;
+            background: #ffffff;
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-top-left-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+        .ai-bot-msg.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, var(--purple-light), var(--purple));
+            color: #ffffff;
+            border-top-right-radius: 4px;
+            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.2);
+        }
+
+        .ai-bot-typing {
+            align-self: flex-start;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            border-top-left-radius: 4px;
+            padding: 0.75rem 1rem;
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            height: 32px;
+            margin-bottom: 0.5rem;
+        }
+        .ai-bot-typing span {
+            width: 6px;
+            height: 6px;
+            background: var(--text-light);
+            border-radius: 50%;
+            animation: bot-typing-dots 1.4s infinite ease-in-out;
+            opacity: 0.4;
+        }
+        .ai-bot-typing span:nth-child(2) { animation-delay: 0.2s; }
+        .ai-bot-typing span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes bot-typing-dots {
+            0%, 100% { transform: translateY(0); opacity: 0.4; }
+            50% { transform: translateY(-4px); opacity: 1; }
+        }
+
+        .ai-bot-input-area {
+            display: flex;
+            align-items: center;
+            padding: 0.65rem 0.85rem;
+            background: #ffffff;
+            border-top: 1px solid var(--border);
+        }
+        .ai-bot-input-area input {
+            flex-grow: 1;
+            background: #f5f3ff;
+            border: 1px solid var(--border);
+            border-radius: 99px;
+            padding: 0.55rem 1.1rem;
+            font-size: 0.82rem;
+            color: var(--text);
+            outline: none;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+        .ai-bot-input-area input:focus {
+            border-color: var(--purple-light);
+            background: #ffffff;
+        }
+        .ai-bot-input-area button {
+            background: none;
+            border: none;
+            color: var(--purple-light);
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 0.4rem;
+            margin-left: 0.4rem;
+            transition: var(--transition);
+        }
+        .ai-bot-input-area button:hover {
+            color: var(--cyan);
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 576px) {
+            .ai-bot-window {
+                width: calc(100% - 2rem);
+                height: 460px;
+                bottom: 5.5rem;
+                right: 1rem;
+            }
+            .ai-bot-trigger {
+                bottom: 1rem;
+                right: 1rem;
+                width: 54px;
+                height: 54px;
+                font-size: 1.3rem;
+            }
+        }
+
+        /* Cute AI Girl Avatar Styling & Animations */
+        .cute-ai-girl-svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .bot-eyes {
+            transform-origin: 50px 45px;
+            animation: eye-blink 4s infinite;
+        }
+        @keyframes eye-blink {
+            0%, 90%, 94%, 98%, 100% { transform: scaleY(1); }
+            92%, 96% { transform: scaleY(0.1); }
+        }
+        .glow-led {
+            animation: led-flash 1.5s infinite alternate ease-in-out;
+        }
+        @keyframes led-flash {
+            0% { opacity: 0.6; filter: drop-shadow(0 0 1px #22d3ee); }
+            100% { opacity: 1; filter: drop-shadow(0 0 6px #22d3ee) drop-shadow(0 0 10px #22d3ee); }
+        }
+        .sparkles {
+            transform-origin: 50px 50px;
+            animation: sparkles-float 3s infinite alternate ease-in-out;
+        }
+        @keyframes sparkles-float {
+            0% { transform: translateY(0) scale(0.95); opacity: 0.5; }
+            100% { transform: translateY(-3px) scale(1.05); opacity: 1; }
+        }
+        .blush {
+            animation: blush-pulse 2s infinite alternate ease-in-out;
+        }
+        @keyframes blush-pulse {
+            0% { opacity: 0.4; }
+            100% { opacity: 0.7; }
+        }
+        .cute-bot-avatar {
+            animation: avatar-float 3s ease-in-out infinite;
+        }
+        @keyframes avatar-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
     </style>
 </head>
 <body>
@@ -1539,7 +1894,7 @@
                     That Scale.
                 </h1>
                 <p class="hero-desc">
-                    I'm Aryan Jha — an AI/ML Developer, Full-Stack Web Architect &amp; Official Snapchat AR Creator with 3.6B+ lens views. I turn complex ideas into clean, powerful digital products.
+                    I'm Aryan Jha — an AI/ML Developer, Full-Stack Web Architect &amp; Official Snapchat AR Creator. I turn complex ideas into clean, powerful digital products.
                 </p>
                 <div class="hero-actions">
                     <button class="btn btn-primary btn-lg" onclick="openModal('hire')">
@@ -1559,8 +1914,8 @@
                     </div>
                     <div class="hero-stat-divider"></div>
                     <div class="hero-stat">
-                        <span class="hero-stat-val" id="stat-views">3.6B+</span>
-                        <span class="hero-stat-label">Lens Views</span>
+                        <span class="hero-stat-val" id="stat-views">99.9%</span>
+                        <span class="hero-stat-label">Server Uptime</span>
                     </div>
                     <div class="hero-stat-divider"></div>
                     <div class="hero-stat">
@@ -1575,15 +1930,7 @@
                 </div>
             </div>
             <div class="hero-right">
-                <div class="portrait-wrap">
-                    <div class="portrait-ring">
-                        <div class="portrait-ring-inner"></div>
-                    </div>
-                    <img src="aryan-kumar.png" alt="Aryan Jha" class="portrait-img" onerror="this.style.display='none'">
-
-
-
-                </div>
+                <!-- Blank (Image removed) -->
             </div>
         </div>
     </div>
@@ -2070,7 +2417,7 @@ async function handleSubscribe(e) {
 function animateStats() {
     const stats = [
         { id: 'stat-projects', start: 0, target: 10, suffix: '+' },
-        { id: 'stat-views', start: 0.0, target: 3.6, suffix: 'B+', isDecimal: true },
+        { id: 'stat-views', start: 0.0, target: 99.9, suffix: '%', isDecimal: true },
         { id: 'stat-clients', start: 0, target: 15, suffix: '+' },
         { id: 'stat-lenses', start: 0, target: 20, suffix: '+' }
     ];
@@ -2255,20 +2602,287 @@ fetch(`${API}/api/visit`, { method:'POST', headers:{'Content-Type':'application/
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(()=>{});
 }
+
+// ===========================
+// FLOATING AI CHATBOT LOGIC
+// ===========================
+let chatHistory = [];
+let chatStage = 0; // 0 = Name, 1 = Email, 2 = Normal Chat
+
+// Initialize chat stage from localStorage
+if (localStorage.getItem('bot_user_name') && localStorage.getItem('bot_user_email')) {
+    chatStage = 2;
+}
+
+function toggleBotWindow() {
+    const win = document.getElementById('ai-bot-window');
+    win.classList.toggle('open');
+    
+    const messagesContainer = document.getElementById('ai-bot-messages');
+    
+    // Trigger initial message if window is opened and empty
+    if (win.classList.contains('open') && messagesContainer.children.length === 0) {
+        const name = localStorage.getItem('bot_user_name');
+        if (chatStage === 2 && name) {
+            appendBotMessage(`Hi ${name}! 🌸 I'm Aryan's AI assistant. Ask me anything about his AI development, full-stack architectures, or Snapchat lenses. How can I help you today?`, 'ai');
+        } else {
+            chatStage = 0;
+            appendBotMessage(`Hi there! 🌸 I'm Aryan's AI assistant. Let's get to know each other first! What is your name?`, 'ai');
+        }
+    }
+}
+
+function appendBotMessage(text, sender) {
+    const container = document.getElementById('ai-bot-messages');
+    
+    const typing = document.getElementById('ai-bot-typing-indicator');
+    if (typing) typing.remove();
+    
+    const msg = document.createElement('div');
+    msg.className = `ai-bot-msg ${sender}`;
+    msg.textContent = text;
+    container.appendChild(msg);
+    container.scrollTop = container.scrollHeight;
+    
+    if (sender === 'ai') {
+        chatHistory.push({ role: 'assistant', content: text });
+    } else if (sender === 'user') {
+        chatHistory.push({ role: 'user', content: text });
+    }
+}
+
+function showTypingIndicator() {
+    const container = document.getElementById('ai-bot-messages');
+    if (document.getElementById('ai-bot-typing-indicator')) return;
+    
+    const typing = document.createElement('div');
+    typing.className = 'ai-bot-typing';
+    typing.id = 'ai-bot-typing-indicator';
+    typing.innerHTML = '<span></span><span></span><span></span>';
+    container.appendChild(typing);
+    container.scrollTop = container.scrollHeight;
+}
+
+async function sendBotMessage(e) {
+    e.preventDefault();
+    const input = document.getElementById('ai-bot-input');
+    const text = input.value.trim();
+    if (!text) return;
+    
+    input.value = '';
+    appendBotMessage(text, 'user');
+    
+    if (chatStage === 0) {
+        // User provided Name
+        localStorage.setItem('bot_user_name', text);
+        chatStage = 1;
+        showTypingIndicator();
+        setTimeout(() => {
+            appendBotMessage(`Nice to meet you, ${text}! ✨ What is your email address so we can stay in touch?`, 'ai');
+        }, 1000);
+        return;
+    }
+    
+    if (chatStage === 1) {
+        // User provided Email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(text)) {
+            showTypingIndicator();
+            setTimeout(() => {
+                appendBotMessage(`Oops, that email doesn't look quite right. 🥺 Can you please type a valid email address?`, 'ai');
+            }, 1000);
+            return;
+        }
+        
+        localStorage.setItem('bot_user_email', text);
+        chatStage = 2;
+        const name = localStorage.getItem('bot_user_name');
+        
+        showTypingIndicator();
+        
+        // Quietly notify backend to log this lead
+        fetch(`${API}/api/chat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: name,
+                email: text,
+                message: '[New AI Chatbot Lead Initialized]',
+                history: []
+            })
+        }).catch(err => console.error('Error logging lead to backend:', err));
+        
+        setTimeout(() => {
+            appendBotMessage(`Thank you! 💖 Now you can ask me anything about Aryan's skills, web apps, or Snapchat lenses. Or try booking a call!`, 'ai');
+        }, 1200);
+        return;
+    }
+    
+    // chatStage === 2: Normal conversation with OpenRouter API
+    showTypingIndicator();
+    
+    const name = localStorage.getItem('bot_user_name');
+    const email = localStorage.getItem('bot_user_email');
+    
+    try {
+        const response = await fetch(`${API}/api/chat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                message: text,
+                history: chatHistory.slice(-10)
+            })
+        });
+        
+        const data = await response.json();
+        const reply = data.success ? data.reply : "I'm having trouble connecting to the model right now. You can email Aryan directly at aryankr2029@gmail.com!";
+        
+        appendBotMessage(reply, 'ai');
+        
+        const lowerReply = reply.toLowerCase();
+        if (lowerReply.includes('book a call') || lowerReply.includes('book-modal')) {
+            setTimeout(() => {
+                openModal('book');
+            }, 1000);
+        } else if (lowerReply.includes('start a project') || lowerReply.includes('hire-modal')) {
+            setTimeout(() => {
+                openModal('hire');
+            }, 1000);
+        }
+        
+    } catch (err) {
+        console.error('Chat error:', err);
+        appendBotMessage("Sorry, I experienced a network error. Please try again or reach out directly!", 'ai');
+    }
+}
 </script>
 
-<!-- Floating Snapchat AR Ad-Bar Widget -->
-<div class="ar-adbar" id="ar-adbar">
-    <img src="snapcode_qr.png" alt="Snapcode" class="ar-adbar-img" id="adbar-img">
-    <div class="ar-adbar-info">
-        <span class="ar-adbar-title" id="adbar-title">Neon Face Filter</span>
-        <span class="ar-adbar-views" id="adbar-views"><i class="fa-solid fa-eye"></i> 3.6B+ Views</span>
+<!-- Floating AI Chatbot Widget -->
+<button class="ai-bot-trigger" onclick="toggleBotWindow()" aria-label="Chat with Assistant">
+    <div class="pulse"></div>
+    <div class="cute-bot-avatar" style="width:100%;height:100%;">
+        <svg class="cute-ai-girl-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="hairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#ec4899" />
+                    <stop offset="100%" stop-color="#a855f7" />
+                </linearGradient>
+                <linearGradient id="headphoneGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#06b6d4" />
+                    <stop offset="100%" stop-color="#3b82f6" />
+                </linearGradient>
+            </defs>
+            <g class="sparkles">
+                <circle cx="15" cy="25" r="1.5" fill="#f59e0b" opacity="0.8"/>
+                <circle cx="85" cy="30" r="1" fill="#ec4899" opacity="0.6"/>
+                <circle cx="20" cy="75" r="2" fill="#06b6d4" opacity="0.7"/>
+            </g>
+            <rect x="46" y="70" width="8" height="12" rx="4" fill="#cbd5e1"/>
+            <line x1="46" y1="76" x2="54" y2="76" stroke="#06b6d4" stroke-width="1" opacity="0.7"/>
+            <path d="M30 82 C35 78, 65 78, 70 82 L75 92 C75 92, 25 92, 25 92 Z" fill="#e2e8f0"/>
+            <circle cx="50" cy="81" r="2.5" fill="#a855f7"/>
+            <path d="M22 45 C15 65, 20 75, 25 75 C30 75, 25 55, 25 45 Z" fill="url(#hairGrad)"/>
+            <path d="M78 45 C85 65, 80 75, 75 75 C70 75, 75 55, 75 45 Z" fill="url(#hairGrad)"/>
+            <circle cx="50" cy="46" r="26" fill="#ffe4e6" />
+            <circle cx="34" cy="52" r="3.5" fill="#f43f5e" opacity="0.5" class="blush" />
+            <circle cx="66" cy="52" r="3.5" fill="#f43f5e" opacity="0.5" class="blush" />
+            <g class="bot-eyes">
+                <ellipse cx="38" cy="45" rx="4" ry="5.5" fill="#0f0a1e"/>
+                <circle cx="36.5" cy="43" r="1.5" fill="#ffffff"/>
+                <circle cx="39.5" cy="47" r="0.7" fill="#ffffff"/>
+                <ellipse cx="62" cy="45" rx="4" ry="5.5" fill="#0f0a1e"/>
+                <circle cx="60.5" cy="43" r="1.5" fill="#ffffff"/>
+                <circle cx="63.5" cy="47" r="0.7" fill="#ffffff"/>
+            </g>
+            <path d="M47 54 Q50 57 53 54" stroke="#e11d48" stroke-width="2" stroke-linecap="round" fill="none" />
+            <path d="M24 35 C28 20, 72 20, 76 35 C70 24, 30 24, 24 35 Z" fill="url(#hairGrad)"/>
+            <path d="M24 32 C23 45, 26 50, 26 50 C26 50, 29 42, 28 35 Z" fill="url(#hairGrad)"/>
+            <path d="M76 32 C77 45, 74 50, 74 50 C74 50, 71 42, 72 35 Z" fill="url(#hairGrad)"/>
+            <g class="headphones">
+                <path d="M22 46 C22 20, 78 20, 78 46" fill="none" stroke="url(#headphoneGrad)" stroke-width="4.5" stroke-linecap="round" />
+                <rect x="17" y="38" width="8" height="16" rx="4" fill="url(#headphoneGrad)" />
+                <circle cx="21" cy="46" r="3" fill="#22d3ee" class="glow-led" />
+                <rect x="75" y="38" width="8" height="16" rx="4" fill="url(#headphoneGrad)" />
+                <circle cx="79" cy="46" r="3" fill="#22d3ee" class="glow-led" />
+                <path d="M27 22 L17 12 L24 9 Z" fill="url(#headphoneGrad)" />
+                <path d="M73 22 L83 12 L76 9 Z" fill="url(#headphoneGrad)" />
+                <polygon points="24,19 19,14 22,12" fill="#22d3ee" class="glow-led" />
+                <polygon points="76,19 81,14 78,12" fill="#22d3ee" class="glow-led" />
+            </g>
+        </svg>
     </div>
-    <a href="https://snapchat.com" target="_blank" class="ar-adbar-btn" id="adbar-link">Try Lens <i class="fa-brands fa-snapchat"></i></a>
-    <button class="ar-adbar-close" onclick="dismissAdbar()">&times;</button>
+</button>
+
+<div class="ai-bot-window" id="ai-bot-window">
+    <div class="ai-bot-chat" id="ai-bot-chat">
+        <div class="ai-bot-header">
+            <div class="ai-bot-profile">
+                <div class="ai-bot-avatar-small" style="width:36px;height:36px;background:none;box-shadow:none;">
+                    <svg class="cute-ai-girl-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="hairGradSmall" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#ec4899" />
+                                <stop offset="100%" stop-color="#a855f7" />
+                            </linearGradient>
+                            <linearGradient id="headphoneGradSmall" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#06b6d4" />
+                                <stop offset="100%" stop-color="#3b82f6" />
+                            </linearGradient>
+                        </defs>
+                        <rect x="46" y="70" width="8" height="12" rx="4" fill="#cbd5e1"/>
+                        <line x1="46" y1="76" x2="54" y2="76" stroke="#06b6d4" stroke-width="1" opacity="0.7"/>
+                        <path d="M30 82 C35 78, 65 78, 70 82 L75 92 C75 92, 25 92, 25 92 Z" fill="#e2e8f0"/>
+                        <circle cx="50" cy="81" r="2.5" fill="#a855f7"/>
+                        <path d="M22 45 C15 65, 20 75, 25 75 C30 75, 25 55, 25 45 Z" fill="url(#hairGradSmall)"/>
+                        <path d="M78 45 C85 65, 80 75, 75 75 C70 75, 75 55, 75 45 Z" fill="url(#hairGradSmall)"/>
+                        <circle cx="50" cy="46" r="26" fill="#ffe4e6" />
+                        <circle cx="34" cy="52" r="3.5" fill="#f43f5e" opacity="0.5" class="blush" />
+                        <circle cx="66" cy="52" r="3.5" fill="#f43f5e" opacity="0.5" class="blush" />
+                        <g class="bot-eyes">
+                            <ellipse cx="38" cy="45" rx="4" ry="5.5" fill="#0f0a1e"/>
+                            <circle cx="36.5" cy="43" r="1.5" fill="#ffffff"/>
+                            <circle cx="39.5" cy="47" r="0.7" fill="#ffffff"/>
+                            <ellipse cx="62" cy="45" rx="4" ry="5.5" fill="#0f0a1e"/>
+                            <circle cx="60.5" cy="43" r="1.5" fill="#ffffff"/>
+                            <circle cx="63.5" cy="47" r="0.7" fill="#ffffff"/>
+                        </g>
+                        <path d="M47 54 Q50 57 53 54" stroke="#e11d48" stroke-width="2" stroke-linecap="round" fill="none" />
+                        <path d="M24 35 C28 20, 72 20, 76 35 C70 24, 30 24, 24 35 Z" fill="url(#hairGradSmall)"/>
+                        <path d="M24 32 C23 45, 26 50, 26 50 C26 50, 29 42, 28 35 Z" fill="url(#hairGradSmall)"/>
+                        <path d="M76 32 C77 45, 74 50, 74 50 C74 50, 71 42, 72 35 Z" fill="url(#hairGradSmall)"/>
+                        <g class="headphones">
+                            <path d="M22 46 C22 20, 78 20, 78 46" fill="none" stroke="url(#headphoneGradSmall)" stroke-width="4.5" stroke-linecap="round" />
+                            <rect x="17" y="38" width="8" height="16" rx="4" fill="url(#headphoneGradSmall)" />
+                            <circle cx="21" cy="46" r="3" fill="#22d3ee" class="glow-led" />
+                            <rect x="75" y="38" width="8" height="16" rx="4" fill="url(#headphoneGradSmall)" />
+                            <circle cx="79" cy="46" r="3" fill="#22d3ee" class="glow-led" />
+                            <path d="M27 22 L17 12 L24 9 Z" fill="url(#headphoneGradSmall)" />
+                            <path d="M73 22 L83 12 L76 9 Z" fill="url(#headphoneGradSmall)" />
+                            <polygon points="24,19 19,14 22,12" fill="#22d3ee" class="glow-led" />
+                            <polygon points="76,19 81,14 78,12" fill="#22d3ee" class="glow-led" />
+                        </g>
+                    </svg>
+                </div>
+                <div>
+                    <div class="ai-bot-name">Aryan's AI Assistant</div>
+                    <div class="ai-bot-status">
+                        <span class="ai-bot-status-dot"></span> Online
+                    </div>
+                </div>
+            </div>
+            <button onclick="toggleBotWindow()" class="ai-bot-close-btn" aria-label="Close Chat">&times;</button>
+        </div>
+        <div class="ai-bot-messages" id="ai-bot-messages">
+            <!-- Messages dynamically appended -->
+        </div>
+        <form class="ai-bot-input-area" onsubmit="sendBotMessage(event)">
+            <input type="text" id="ai-bot-input" placeholder="Type your message..." autocomplete="off" required>
+            <button type="submit" aria-label="Send message"><i class="fa-solid fa-paper-plane"></i></button>
+        </form>
+    </div>
 </div>
-
-
 
 </body>
 </html>
