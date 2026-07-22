@@ -859,7 +859,7 @@
         .lens-showcase {
             margin-top: 2rem;
             display: grid;
-            grid-template-columns: 0.95fr 1.35fr;
+            grid-template-columns: 1fr;
             gap: 2rem;
             align-items: center;
         }
@@ -1636,52 +1636,7 @@
             <div class="portfolio-summary-item"><strong>Global</strong><span>Remote Friendly</span></div>
         </div>
         <div class="projects-grid" id="projects-grid">
-            <!-- Loaded dynamically, fallbacks below -->
-            <div class="project-card featured-project fade-up">
-                <div class="project-media">
-                    <img src="featured_project_1.png" alt="AR Card System" class="project-img" onerror="this.style.display='none'">
-                    <span class="project-type"><i class="fa-solid fa-layer-group"></i> Web Platform</span>
-                </div>
-                <div class="project-body">
-                    <div class="project-tags"><span class="tag">Python</span><span class="tag">Cloud</span><span class="tag">JS</span></div>
-                    <div class="project-title">AR Card System</div>
-                    <p class="project-desc">AI-ready cloud platform for smart augmented reality business cards with integrated QR codes and secure auth.</p>
-                    <div class="project-actions">
-                        <a href="https://arcard-1.onrender.com" target="_blank" class="btn btn-primary" style="font-size:0.75rem;padding:0.4rem 0.9rem">View Project <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                        <button class="btn btn-ghost" onclick="openModal('hire')" style="font-size:0.75rem;padding:0.4rem 0.9rem">Hire Similar</button>
-                    </div>
-                </div>
-            </div>
-            <div class="project-card featured-project fade-up">
-                <div class="project-media">
-                    <img src="featured_project_2.png" alt="AI Image Editor" class="project-img" onerror="this.style.display='none'">
-                    <span class="project-type"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Product</span>
-                </div>
-                <div class="project-body">
-                    <div class="project-tags"><span class="tag">Python AI</span><span class="tag">JS</span><span class="tag">Vercel</span></div>
-                    <div class="project-title">Editor Pro — AI Image Editor</div>
-                    <p class="project-desc">Browser-based AI image editor with command-driven transformations, vintage filters &amp; real-time controls.</p>
-                    <div class="project-actions">
-                        <a href="https://ai-gngh.vercel.app" target="_blank" class="btn btn-primary" style="font-size:0.75rem;padding:0.4rem 0.9rem">View Project <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                        <button class="btn btn-ghost" onclick="openModal('hire')" style="font-size:0.75rem;padding:0.4rem 0.9rem">Hire Similar</button>
-                    </div>
-                </div>
-            </div>
-            <div class="project-card featured-project fade-up">
-                <div class="project-media">
-                    <img src="featured_project_3.png" alt="Neon Face Filter" class="project-img" onerror="this.style.display='none'">
-                    <span class="project-type"><i class="fa-brands fa-snapchat"></i> AR Experience</span>
-                </div>
-                <div class="project-body">
-                    <div class="project-tags"><span class="tag">Lens Studio</span><span class="tag">AR</span><span class="tag">Snapchat</span></div>
-                    <div class="project-title">Neon Face Filter AR Lens</div>
-                    <p class="project-desc">Interactive Snapchat AR lens with neon face tracking effects, real-time visual shaders and 3D transformations.</p>
-                    <div class="project-actions">
-                        <a href="https://snapchat.com" target="_blank" class="btn btn-primary" style="font-size:0.75rem;padding:0.4rem 0.9rem">Try Lens <i class="fa-solid fa-wand-magic-sparkles"></i></a>
-                        <button class="btn btn-ghost" onclick="openModal('hire')" style="font-size:0.75rem;padding:0.4rem 0.9rem">Build Lens</button>
-                    </div>
-                </div>
-            </div>
+            <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem 0;">No projects published yet.</div>
         </div>
     </div>
 </section>
@@ -1694,27 +1649,12 @@
     <div class="container">
         <div class="section-header centered fade-up">
             <div class="label"><i class="fa-brands fa-snapchat"></i> Lens Gallery</div>
-            <h2 class="heading">Snapchat Lenses in <span>Small Circles</span></h2>
+            <h2 class="heading">Snapchat Lenses</h2>
             <p class="subtext" style="margin-top:0.75rem">A playful gallery for AR work, brand filters, snapcodes, and interactive effects. New lenses from the admin panel appear here automatically.</p>
         </div>
         <div class="lens-showcase">
-            <div class="lens-feature fade-up" id="lens-feature">
-                <img src="snapcode_qr.png" alt="Featured Snapchat lens snapcode" class="lens-feature-img" id="lens-feature-img">
-                <h3 id="lens-feature-title">Featured AR Lens</h3>
-                <p id="lens-feature-desc">Cute, fast-scanning circular lens cards make it easy for visitors to explore your Snapchat AR work without leaving the portfolio.</p>
-                <a href="https://snapchat.com" target="_blank" class="btn btn-primary" id="lens-feature-link">Open Lens <i class="fa-brands fa-snapchat"></i></a>
-            </div>
             <div class="lens-bubbles fade-up" id="lens-bubbles">
-                <a href="https://snapchat.com" target="_blank" class="lens-bubble">
-                    <span class="lens-bubble-img-wrap"><img src="snapcode_qr.png" alt="Snapcode" class="lens-bubble-img"></span>
-                    <span class="lens-bubble-name">Neon Face AR</span>
-                    <span class="lens-bubble-views"><i class="fa-solid fa-eye"></i> 3.6B views</span>
-                </a>
-                <a href="https://snapchat.com" target="_blank" class="lens-bubble">
-                    <span class="lens-bubble-img-wrap"><img src="latest_snapchat_lens.png" alt="Snap lens preview" class="lens-bubble-img"></span>
-                    <span class="lens-bubble-name">Latest Lens</span>
-                    <span class="lens-bubble-views"><i class="fa-solid fa-eye"></i> Live</span>
-                </a>
+                <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem 0;">No lenses published yet.</div>
             </div>
         </div>
     </div>
@@ -2200,17 +2140,7 @@ async function loadDynamicLenses() {
         if (!data.success || !data.lenses || data.lenses.length === 0) return;
 
         const lenses = data.lenses;
-        const featured = lenses.find(l => l.activeAdBar) || lenses[0];
-        const featureImg = document.getElementById('lens-feature-img');
-        const featureTitle = document.getElementById('lens-feature-title');
-        const featureDesc = document.getElementById('lens-feature-desc');
-        const featureLink = document.getElementById('lens-feature-link');
         const bubbles = document.getElementById('lens-bubbles');
-
-        featureImg.src = safeUrl(featured.snapcodeUrl, 'snapcode_qr.png');
-        featureTitle.textContent = featured.name || 'Featured AR Lens';
-        featureDesc.textContent = featured.description || 'A custom Snapchat AR lens with fast scan access and a polished brand-ready experience.';
-        featureLink.href = safeUrl(featured.lensUrl, 'https://snapchat.com');
 
         bubbles.innerHTML = '';
         lenses.forEach(lens => {

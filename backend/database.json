@@ -59,17 +59,6 @@
     }
   ],
   "testimonials": [],
-  "projects": [
-    {
-      "name": "My Test Project",
-      "description": "A test project to verify the system works",
-      "imageUrl": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800",
-      "tags": "Python, AI, Flask",
-      "demoUrl": "https://example.com/demo",
-      "githubUrl": "https://github.com/aryanjha205",
-      "_id": "1783768278154",
-      "date": "2026-07-11T16:41:18.155847"
-    }
-  ],
+  "projects": [],
   "lenses": []
 }
