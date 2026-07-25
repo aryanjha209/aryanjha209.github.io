@@ -144,7 +144,13 @@
             pointer-events: none;
             z-index: 1;
             opacity: 0.45;
-            animation: orb-pulse 22s infinite ease-in-out alternate;
+            animation: morphing-orb 20s infinite ease-in-out alternate;
+        }
+        @keyframes morphing-orb {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(100px, -50px) scale(1.2); }
+            66% { transform: translate(-50px, 100px) scale(0.8); }
+            100% { transform: translate(0, 0) scale(1); }
         }
         .orb-1 {
             background: radial-gradient(circle, rgba(168, 85, 247, 0.22) 0%, transparent 70%);
@@ -1949,9 +1955,12 @@
 
                 <h1 class="hero-headline">
                     Building <span class="accent">AI</span> &amp;<br>
-                    <span class="cyan-accent">Web Solutions</span><br>
+                    <span class="cyan-accent" id="typewriter-text">Web Solutions</span><span class="typewriter-cursor" style="animation: blink 1s infinite;">|</span><br>
                     That Scale.
                 </h1>
+                <style>
+                    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+                </style>
                 <p class="hero-desc">
                     I'm Aryan Jha — an AI/ML Developer, Full-Stack Web Architect &amp; Official Snapchat AR Creator. I turn complex ideas into clean, powerful digital products.
                 </p>
@@ -2886,6 +2895,76 @@ function handleShowcaseClick() {
         }
     }
 }
+
+// ===========================
+// 3D TILT EFFECT
+// ===========================
+function initTiltEffect() {
+    const cards = document.querySelectorAll('.service-card, .project-card, .lens-card');
+    cards.forEach(card => {
+        // Only attach once
+        if (card.dataset.tiltInit) return;
+        card.dataset.tiltInit = 'true';
+        
+        card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = ((y - centerY) / centerY) * -8; // Max 8 deg
+            const rotateY = ((x - centerX) / centerX) * 8;
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            card.style.transition = 'none';
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+            card.style.transition = 'transform 0.5s ease';
+        });
+    });
+}
+
+// ===========================
+// TYPEWRITER EFFECT
+// ===========================
+const typewriterTexts = ["Web Solutions", "AR Experiences", "AI Systems", "Digital Products"];
+let typeIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+
+function typeWriter() {
+    const textElement = document.getElementById("typewriter-text");
+    if (!textElement) return;
+
+    const currentText = typewriterTexts[typeIndex];
+    
+    if (isDeleting) {
+        textElement.textContent = currentText.substring(0, charIndex - 1);
+        charIndex--;
+    } else {
+        textElement.textContent = currentText.substring(0, charIndex + 1);
+        charIndex++;
+    }
+
+    let typeSpeed = isDeleting ? 40 : 80;
+
+    if (!isDeleting && charIndex === currentText.length) {
+        typeSpeed = 2000; // Pause at end
+        isDeleting = true;
+    } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        typeIndex = (typeIndex + 1) % typewriterTexts.length;
+        typeSpeed = 500; // Pause before next word
+    }
+
+    setTimeout(typeWriter, typeSpeed);
+}
+
+// Run initializations
+document.addEventListener('DOMContentLoaded', () => {
+    typeWriter();
+    setTimeout(initTiltEffect, 500);
+});
 </script>
 
 <!-- Floating AI Chatbot Widget -->
