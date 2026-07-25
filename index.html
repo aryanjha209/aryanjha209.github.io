@@ -1989,11 +1989,7 @@
                 </div>
             </div>
             <div class="hero-right">
-                <!-- Showcase Box (Rotates posters) -->
-                <div class="showcase-box" id="showcase-box" style="display:none;" onclick="handleShowcaseClick()">
-                    <img src="" alt="Showcase Poster" class="showcase-img" id="showcase-img">
-                    <div class="showcase-badge"><i class="fa-solid fa-sparkles"></i> Featured</div>
-                </div>
+                <!-- Showcase Box removed as per request -->
             </div>
         </div>
     </div>
@@ -2837,6 +2833,8 @@ async function loadShowcasePosters() {
             showcasePosters = data.posters;
             const box = document.getElementById('showcase-box');
             const img = document.getElementById('showcase-img');
+            
+            if (!box || !img) return;
             
             // Set first poster
             img.src = showcasePosters[0].imageUrl;
