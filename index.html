@@ -103,7 +103,7 @@
            RESET
         =========================== */
         *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-        html { scroll-behavior: smooth; overflow-x: hidden; width: 100%; }
+        html { overflow-x: hidden; width: 100%; }
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: #ffffff !important;
@@ -2392,7 +2392,7 @@
 </div>
 
 <!-- Scroll to top -->
-<button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+<button class="scroll-top" id="scroll-top" onclick="const sPos = window.scrollY; const dur = 400; let st = null; window.requestAnimationFrame(function s(t){if(!st)st=t;const p=Math.min((t-st)/dur,1);const e=p<0.5?2*p*p:-1+(4-2*p)*p;window.scrollTo(0,sPos*(1-e));if(p<1)window.requestAnimationFrame(s);});">
     <i class="fa-solid fa-arrow-up"></i>
 </button>
 
