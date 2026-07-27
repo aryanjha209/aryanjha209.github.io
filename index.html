@@ -1896,6 +1896,30 @@
             z-index: 5;
             box-shadow: 0 4px 10px rgba(0,0,0,0.25);
         }
+        /* Homepage art direction — lightweight CSS visual, no image download required */
+        .hero { min-height: 640px; padding-top: 7.5rem; }
+        .hero-kicker { margin-bottom: 1.35rem; }
+        .hero-kicker.label { text-transform: none; letter-spacing: .1px; }
+        .hero-visual { width: min(100%, 520px); aspect-ratio: 1 / .92; position: relative; display:grid; place-items:center; }
+        .hero-orbit { position:absolute; border:1px solid rgba(124, 58, 237, .17); border-radius:50%; }
+        .hero-orbit.one { width:78%; height:78%; }
+        .hero-orbit.two { width:96%; height:96%; }
+        .hero-orbit.three { width:116%; height:116%; border-style:dashed; }
+        .hero-core { position:relative; width:190px; height:190px; display:grid; place-items:center; border-radius:48% 52% 45% 55%; background:radial-gradient(circle at 30% 25%, #c4b5fd 0, #8b5cf6 34%, #5b21b6 72%, #312e81 100%); box-shadow:0 20px 50px rgba(109,40,217,.38), inset -15px -18px 32px rgba(49,20,120,.52), inset 12px 10px 24px rgba(255,255,255,.38); animation:float-core 5s ease-in-out infinite; }
+        .hero-core::before { content:''; width:65%; height:65%; border:1px solid rgba(255,255,255,.6); border-radius:46% 54% 51% 49%; box-shadow:inset 0 0 22px rgba(255,255,255,.25); }
+        .hero-core i { position:absolute; font-size:4.1rem; color:#fff; opacity:.92; text-shadow:0 0 18px rgba(255,255,255,.85); }
+        .hero-platform { position:absolute; bottom:12%; width:220px; height:66px; border:8px solid rgba(196,181,253,.76); border-radius:50%; background:radial-gradient(ellipse, rgba(255,255,255,.95), rgba(167,139,250,.75) 35%, rgba(91,33,182,.95) 75%); box-shadow:0 12px 0 #4c1d95, 0 27px 26px rgba(91,33,182,.28), inset 0 0 20px white; }
+        .visual-card { position:absolute; z-index:4; width:104px; min-height:96px; padding:.9rem .5rem; display:flex; flex-direction:column; gap:.48rem; align-items:center; justify-content:center; background:rgba(255,255,255,.9); border:1px solid rgba(139,92,246,.16); border-radius:14px; box-shadow:0 16px 28px rgba(76,29,149,.1); font-size:.68rem; font-weight:800; text-align:center; color:var(--text); }
+        .visual-card i { color:#6d28d9; font-size:1.45rem; }
+        .visual-card.ai { top:9%; left:4%; } .visual-card.web { top:9%; right:1%; } .visual-card.auto { bottom:12%; left:4%; } .visual-card.ar { bottom:10%; right:0; }
+        .orbit-dot { position:absolute; z-index:3; width:8px; height:8px; border-radius:50%; background:#7c3aed; box-shadow:0 0 10px 4px rgba(124,58,237,.42); }
+        .dot-one { top:28%; left:18%; } .dot-two { top:44%; right:8%; } .dot-three { bottom:12%; left:44%; }
+        @keyframes float-core { 0%,100% { transform:translateY(0) rotate(-3deg); } 50% { transform:translateY(-12px) rotate(3deg); } }
+        .trust-bar { margin:0 auto 1.5rem; width:calc(100% - 3rem); max-width:1100px; background:rgba(255,255,255,.8); border:1px solid rgba(139,92,246,.12); border-radius:16px; box-shadow:0 10px 30px rgba(29,18,77,.06); padding:1.05rem 2rem; }
+        .trust-logo { opacity:1; color:#1d1b2d; font-size:.95rem; }
+        .trust-logo i { color:#6d28d9; font-size:1.2rem; }
+        @media (max-width:768px) { .hero { min-height:auto; padding:7rem 0 3.5rem; } .hero-visual { max-width:430px; margin:auto; } .trust-bar { width:calc(100% - 2rem); padding:1rem 1.25rem; } .trust-bar-inner { align-items:flex-start; flex-direction:column; gap:.8rem; } .trust-logos { gap:1rem; } }
+        @media (max-width:440px) { .visual-card { transform:scale(.8); } .visual-card.ai,.visual-card.auto { left:-3%; } .visual-card.web,.visual-card.ar { right:-3%; } .hero-core { width:155px; height:155px; } .hero-platform { bottom:10%; width:185px; } }
     </style>
 </head>
 <body>
@@ -1952,7 +1976,7 @@
     <div class="container">
         <div class="hero-grid">
             <div class="hero-left">
-
+                <div class="label hero-kicker"><i class="fa-solid fa-sparkles"></i> AI · Web · Automation</div>
                 <h1 class="hero-headline">
                     Building <span class="accent">AI</span> &amp;<br>
                     <span class="cyan-accent" id="typewriter-text">Web Solutions</span><span class="typewriter-cursor" style="animation: blink 1s infinite;">|</span><br>
@@ -1977,8 +2001,8 @@
                 </div>
                 <div class="hero-stats">
                     <div class="hero-stat">
-                        <span class="hero-stat-val" id="stat-projects">10+</span>
-                        <span class="hero-stat-label">AI Projects</span>
+                        <span class="hero-stat-val" id="stat-projects">0</span>
+                        <span class="hero-stat-label">Published Projects</span>
                     </div>
                     <div class="hero-stat-divider"></div>
                     <div class="hero-stat">
@@ -1998,8 +2022,31 @@
                 </div>
             </div>
             <div class="hero-right">
-                <!-- Showcase Box removed as per request -->
+                <div class="hero-visual" aria-label="AI solutions visual">
+                    <span class="hero-orbit one"></span><span class="hero-orbit two"></span><span class="hero-orbit three"></span>
+                    <span class="orbit-dot dot-one"></span><span class="orbit-dot dot-two"></span><span class="orbit-dot dot-three"></span>
+                    <div class="visual-card ai"><i class="fa-solid fa-brain"></i><span>AI Solutions</span></div>
+                    <div class="visual-card web"><i class="fa-solid fa-code"></i><span>Web Apps</span></div>
+                    <div class="visual-card auto"><i class="fa-solid fa-bolt"></i><span>Automation</span></div>
+                    <div class="visual-card ar"><i class="fa-solid fa-camera"></i><span>AR Experiences</span></div>
+                    <div class="hero-core"><i class="fa-solid fa-brain"></i></div>
+                    <div class="hero-platform"></div>
+                </div>
             </div>
+        </div>
+    </div>
+</section>
+
+<section class="trust-bar" aria-label="Technology stack">
+    <div class="trust-bar-inner">
+        <span class="trust-label">Built with modern tools</span>
+        <div class="trust-logos">
+            <span class="trust-logo"><i class="fa-solid fa-triangle"></i> Vercel</span>
+            <span class="trust-logo"><i class="fa-solid fa-leaf"></i> MongoDB</span>
+            <span class="trust-logo"><i class="fa-solid fa-atom"></i> OpenAI</span>
+            <span class="trust-logo"><i class="fa-brands fa-python"></i> Python</span>
+            <span class="trust-logo"><i class="fa-solid fa-fire"></i> Firebase</span>
+            <span class="trust-logo"><i class="fa-brands fa-docker"></i> Docker</span>
         </div>
     </div>
 </section>
@@ -2070,12 +2117,12 @@
             </div>
         </div>
         <div class="portfolio-summary fade-up">
-            <div class="portfolio-summary-item"><strong>10+</strong><span>Delivered Builds</span></div>
+            <div class="portfolio-summary-item"><strong id="portfolio-project-count">0</strong><span>Published Builds</span></div>
             <div class="portfolio-summary-item"><strong>4</strong><span>Core Services</span></div>
             <div class="portfolio-summary-item"><strong>Global</strong><span>Remote Friendly</span></div>
         </div>
         <div class="projects-grid" id="projects-grid">
-            <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem 0;">No projects published yet.</div>
+            <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem 0;">Loading published projects…</div>
         </div>
     </div>
 </section>
@@ -2492,7 +2539,6 @@ async function handleSubscribe(e) {
 // ===========================
 function animateStats() {
     const stats = [
-        { id: 'stat-projects', start: 0, target: 10, suffix: '+' },
         { id: 'stat-views', start: 0.0, target: 99.9, suffix: '%', isDecimal: true },
         { id: 'stat-clients', start: 0, target: 15, suffix: '+' },
         { id: 'stat-lenses', start: 0, target: 20, suffix: '+' }
@@ -2540,16 +2586,22 @@ function handleUrlQueryRouting() {
 // DYNAMIC PROJECTS LOADER
 // ===========================
 async function loadDynamicProjects() {
+    const grid = document.getElementById('projects-grid');
+    const count = document.getElementById('portfolio-project-count');
+    const stat = document.getElementById('stat-projects');
     try {
         const response = await fetch(`${API}/api/projects`);
         const data = await response.json();
-        if (data.success && data.projects && data.projects.length > 0) {
-            const grid = document.getElementById('projects-grid');
+        const projects = data.success && Array.isArray(data.projects) ? data.projects : [];
+        if (count) count.textContent = projects.length;
+        if (stat) stat.textContent = projects.length;
+        if (projects.length > 0) {
             grid.innerHTML = ''; // Clear fallback cards
-            data.projects.forEach(p => {
+            projects.forEach(p => {
                 const tagsArray = Array.isArray(p.tags) ? p.tags : (p.tags ? p.tags.split(',').map(t => t.trim()) : []);
                 const tagsHtml = tagsArray.map(t => `<span class="tag">${escapeText(t)}</span>`).join('');
                 const demoUrl = safeUrl(p.demoUrl, '');
+                const githubUrl = safeUrl(p.githubUrl, '');
                 
                 const card = document.createElement('div');
                 card.className = 'project-card featured-project fade-up';
@@ -2564,6 +2616,7 @@ async function loadDynamicProjects() {
                         <p class="project-desc">${escapeText(p.description || 'A selected project from Aryan Jha portfolio.')}</p>
                         <div class="project-actions">
                             ${demoUrl ? `<a href="${demoUrl}" target="_blank" class="btn btn-primary" style="font-size:0.75rem;padding:0.4rem 0.9rem">View Project <i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}
+                            ${githubUrl ? `<a href="${githubUrl}" target="_blank" class="btn btn-ghost" style="font-size:0.75rem;padding:0.4rem 0.9rem">Code <i class="fa-brands fa-github"></i></a>` : ''}
                             <button class="btn btn-ghost" onclick="openModal('hire')" style="font-size:0.75rem;padding:0.4rem 0.9rem">Hire Similar</button>
                         </div>
                     </div>
@@ -2571,9 +2624,12 @@ async function loadDynamicProjects() {
                 grid.appendChild(card);
                 observer.observe(card); // Hook scroll animation
             });
+        } else if (grid) {
+            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--text-muted);padding:3rem 0">No projects have been published by the admin yet.</div>';
         }
     } catch (err) {
         console.error('Error fetching dynamic projects:', err);
+        if (grid) grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--text-muted);padding:3rem 0">Projects are temporarily unavailable. Please try again shortly.</div>';
     }
 }
 
