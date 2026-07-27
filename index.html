@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script type="application/ld+json">
+    <script defer type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "Person",
@@ -2094,7 +2094,7 @@
             </div>
             <div class="hero-right">
                 <div class="hero-visual" aria-label="AI solutions visual">
-                    <img class="hero-ai-art" src="ai-platform-hero-v2.png" alt="Glowing neural network brain above an AI platform">
+                    <img class="hero-ai-art" src="ai-platform-hero-transparent.png" alt="Glowing neural network brain above an AI platform">
                 </div>
             </div>
         </div>
@@ -2398,7 +2398,7 @@
 
 
 
-<script src="config.js"></script>
+<script defer src="config.js"></script>
 <script>
 // ===========================
 // API BASE
@@ -2676,7 +2676,7 @@ async function loadDynamicProjects() {
                 card.innerHTML = `
                     <div class="project-flip">
                         <div class="project-face project-front">
-                            <img src="${safeUrl(p.imageUrl, 'featured_project_1.png')}" alt="${escapeText(p.name || 'Portfolio project')} poster" class="project-img" onerror="this.style.display='none'">
+                            <img loading='lazy' src="${safeUrl(p.imageUrl, 'featured_project_1.png')}" alt="${escapeText(p.name || 'Portfolio project')} poster" class="project-img" onerror="this.style.display='none'">
                             <span class="project-type"><i class="fa-solid fa-briefcase"></i> Portfolio Work</span>
                             <span class="flip-hint">Hover to explore <i class="fa-solid fa-rotate"></i></span>
                         </div>
@@ -2745,7 +2745,7 @@ async function loadDynamicLenses() {
             item.rel = 'noopener';
             item.innerHTML = `
                 <span class="lens-bubble-img-wrap">
-                    <img src="${safeUrl(lens.snapcodeUrl, 'snapcode_qr.png')}" alt="${escapeText(lens.name || 'Snapchat lens')}" class="lens-bubble-img">
+                    <img loading='lazy' src="${safeUrl(lens.snapcodeUrl, 'snapcode_qr.png')}" alt="${escapeText(lens.name || 'Snapchat lens')}" class="lens-bubble-img">
                 </span>
                 <span class="lens-bubble-name">${escapeText(lens.name || 'Snap Lens')}</span>
                 <span class="lens-bubble-views"><i class="fa-solid fa-eye"></i> ${escapeText(lens.views || 'View')}</span>
@@ -2828,416 +2828,7 @@ if ('serviceWorker' in navigator) {
 }
 
 // ===========================
-// FLOATING AI CHATBOT LOGIC
-// ===========================
-let chatHistory = [];
-let chatStage = 0; // 0 = Name, 1 = Email, 2 = Normal Chat
 
-// Initialize chat stage from localStorage
-if (localStorage.getItem('bot_user_name') && localStorage.getItem('bot_user_email')) {
-    chatStage = 2;
-}
-
-function toggleBotWindow() {
-    const win = document.getElementById('ai-bot-window');
-    win.classList.toggle('open');
-    
-    const messagesContainer = document.getElementById('ai-bot-messages');
-    
-    // Trigger initial message if window is opened and empty
-    if (win.classList.contains('open') && messagesContainer.children.length === 0) {
-        const name = localStorage.getItem('bot_user_name');
-        if (chatStage === 2 && name) {
-            appendBotMessage(`Hi ${name}! 🌸 I'm Aryan's AI assistant. Ask me anything about his AI development, full-stack architectures, or Snapchat lenses. How can I help you today?`, 'ai');
-        } else {
-            chatStage = 0;
-            appendBotMessage(`Hi there! 🌸 I'm Aryan's AI assistant. Let's get to know each other first! What is your name?`, 'ai');
-        }
-    }
-}
-
-function appendBotMessage(text, sender) {
-    const container = document.getElementById('ai-bot-messages');
-    
-    const typing = document.getElementById('ai-bot-typing-indicator');
-    if (typing) typing.remove();
-    
-    const msg = document.createElement('div');
-    msg.className = `ai-bot-msg ${sender}`;
-    msg.textContent = text;
-    container.appendChild(msg);
-    container.scrollTop = container.scrollHeight;
-    
-    if (sender === 'ai') {
-        chatHistory.push({ role: 'assistant', content: text });
-    } else if (sender === 'user') {
-        chatHistory.push({ role: 'user', content: text });
-    }
-}
-
-function showTypingIndicator() {
-    const container = document.getElementById('ai-bot-messages');
-    if (document.getElementById('ai-bot-typing-indicator')) return;
-    
-    const typing = document.createElement('div');
-    typing.className = 'ai-bot-typing';
-    typing.id = 'ai-bot-typing-indicator';
-    typing.innerHTML = '<span></span><span></span><span></span>';
-    container.appendChild(typing);
-    container.scrollTop = container.scrollHeight;
-}
-
-async function sendBotMessage(e) {
-    e.preventDefault();
-    const input = document.getElementById('ai-bot-input');
-    const text = input.value.trim();
-    if (!text) return;
-    
-    input.value = '';
-    appendBotMessage(text, 'user');
-    
-    if (chatStage === 0) {
-        // User provided Name
-        localStorage.setItem('bot_user_name', text);
-        chatStage = 1;
-        showTypingIndicator();
-        setTimeout(() => {
-            appendBotMessage(`Nice to meet you, ${text}! ✨ What is your email address so we can stay in touch?`, 'ai');
-        }, 1000);
-        return;
-    }
-    
-    if (chatStage === 1) {
-        // User provided Email
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(text)) {
-            showTypingIndicator();
-            setTimeout(() => {
-                appendBotMessage(`Oops, that email doesn't look quite right. 🥺 Can you please type a valid email address?`, 'ai');
-            }, 1000);
-            return;
-        }
-        
-        localStorage.setItem('bot_user_email', text);
-        chatStage = 2;
-        const name = localStorage.getItem('bot_user_name');
-        
-        showTypingIndicator();
-        
-        // Quietly notify backend to log this lead
-        fetch(`${API}/api/chat`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: name,
-                email: text,
-                message: '[New AI Chatbot Lead Initialized]',
-                history: []
-            })
-        }).catch(err => console.error('Error logging lead to backend:', err));
-        
-        setTimeout(() => {
-            appendBotMessage(`Thank you! 💖 Now you can ask me anything about Aryan's skills, web apps, or Snapchat lenses. Or try booking a call!`, 'ai');
-        }, 1200);
-        return;
-    }
-    
-    // chatStage === 2: Normal conversation with OpenRouter API
-    showTypingIndicator();
-    
-    const name = localStorage.getItem('bot_user_name');
-    const email = localStorage.getItem('bot_user_email');
-    
-    try {
-        const response = await fetch(`${API}/api/chat`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: name,
-                email: email,
-                message: text,
-                history: chatHistory.slice(-10)
-            })
-        });
-        
-        const data = await response.json();
-        const reply = data.success ? data.reply : "I'm having trouble connecting to the model right now. You can email Aryan directly at aryankr2029@gmail.com!";
-        
-        appendBotMessage(reply, 'ai');
-        
-        const lowerReply = reply.toLowerCase();
-        if (lowerReply.includes('book a call') || lowerReply.includes('book-modal')) {
-            setTimeout(() => {
-                openModal('book');
-            }, 1000);
-        } else if (lowerReply.includes('start a project') || lowerReply.includes('hire-modal')) {
-            setTimeout(() => {
-                openModal('hire');
-            }, 1000);
-        }
-        
-    } catch (err) {
-        console.error('Chat error:', err);
-        appendBotMessage("Sorry, I experienced a network error. Please try again or reach out directly!", 'ai');
-    }
-}
-
-// ===========================
-// SHOWCASE POSTERS ROTATION
-// ===========================
-let showcasePosters = [];
-let currentPosterIndex = 0;
-let posterRotationTimer = null;
-
-async function loadShowcasePosters() {
-    try {
-        const response = await fetch(`${API}/api/posters`);
-        const data = await response.json();
-        if (data.success && data.posters && data.posters.length > 0) {
-            showcasePosters = data.posters;
-            const box = document.getElementById('showcase-box');
-            const img = document.getElementById('showcase-img');
-            
-            if (!box || !img) return;
-            
-            // Set first poster
-            img.src = showcasePosters[0].imageUrl;
-            box.style.display = 'flex';
-            
-            // Fade in image
-            setTimeout(() => {
-                img.classList.add('fade-in');
-            }, 100);
-            
-            // Setup 3-second cycle rotation if there is more than 1 poster
-            if (showcasePosters.length > 1) {
-                if (posterRotationTimer) clearInterval(posterRotationTimer);
-                posterRotationTimer = setInterval(() => {
-                    img.classList.remove('fade-in');
-                    setTimeout(() => {
-                        currentPosterIndex = (currentPosterIndex + 1) % showcasePosters.length;
-                        img.src = showcasePosters[currentPosterIndex].imageUrl;
-                        img.classList.add('fade-in');
-                    }, 500); // 500ms match transition fade duration
-                }, 3500); // Rotate every 3.5s (3s visual + 0.5s fade transition)
-            }
-        }
-    } catch (err) {
-        console.error('Error fetching showcase posters:', err);
-    }
-}
-
-function handleShowcaseClick() {
-    if (showcasePosters.length > 0 && showcasePosters[currentPosterIndex]) {
-        const redirectUrl = showcasePosters[currentPosterIndex].redirectUrl;
-        if (redirectUrl) {
-            // Programmatic redirect that keeps the link invisible
-            const newTab = window.open();
-            if (newTab) {
-                newTab.opener = null;
-                newTab.location = redirectUrl;
-            } else {
-                window.location.href = redirectUrl;
-            }
-        }
-    }
-}
-
-// ===========================
-// 3D TILT EFFECT
-// ===========================
-function initTiltEffect() {
-    const cards = document.querySelectorAll('.service-card, .project-card, .lens-card');
-    cards.forEach(card => {
-        // Only attach once
-        if (card.dataset.tiltInit) return;
-        card.dataset.tiltInit = 'true';
-        
-        card.addEventListener('mousemove', e => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = ((y - centerY) / centerY) * -8; // Max 8 deg
-            const rotateY = ((x - centerX) / centerX) * 8;
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-            card.style.transition = 'none';
-        });
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-            card.style.transition = 'transform 0.5s ease';
-        });
-    });
-}
-
-// ===========================
-// TYPEWRITER EFFECT
-// ===========================
-const typewriterTexts = ["Web Solutions", "AR Experiences", "AI Systems", "Digital Products"];
-let typeIndex = 0;
-let charIndex = 0;
-let isDeleting = false;
-
-function typeWriter() {
-    const textElement = document.getElementById("typewriter-text");
-    if (!textElement) return;
-
-    const currentText = typewriterTexts[typeIndex];
-    
-    if (isDeleting) {
-        textElement.textContent = currentText.substring(0, charIndex - 1);
-        charIndex--;
-    } else {
-        textElement.textContent = currentText.substring(0, charIndex + 1);
-        charIndex++;
-    }
-
-    let typeSpeed = isDeleting ? 40 : 80;
-
-    if (!isDeleting && charIndex === currentText.length) {
-        typeSpeed = 2000; // Pause at end
-        isDeleting = true;
-    } else if (isDeleting && charIndex === 0) {
-        isDeleting = false;
-        typeIndex = (typeIndex + 1) % typewriterTexts.length;
-        typeSpeed = 500; // Pause before next word
-    }
-
-    setTimeout(typeWriter, typeSpeed);
-}
-
-// Run initializations
-document.addEventListener('DOMContentLoaded', () => {
-    typeWriter();
-    setTimeout(initTiltEffect, 500);
-});
-</script>
-
-<!-- Floating AI Chatbot Widget -->
-<button class="ai-bot-trigger" onclick="toggleBotWindow()" aria-label="Chat with Assistant">
-    <div class="pulse"></div>
-    <div class="cute-bot-avatar" style="width:100%;height:100%;">
-        <svg class="cute-ai-girl-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <linearGradient id="hairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#ec4899" />
-                    <stop offset="100%" stop-color="#a855f7" />
-                </linearGradient>
-                <linearGradient id="headphoneGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stop-color="#06b6d4" />
-                    <stop offset="100%" stop-color="#3b82f6" />
-                </linearGradient>
-            </defs>
-            <g class="sparkles">
-                <circle cx="15" cy="25" r="1.5" fill="#f59e0b" opacity="0.8"/>
-                <circle cx="85" cy="30" r="1" fill="#ec4899" opacity="0.6"/>
-                <circle cx="20" cy="75" r="2" fill="#06b6d4" opacity="0.7"/>
-            </g>
-            <rect x="46" y="70" width="8" height="12" rx="4" fill="#cbd5e1"/>
-            <line x1="46" y1="76" x2="54" y2="76" stroke="#06b6d4" stroke-width="1" opacity="0.7"/>
-            <path d="M30 82 C35 78, 65 78, 70 82 L75 92 C75 92, 25 92, 25 92 Z" fill="#e2e8f0"/>
-            <circle cx="50" cy="81" r="2.5" fill="#a855f7"/>
-            <path d="M22 45 C15 65, 20 75, 25 75 C30 75, 25 55, 25 45 Z" fill="url(#hairGrad)"/>
-            <path d="M78 45 C85 65, 80 75, 75 75 C70 75, 75 55, 75 45 Z" fill="url(#hairGrad)"/>
-            <circle cx="50" cy="46" r="26" fill="#ffe4e6" />
-            <circle cx="34" cy="52" r="3.5" fill="#f43f5e" opacity="0.5" class="blush" />
-            <circle cx="66" cy="52" r="3.5" fill="#f43f5e" opacity="0.5" class="blush" />
-            <g class="bot-eyes">
-                <ellipse cx="38" cy="45" rx="4" ry="5.5" fill="#0f0a1e"/>
-                <circle cx="36.5" cy="43" r="1.5" fill="#ffffff"/>
-                <circle cx="39.5" cy="47" r="0.7" fill="#ffffff"/>
-                <ellipse cx="62" cy="45" rx="4" ry="5.5" fill="#0f0a1e"/>
-                <circle cx="60.5" cy="43" r="1.5" fill="#ffffff"/>
-                <circle cx="63.5" cy="47" r="0.7" fill="#ffffff"/>
-            </g>
-            <path d="M47 54 Q50 57 53 54" stroke="#e11d48" stroke-width="2" stroke-linecap="round" fill="none" />
-            <path d="M24 35 C28 20, 72 20, 76 35 C70 24, 30 24, 24 35 Z" fill="url(#hairGrad)"/>
-            <path d="M24 32 C23 45, 26 50, 26 50 C26 50, 29 42, 28 35 Z" fill="url(#hairGrad)"/>
-            <path d="M76 32 C77 45, 74 50, 74 50 C74 50, 71 42, 72 35 Z" fill="url(#hairGrad)"/>
-            <g class="headphones">
-                <path d="M22 46 C22 20, 78 20, 78 46" fill="none" stroke="url(#headphoneGrad)" stroke-width="4.5" stroke-linecap="round" />
-                <rect x="17" y="38" width="8" height="16" rx="4" fill="url(#headphoneGrad)" />
-                <circle cx="21" cy="46" r="3" fill="#22d3ee" class="glow-led" />
-                <rect x="75" y="38" width="8" height="16" rx="4" fill="url(#headphoneGrad)" />
-                <circle cx="79" cy="46" r="3" fill="#22d3ee" class="glow-led" />
-                <path d="M27 22 L17 12 L24 9 Z" fill="url(#headphoneGrad)" />
-                <path d="M73 22 L83 12 L76 9 Z" fill="url(#headphoneGrad)" />
-                <polygon points="24,19 19,14 22,12" fill="#22d3ee" class="glow-led" />
-                <polygon points="76,19 81,14 78,12" fill="#22d3ee" class="glow-led" />
-            </g>
-        </svg>
-    </div>
-</button>
-
-<div class="ai-bot-window" id="ai-bot-window">
-    <div class="ai-bot-chat" id="ai-bot-chat">
-        <div class="ai-bot-header">
-            <div class="ai-bot-profile">
-                <div class="ai-bot-avatar-small" style="width:36px;height:36px;background:none;box-shadow:none;">
-                    <svg class="cute-ai-girl-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="hairGradSmall" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#ec4899" />
-                                <stop offset="100%" stop-color="#a855f7" />
-                            </linearGradient>
-                            <linearGradient id="headphoneGradSmall" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" stop-color="#06b6d4" />
-                                <stop offset="100%" stop-color="#3b82f6" />
-                            </linearGradient>
-                        </defs>
-                        <rect x="46" y="70" width="8" height="12" rx="4" fill="#cbd5e1"/>
-                        <line x1="46" y1="76" x2="54" y2="76" stroke="#06b6d4" stroke-width="1" opacity="0.7"/>
-                        <path d="M30 82 C35 78, 65 78, 70 82 L75 92 C75 92, 25 92, 25 92 Z" fill="#e2e8f0"/>
-                        <circle cx="50" cy="81" r="2.5" fill="#a855f7"/>
-                        <path d="M22 45 C15 65, 20 75, 25 75 C30 75, 25 55, 25 45 Z" fill="url(#hairGradSmall)"/>
-                        <path d="M78 45 C85 65, 80 75, 75 75 C70 75, 75 55, 75 45 Z" fill="url(#hairGradSmall)"/>
-                        <circle cx="50" cy="46" r="26" fill="#ffe4e6" />
-                        <circle cx="34" cy="52" r="3.5" fill="#f43f5e" opacity="0.5" class="blush" />
-                        <circle cx="66" cy="52" r="3.5" fill="#f43f5e" opacity="0.5" class="blush" />
-                        <g class="bot-eyes">
-                            <ellipse cx="38" cy="45" rx="4" ry="5.5" fill="#0f0a1e"/>
-                            <circle cx="36.5" cy="43" r="1.5" fill="#ffffff"/>
-                            <circle cx="39.5" cy="47" r="0.7" fill="#ffffff"/>
-                            <ellipse cx="62" cy="45" rx="4" ry="5.5" fill="#0f0a1e"/>
-                            <circle cx="60.5" cy="43" r="1.5" fill="#ffffff"/>
-                            <circle cx="63.5" cy="47" r="0.7" fill="#ffffff"/>
-                        </g>
-                        <path d="M47 54 Q50 57 53 54" stroke="#e11d48" stroke-width="2" stroke-linecap="round" fill="none" />
-                        <path d="M24 35 C28 20, 72 20, 76 35 C70 24, 30 24, 24 35 Z" fill="url(#hairGradSmall)"/>
-                        <path d="M24 32 C23 45, 26 50, 26 50 C26 50, 29 42, 28 35 Z" fill="url(#hairGradSmall)"/>
-                        <path d="M76 32 C77 45, 74 50, 74 50 C74 50, 71 42, 72 35 Z" fill="url(#hairGradSmall)"/>
-                        <g class="headphones">
-                            <path d="M22 46 C22 20, 78 20, 78 46" fill="none" stroke="url(#headphoneGradSmall)" stroke-width="4.5" stroke-linecap="round" />
-                            <rect x="17" y="38" width="8" height="16" rx="4" fill="url(#headphoneGradSmall)" />
-                            <circle cx="21" cy="46" r="3" fill="#22d3ee" class="glow-led" />
-                            <rect x="75" y="38" width="8" height="16" rx="4" fill="url(#headphoneGradSmall)" />
-                            <circle cx="79" cy="46" r="3" fill="#22d3ee" class="glow-led" />
-                            <path d="M27 22 L17 12 L24 9 Z" fill="url(#headphoneGradSmall)" />
-                            <path d="M73 22 L83 12 L76 9 Z" fill="url(#headphoneGradSmall)" />
-                            <polygon points="24,19 19,14 22,12" fill="#22d3ee" class="glow-led" />
-                            <polygon points="76,19 81,14 78,12" fill="#22d3ee" class="glow-led" />
-                        </g>
-                    </svg>
-                </div>
-                <div>
-                    <div class="ai-bot-name">Aryan's AI Assistant</div>
-                    <div class="ai-bot-status">
-                        <span class="ai-bot-status-dot"></span> Online
-                    </div>
-                </div>
-            </div>
-            <button onclick="toggleBotWindow()" class="ai-bot-close-btn" aria-label="Close Chat">&times;</button>
-        </div>
-        <div class="ai-bot-messages" id="ai-bot-messages">
-            <!-- Messages dynamically appended -->
-        </div>
-        <form class="ai-bot-input-area" onsubmit="sendBotMessage(event)">
-            <input type="text" id="ai-bot-input" placeholder="Type your message..." autocomplete="off" required>
-            <button type="submit" aria-label="Send message"><i class="fa-solid fa-paper-plane"></i></button>
-        </form>
-    </div>
-</div>
-
+    </script>
 </body>
 </html>
