@@ -1956,6 +1956,41 @@
         .flip-back-hint { font-size:.67rem; color:rgba(255,255,255,.68); margin-top:.85rem; }
         @media (hover:none) { .project-card:hover .project-flip { transform:none; } .project-card:hover .project-front .project-img { transform:none; } .project-card.is-flipped .project-flip { transform:rotateY(180deg); } }
         @media (max-width:768px) { .projects-header { padding:1.35rem; } .project-card,.project-flip { min-height:360px; height:360px; } }
+
+        /* Contact and footer: stable at every viewport size */
+        #hero, #services, #projects, #lenses, #contact { scroll-margin-top:6rem; }
+        .cta-section { max-width:100%; }
+        .cta-contact-row { flex-wrap:wrap; gap:1rem 2rem; }
+        .footer-newsletter-form { width:100%; max-width:360px; }
+        .footer-newsletter-form input { min-width:0; }
+        .main-footer { padding:4rem 0 1.5rem; }
+        @media (max-width:1024px) {
+            .container { max-width:920px; }
+            .footer-top { grid-template-columns:1.35fr 1fr 1fr; gap:2.25rem; }
+            .footer-top > :last-child { grid-column:2 / 4; }
+        }
+        @media (max-width:768px) {
+            .container { padding-left:1.25rem; padding-right:1.25rem; }
+            .cta-section { padding:2.25rem 1.25rem; border-radius:22px; }
+            .cta-actions { justify-content:center; flex-wrap:wrap; }
+            .cta-contact-row { margin-top:1.7rem; padding-top:1.35rem; justify-content:center; }
+            .main-footer { padding:3.25rem 0 1.25rem; }
+            .footer-top { grid-template-columns:1fr 1fr; gap:2.25rem 1.4rem; }
+            .footer-top > :first-child, .footer-top > :last-child { grid-column:1 / -1; }
+            .footer-bottom { gap:1rem; flex-wrap:wrap; }
+        }
+        @media (max-width:520px) {
+            .cta-section .heading { font-size:2rem; }
+            .cta-actions .btn { width:100%; justify-content:center; }
+            .cta-contact-item { font-size:.8rem; overflow-wrap:anywhere; }
+            .footer-top { grid-template-columns:1fr; gap:1.8rem; }
+            .footer-top > :first-child, .footer-top > :last-child { grid-column:auto; }
+            .footer-newsletter-form { max-width:none; }
+            .footer-newsletter-form button { padding-left:.8rem; padding-right:.8rem; font-size:.72rem; }
+            .footer-bottom { align-items:flex-start; flex-direction:column; padding-top:1.25rem; }
+            .footer-bottom-links { gap:1.1rem; flex-wrap:wrap; }
+            .ai-bot-trigger { width:52px; height:52px; right:1rem; bottom:1rem; font-size:1.2rem; }
+        }
     </style>
 </head>
 <body>
