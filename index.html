@@ -1958,7 +1958,7 @@
         @media (max-width:768px) { .projects-header { padding:1.35rem; } .project-card,.project-flip { min-height:360px; height:360px; } }
 
         /* Contact and footer: stable at every viewport size */
-        #hero, #services, #agency, #projects, #lenses, #contact { scroll-margin-top:6rem; }
+        #hero, #services, #projects, #lenses, #contact { scroll-margin-top:6rem; }
         .cta-section { max-width:100%; }
         .cta-contact-row { flex-wrap:wrap; gap:1rem 2rem; }
         .footer-newsletter-form { width:100%; max-width:360px; }
@@ -2009,7 +2009,6 @@
         <nav class="nav-links" id="nav-links">
             <a href="#hero" class="active">Home</a>
             <a href="#services">Services</a>
-            <a href="#agency">Agency</a>
             <a href="#projects">Projects</a>
             <a href="#lenses">Lenses</a>
             <a href="#contact">Contact</a>
@@ -2027,7 +2026,6 @@
     <button onclick="toggleMobile()" style="position:absolute;top:1.5rem;right:1.5rem;background:none;border:1px solid var(--border);border-radius:10px;padding:0.4rem 0.7rem;font-size:1rem;cursor:pointer;color:var(--text-muted)"><i class="fa-solid fa-xmark"></i></button>
     <a href="#hero" onclick="toggleMobile()" style="font-size:1.6rem;font-weight:800;color:var(--text)">Home</a>
     <a href="#services" onclick="toggleMobile()" style="font-size:1.6rem;font-weight:800;color:var(--text)">Services</a>
-    <a href="#agency" onclick="toggleMobile()" style="font-size:1.6rem;font-weight:800;color:var(--text)">Agency</a>
     <a href="#projects" onclick="toggleMobile()" style="font-size:1.6rem;font-weight:800;color:var(--text)">Projects</a>
     <a href="#lenses" onclick="toggleMobile()" style="font-size:1.6rem;font-weight:800;color:var(--text)">Lenses</a>
     <a href="#contact" onclick="toggleMobile()" style="font-size:1.6rem;font-weight:800;color:var(--text)">Contact</a>
@@ -2160,45 +2158,6 @@
                 <div class="service-tags">
                     <span class="tag">Lens Studio</span><span class="tag">AR</span><span class="tag">3D</span><span class="tag">Scripting</span>
                 </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ===========================
-     AGENCY SERVICES
-=========================== -->
-<section class="section" id="agency" style="background:var(--bg)">
-    <div class="container">
-        <div class="section-header fade-up">
-            <div class="label"><i class="fa-solid fa-building"></i> Agency Solutions</div>
-            <h2 class="heading">Enterprise &amp; <span>B2B Services</span></h2>
-            <p class="subtext" style="margin-top:0.75rem">Comprehensive technical packages designed for startups, brands, and enterprises scaling their operations.</p>
-        </div>
-        <div class="services-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
-            <div class="service-card fade-up" data-theme="ai" style="padding: 2.5rem; border-color: rgba(168, 85, 247, 0.4);">
-                <div class="service-title" style="font-size: 1.4rem; margin-bottom: 1rem;">MVP Launchpad</div>
-                <p class="service-desc">Go from idea to a fully functional Minimum Viable Product in weeks, not months. Includes architecture, backend, frontend, and deployment.</p>
-                <div class="service-tags" style="margin-bottom: 2rem;">
-                    <span class="tag">Full-Cycle</span><span class="tag">Startups</span>
-                </div>
-                <button class="btn btn-outline" style="width: 100%; justify-content: center;" onclick="openModal('book')">Discuss MVP</button>
-            </div>
-            <div class="service-card fade-up" data-theme="web" style="padding: 2.5rem; border-color: rgba(6, 182, 212, 0.4);">
-                <div class="service-title" style="font-size: 1.4rem; margin-bottom: 1rem;">Dedicated Retainer</div>
-                <p class="service-desc">Ongoing development, maintenance, and technical consulting. Get a dedicated architect to lead your tech initiatives and scale your platform.</p>
-                <div class="service-tags" style="margin-bottom: 2rem;">
-                    <span class="tag">Long-term</span><span class="tag">Scale</span>
-                </div>
-                <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="openModal('book')">Book Consultation</button>
-            </div>
-            <div class="service-card fade-up" data-theme="api" style="padding: 2.5rem; border-color: rgba(16, 185, 129, 0.4);">
-                <div class="service-title" style="font-size: 1.4rem; margin-bottom: 1rem;">Enterprise AI Integration</div>
-                <p class="service-desc">Custom AI pipelines embedded securely into your internal business tools. Enhance productivity with specialized LLMs and data automation.</p>
-                <div class="service-tags" style="margin-bottom: 2rem;">
-                    <span class="tag">B2B</span><span class="tag">AI Strategy</span>
-                </div>
-                <button class="btn btn-outline" style="width: 100%; justify-content: center;" onclick="openModal('book')">Explore AI</button>
             </div>
         </div>
     </div>
