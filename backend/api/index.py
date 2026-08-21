@@ -563,7 +563,7 @@ Answer all other technical, work, and background questions about Aryan Jha accur
         messages_payload.append({"role": "user", "content": message})
         
         data = {
-            "model": "google/gemma-4-31b-it:free",
+            "model": "openrouter/free",
             "messages": messages_payload
         }
         
@@ -581,16 +581,24 @@ Answer all other technical, work, and background questions about Aryan Jha accur
             method="POST"
         )
         
-        with urllib.request.urlopen(req, timeout=30) as response:
-            res_body = response.read().decode('utf-8')
-            res_data = json.loads(res_body)
-            ai_reply = res_data['choices'][0]['message']['content']
-            return jsonify({"success": True, "reply": ai_reply}), 200
+        import urllib.error
+        try:
+            with urllib.request.urlopen(req, timeout=30) as response:
+                res_body = response.read().decode('utf-8')
+                res_data = json.loads(res_body)
+                ai_reply = res_data['choices'][0]['message']['content']
+                return jsonify({"success": True, "reply": ai_reply}), 200
+        except urllib.error.HTTPError as http_err:
+            error_body = ""
+            try:
+                error_body = http_err.read().decode('utf-8')
+            except Exception:
+                pass
+            print(f"OpenRouter HTTPError {http_err.code}: {http_err.reason}\nBody: {error_body}", flush=True)
+            return jsonify({"success": False, "reply": f"OpenRouter Error ({http_err.code}): {error_body or http_err.reason}"}), 500
             
     except Exception as e:
-        import traceback
-        traceback.print_exc()
-        print(f"Chat API error: {e}")
+        print(f"Chat API error: {e}", flush=True)
         error_detail = str(e)
         return jsonify({"success": False, "reply": f"I am experiencing a temporary issue ({error_detail}). Please try again in a moment, or contact Aryan directly via email!"}), 500
 
